@@ -30,12 +30,13 @@ def plot_backtest_results(run_dir: Path, df: pd.DataFrame, equity_df: pd.DataFra
                 if prob > 0.5:
                     ax1.axhline(y=level, color='red', alpha=0.3, linewidth=0.5)
     
-    # Plot trades
-    for _, trade in trades_df.iterrows():
+    # Plot trades (only ENTRY trades)
+    entry_trades = trades_df[trades_df['type'] == 'ENTRY']
+    for _, trade in entry_trades.iterrows():
         if trade['side'] == 'long':
-            ax1.scatter(trade.name, trade['entry_price'], marker='^', color='green', s=100, label='Buy' if _ == 0 else "")
+            ax1.scatter(trade['time'], trade['price'], marker='^', color='green', s=100, label='Buy' if _ == 0 else "")
         elif trade['side'] == 'short':
-            ax1.scatter(trade.name, trade['entry_price'], marker='v', color='red', s=100, label='Sell' if _ == 0 else "")
+            ax1.scatter(trade['time'], trade['price'], marker='v', color='red', s=100, label='Sell' if _ == 0 else "")
     
     ax1.legend()
     ax1.grid(True, alpha=0.3)

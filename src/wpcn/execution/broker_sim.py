@@ -33,6 +33,7 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
     cash = float(cfg.initial_equity)
     pos_qty = 0.0
     pos_side = 0  # +1 long, -1 short
+    entry_px = np.nan  # 진입 가격 저장
     stop_price = np.nan
     tp1 = np.nan
     tp2 = np.nan
@@ -82,7 +83,8 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                 if l <= limit_px <= h:
                     fill_px = apply_costs(limit_px, costs)
                     pos_side = +1 if od["side"] == "long" else -1
-                    pos_qty = (cash / fill_px) * pos_side
+                    pos_qty = cash / fill_px  # 항상 양수로 수량 계산
+                    entry_px = fill_px  # 진입가 저장
                     cash = 0.0
                     stop_price = od["stop"]
                     tp1 = od["tp1"]
@@ -99,9 +101,12 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
             # stop
             if (pos_side == 1 and l <= stop_price) or (pos_side == -1 and h >= stop_price):
                 exit_px = apply_costs(stop_price, costs)
-                cash = cash + pos_qty * exit_px
+                if pos_side == 1:  # 롱: 매도
+                    cash = pos_qty * exit_px
+                else:  # 숏: 매수로 청산 (진입가 - 청산가)만큼 수익
+                    cash = pos_qty * entry_px + pos_qty * (entry_px - exit_px)
                 trades.append({"time": t, "type":"STOP", "side":"long" if pos_side==1 else "short", "price": exit_px})
-                pos_qty = 0.0; pos_side = 0; stop_price=np.nan; tp1=np.nan; tp2=np.nan; entry_i=-1; tp1_done=False
+                pos_qty = 0.0; pos_side = 0; entry_px=np.nan; stop_price=np.nan; tp1=np.nan; tp2=np.nan; entry_i=-1; tp1_done=False
             else:
                 # tp1
                 if not tp1_done:
@@ -109,7 +114,10 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                         exit_px = apply_costs(tp1, costs)
                         frac = cfg.tp1_frac
                         qty_exit = pos_qty * frac
-                        cash = cash + qty_exit * exit_px
+                        if pos_side == 1:  # 롱
+                            cash = cash + qty_exit * exit_px
+                        else:  # 숏
+                            cash = cash + qty_exit * entry_px + qty_exit * (entry_px - exit_px)
                         pos_qty = pos_qty * (1-frac)
                         tp1_done = True
                         trades.append({"time": t, "type":"TP1", "side":"long" if pos_side==1 else "short", "price": exit_px})
@@ -117,18 +125,30 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                 if cfg.use_tp2 and pos_side != 0:
                     if (pos_side == 1 and h >= tp2) or (pos_side == -1 and l <= tp2):
                         exit_px = apply_costs(tp2, costs)
-                        cash = cash + pos_qty * exit_px
+                        if pos_side == 1:  # 롱
+                            cash = cash + pos_qty * exit_px
+                        else:  # 숏
+                            cash = cash + pos_qty * entry_px + pos_qty * (entry_px - exit_px)
                         trades.append({"time": t, "type":"TP2", "side":"long" if pos_side==1 else "short", "price": exit_px})
-                        pos_qty = 0.0; pos_side = 0; stop_price=np.nan; tp1=np.nan; tp2=np.nan; entry_i=-1; tp1_done=False
+                        pos_qty = 0.0; pos_side = 0; entry_px=np.nan; stop_price=np.nan; tp1=np.nan; tp2=np.nan; entry_i=-1; tp1_done=False
                 # max hold
                 if pos_side != 0 and cfg.max_hold_bars is not None:
                     if (i - entry_i) >= cfg.max_hold_bars:
                         exit_px = apply_costs(c, costs)
-                        cash = cash + pos_qty * exit_px
+                        if pos_side == 1:  # 롱
+                            cash = cash + pos_qty * exit_px
+                        else:  # 숏
+                            cash = cash + pos_qty * entry_px + pos_qty * (entry_px - exit_px)
                         trades.append({"time": t, "type":"TIME_EXIT", "side":"long" if pos_side==1 else "short", "price": exit_px})
-                        pos_qty = 0.0; pos_side = 0; stop_price=np.nan; tp1=np.nan; tp2=np.nan; entry_i=-1; tp1_done=False
+                        pos_qty = 0.0; pos_side = 0; entry_px=np.nan; stop_price=np.nan; tp1=np.nan; tp2=np.nan; entry_i=-1; tp1_done=False
 
-        equity_val = cash + pos_qty * c
+        # equity 계산: 포지션이 있으면 현재가로 평가
+        if pos_side == 1:  # 롱
+            equity_val = cash + pos_qty * c
+        elif pos_side == -1:  # 숏
+            equity_val = cash + pos_qty * entry_px + pos_qty * (entry_px - c)
+        else:  # 포지션 없음
+            equity_val = cash
         equity_rows.append({"time": t, "equity": float(equity_val), "pos_qty": float(pos_qty), "pos_side": int(pos_side)})
 
     equity_df = pd.DataFrame(equity_rows).set_index("time")
