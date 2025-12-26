@@ -1,0 +1,9 @@
+{
+  "final_equity": 0.9993098550605423,
+  "total_return_pct": -0.06901449394577375,
+  "max_drawdown_pct": -0.06901449394577375,
+  "sharpe_proxy": -0.6660169253245147,
+  "trade_entries": 1,
+  "tp_events": 0,
+  "stop_events": 1
+}

@@ -1,0 +1,9 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wpcn-backtester"
+version = "0.1.0"
+description = "Wyckoff Probabilistic Chart Navigation backtester (MVP)"
+requires-python = ">=3.10"

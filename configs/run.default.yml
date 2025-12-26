@@ -1,0 +1,27 @@
+exchange_id: binanceusdm
+symbol: BTC/USDT
+timeframe: 5m
+days: 14
+fee_bps: 2.0
+slippage_bps: 3.0
+initial_equity: 1.0
+max_hold_bars: 200
+tp1_frac: 0.5
+use_tp2: true
+use_tuning: false
+wf:
+  train_bars: 4000
+  test_bars: 1000
+  embargo_bars: 50
+  n_candidates: 60
+mtf:
+- 15m
+- 1h
+- 4h
+- 1d
+conf_min: 0.55
+edge_min: 0.75
+confirm_bars: 1
+chaos_ret_atr: 3.0
+adx_len: 14
+adx_trend: 20.0

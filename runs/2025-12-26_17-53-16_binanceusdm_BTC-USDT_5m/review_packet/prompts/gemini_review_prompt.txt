@@ -1,0 +1,6 @@
+You are a strict quant reviewer. Review this WPCN Spring/UTAD backtest run.
+1) Check for lookahead/leakage risks (signals using future data, resampling errors).
+2) Check whether entry/exit simulation is overly optimistic. Suggest conservative adjustments.
+3) Identify overfitting signs in walk-forward and parameter stability.
+4) Recommend next validation experiments and stress tests.
+Return: bullet list with severity levels and concrete fixes.
