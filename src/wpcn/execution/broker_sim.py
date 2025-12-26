@@ -5,7 +5,7 @@ import pandas as pd
 
 from wpcn.core.types import Theta, BacktestCosts, BacktestConfig
 from wpcn.execution.cost import apply_costs
-from wpcn.wyckoff.events import detect_spring_utad
+from wpcn.wyckoff.events import detect_spring_utad, detect_all_signals
 from wpcn.engine.navigation import compute_navigation
 
 def approx_pfill_det(df: pd.DataFrame, t_idx: int, entry_price: float, N_fill: int) -> float:
@@ -16,14 +16,15 @@ def approx_pfill_det(df: pd.DataFrame, t_idx: int, entry_price: float, N_fill: i
     hit = ((window["low"] <= entry_price) & (entry_price <= window["high"])).any()
     return 1.0 if hit else 0.0
 
-def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: BacktestConfig, mtf: List[str] | None = None) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: BacktestConfig, mtf: List[str] | None = None, scalping_mode: bool = False) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     df = df.sort_index()
     mtf = mtf or []
 
     # navigation (page probs + Unknown gate)
     nav = compute_navigation(df, theta, cfg, mtf)
 
-    signals = detect_spring_utad(df, theta)
+    # Use scalping signals if scalping_mode is enabled
+    signals = detect_all_signals(df, theta, scalping_mode=scalping_mode)
     signals_df = pd.DataFrame([{
         "time": s.t_signal, "side": s.side, "event": s.event,
         "entry": s.entry_price, "stop": s.stop_price, "tp1": s.tp1, "tp2": s.tp2,
@@ -48,12 +49,24 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
     for s in signals:
         sig_by_time.setdefault(s.t_signal, []).append(s)
 
-    for i, t in enumerate(df.index):
-        o,h,l,c = df.loc[t, ["open","high","low","close"]].astype(float)
+    # OPTIMIZATION: Pre-extract numpy arrays for faster iteration
+    idx = df.index
+    open_arr = df["open"].values
+    high_arr = df["high"].values
+    low_arr = df["low"].values
+    close_arr = df["close"].values
+
+    # Pre-index nav for faster lookup
+    nav_gate = nav["trade_gate"].to_dict() if not nav.empty else {}
+    n = len(df)
+
+    for i in range(n):
+        t = idx[i]
+        o, h, l, c = open_arr[i], high_arr[i], low_arr[i], close_arr[i]
 
         # place new orders (activate next bar) if gate open
         if t in sig_by_time:
-            gate_ok = bool(int(nav.loc[t, "trade_gate"])) if t in nav.index else True
+            gate_ok = bool(int(nav_gate.get(t, 1)))
             if gate_ok:
                 for s in sig_by_time[t]:
                     pfill = approx_pfill_det(df, i, s.entry_price, theta.N_fill)
@@ -71,10 +84,14 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                         "meta": s.meta or {}
                     })
 
-        # fill pending if flat
+        # fill pending if flat (only fill ONE order per bar)
         if pos_side == 0 and pending_orders:
             still = []
+            filled_this_bar = False
             for od in pending_orders:
+                if filled_this_bar:
+                    still.append(od)
+                    continue
                 if i < od["activate_i"]:
                     still.append(od); continue
                 if i > od["expire_i"]:
@@ -92,6 +109,9 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                     entry_i = i
                     tp1_done = False
                     trades.append({"time": t, "type":"ENTRY", "side": od["side"], "price": fill_px, "event": od["event"], **od["meta"]})
+                    filled_this_bar = True  # 한 바에 하나만 체결
+                    # 나머지 주문은 모두 취소 (같은 시간의 중복 주문 방지)
+                    continue
                 else:
                     still.append(od)
             pending_orders = still

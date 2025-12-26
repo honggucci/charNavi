@@ -23,9 +23,9 @@ def main():
     
     # 설정값
     exchange = "binance"  # 현물 거래소
-    symbol = "BTC/USDT"
-    timeframe = "1d"  # 일봉
-    days = 3650  # 일봉 약 3650개 = 10년 (2016년부터)
+    symbol = "BTC/USDT"  # 비트코인
+    timeframe = "15m"  # 15분봉 (개선된 단타용)
+    days = 30  # 30일 데이터
     
     print(f"\n{'='*60}")
     print(f"WPCN 백테스팅 시작")
@@ -67,19 +67,19 @@ def main():
     costs = BacktestCosts(fee_bps=2.0, slippage_bps=3.0)
     bt = BacktestConfig(
         initial_equity=1.0,
-        max_hold_bars=100,  # 일봉: 100봉 = 약 100일
+        max_hold_bars=30,  # 15분봉: 30봉 = 약 7.5시간
         tp1_frac=0.5,
         use_tp2=True,
-        conf_min=0.60,
-        edge_min=0.80,
+        conf_min=0.50,  # 단타용: 완화
+        edge_min=0.60,  # 단타용: 완화
         confirm_bars=1,
         chaos_ret_atr=3.0,
         adx_len=14,
-        adx_trend=20.0,
+        adx_trend=15.0,  # 단타용: 완화
     )
 
-    # 다중 타임프레임 설정: 일봉 기준으로 4시간봉, 주봉 확인
-    mtf_timeframes = ["4h", "1w"]
+    # 다중 타임프레임 설정: 15분봉 기준으로 1시간봉, 4시간봉 확인
+    mtf_timeframes = ["1h", "4h"]
 
     cfg = RunConfig(
         exchange_id=exchange,
@@ -95,10 +95,14 @@ def main():
     )
 
     print(f"MTF 활성화: {', '.join(mtf_timeframes)} (상위 타임프레임 추세 확인)")
-    
+
+    # 단타 모드 활성화
+    scalping_mode = True  # RSI 다이버전스, 피보나치 반등, Stoch RSI 신호 사용
+    print(f"단타 모드: {'활성화' if scalping_mode else '비활성화'}")
+
     # 백테스트 실행
     engine = BacktestEngine(runs_root=str(REPO_ROOT / "runs"))
-    run_id = engine.run(df, cfg, theta=DEFAULT_THETA)
+    run_id = engine.run(df, cfg, theta=DEFAULT_THETA, scalping_mode=scalping_mode)
     print(f"[완료] 백테스팅 완료: {run_id}")
     
     # 결과 경로

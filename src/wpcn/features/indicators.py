@@ -61,3 +61,174 @@ def adx(df: pd.DataFrame, length: int = 14) -> pd.Series:
     dx = 100.0 * (plus_di - minus_di).abs() / ((plus_di + minus_di) + 1e-12)
     adx_ = dx.ewm(alpha=1/length, adjust=False).mean()
     return adx_
+
+
+def find_pivot_points(series: pd.Series, lookback: int = 5) -> tuple:
+    """Find pivot highs and lows in a series."""
+    n = len(series)
+    pivot_highs = np.full(n, np.nan)
+    pivot_lows = np.full(n, np.nan)
+    pivot_high_idx = []
+    pivot_low_idx = []
+
+    arr = series.values
+
+    for i in range(lookback, n - lookback):
+        window = arr[i-lookback:i+lookback+1]
+        if arr[i] == np.nanmax(window):
+            pivot_highs[i] = arr[i]
+            pivot_high_idx.append(i)
+        if arr[i] == np.nanmin(window):
+            pivot_lows[i] = arr[i]
+            pivot_low_idx.append(i)
+
+    return pivot_highs, pivot_lows, pivot_high_idx, pivot_low_idx
+
+
+def detect_rsi_divergence(df: pd.DataFrame, rsi_len: int = 14, lookback: int = 5) -> pd.DataFrame:
+    """
+    Detect RSI divergence (bullish and bearish).
+
+    Bullish divergence: Price makes lower low, RSI makes higher low (buy signal)
+    Bearish divergence: Price makes higher high, RSI makes lower high (sell signal)
+    """
+    close = df['close']
+    low = df['low']
+    high = df['high']
+    r = rsi(close, rsi_len)
+
+    n = len(df)
+    bullish_div = np.zeros(n, dtype=bool)
+    bearish_div = np.zeros(n, dtype=bool)
+    div_strength = np.zeros(n)
+
+    # Find pivot points in price and RSI
+    _, price_lows, _, price_low_idx = find_pivot_points(low, lookback)
+    price_highs, _, price_high_idx, _ = find_pivot_points(high, lookback)
+    _, rsi_lows, _, rsi_low_idx = find_pivot_points(r, lookback)
+    rsi_highs, _, rsi_high_idx, _ = find_pivot_points(r, lookback)
+
+    low_arr = low.values
+    high_arr = high.values
+    rsi_arr = r.values
+
+    # Check for bullish divergence (price lower low, RSI higher low)
+    for i in range(len(price_low_idx) - 1):
+        curr_idx = price_low_idx[i + 1]
+        prev_idx = price_low_idx[i]
+
+        if curr_idx - prev_idx < 3 or curr_idx - prev_idx > 50:
+            continue
+
+        # Price made lower low
+        if low_arr[curr_idx] < low_arr[prev_idx]:
+            # Check if RSI made higher low in similar timeframe
+            rsi_prev = rsi_arr[prev_idx]
+            rsi_curr = rsi_arr[curr_idx]
+
+            # RSI higher low = bullish divergence (더 완화: RSI < 50)
+            if rsi_curr > rsi_prev and rsi_curr < 50:  # RSI in lower zone
+                bullish_div[curr_idx] = True
+                div_strength[curr_idx] = (rsi_curr - rsi_prev) / (rsi_prev + 1e-12)
+
+    # Check for bearish divergence (price higher high, RSI lower high)
+    for i in range(len(price_high_idx) - 1):
+        curr_idx = price_high_idx[i + 1]
+        prev_idx = price_high_idx[i]
+
+        if curr_idx - prev_idx < 3 or curr_idx - prev_idx > 50:
+            continue
+
+        # Price made higher high
+        if high_arr[curr_idx] > high_arr[prev_idx]:
+            # Check if RSI made lower high
+            rsi_prev = rsi_arr[prev_idx]
+            rsi_curr = rsi_arr[curr_idx]
+
+            # RSI lower high = bearish divergence (더 완화: RSI > 50)
+            if rsi_curr < rsi_prev and rsi_curr > 50:  # RSI in upper zone
+                bearish_div[curr_idx] = True
+                div_strength[curr_idx] = (rsi_prev - rsi_curr) / (rsi_curr + 1e-12)
+
+    return pd.DataFrame({
+        'bullish_div': bullish_div,
+        'bearish_div': bearish_div,
+        'div_strength': div_strength,
+        'rsi': r
+    }, index=df.index)
+
+
+def fibonacci_levels(high: float, low: float) -> dict:
+    """Calculate Fibonacci retracement levels."""
+    diff = high - low
+    return {
+        'fib_0': low,
+        'fib_236': low + diff * 0.236,
+        'fib_382': low + diff * 0.382,
+        'fib_500': low + diff * 0.5,
+        'fib_618': low + diff * 0.618,
+        'fib_786': low + diff * 0.786,
+        'fib_100': high,
+        # Extensions
+        'fib_127': high + diff * 0.272,
+        'fib_161': high + diff * 0.618,
+    }
+
+
+def detect_fib_bounce(df: pd.DataFrame, swing_lookback: int = 20, tolerance: float = 0.005) -> pd.DataFrame:
+    """
+    Detect price bouncing off Fibonacci levels.
+
+    Returns signals when price touches and bounces from key Fib levels (0.382, 0.5, 0.618).
+    """
+    n = len(df)
+    fib_bounce_long = np.zeros(n, dtype=bool)
+    fib_bounce_short = np.zeros(n, dtype=bool)
+    fib_level = np.full(n, np.nan)
+
+    close = df['close'].values
+    high = df['high'].values
+    low = df['low'].values
+
+    for i in range(swing_lookback, n):
+        # Find swing high and low in lookback period
+        window_high = np.max(high[i-swing_lookback:i])
+        window_low = np.min(low[i-swing_lookback:i])
+
+        if window_high - window_low < 1e-12:
+            continue
+
+        fibs = fibonacci_levels(window_high, window_low)
+        current_close = close[i]
+        current_low = low[i]
+        current_high = high[i]
+
+        # Check for bounce at key Fib levels (uptrend retracement)
+        for level_name, level_price in [('fib_382', fibs['fib_382']),
+                                         ('fib_500', fibs['fib_500']),
+                                         ('fib_618', fibs['fib_618'])]:
+            # Long signal: price dips to Fib level and closes above
+            if (current_low <= level_price * (1 + tolerance) and
+                current_low >= level_price * (1 - tolerance) and
+                current_close > level_price):
+                fib_bounce_long[i] = True
+                fib_level[i] = level_price
+                break
+
+        # Check for rejection at key Fib levels (downtrend retracement)
+        for level_name, level_price in [('fib_382', fibs['fib_382']),
+                                         ('fib_500', fibs['fib_500']),
+                                         ('fib_618', fibs['fib_618'])]:
+            # Short signal: price spikes to Fib level and closes below
+            if (current_high >= level_price * (1 - tolerance) and
+                current_high <= level_price * (1 + tolerance) and
+                current_close < level_price):
+                fib_bounce_short[i] = True
+                fib_level[i] = level_price
+                break
+
+    return pd.DataFrame({
+        'fib_bounce_long': fib_bounce_long,
+        'fib_bounce_short': fib_bounce_short,
+        'fib_level': fib_level
+    }, index=df.index)

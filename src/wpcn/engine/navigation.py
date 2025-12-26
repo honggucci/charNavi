@@ -137,6 +137,7 @@ def compute_navigation(df: pd.DataFrame, theta: Theta, bt: BacktestConfig, mtf: 
         runlen.append(c)
     out["top1_runlen"] = runlen
 
+    # edge_score 조건 포함한 원래 조건으로 복원
     out["trade_gate"] = (
         (out["regime"] != "CHAOS") &
         (out["confidence"] >= bt.conf_min) &
