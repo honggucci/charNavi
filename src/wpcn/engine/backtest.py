@@ -21,7 +21,7 @@ class BacktestEngine:
     def __init__(self, runs_root: str = "runs"):
         self.runs_root = runs_root
 
-    def run(self, df: pd.DataFrame, cfg: RunConfig, theta: Optional[Theta] = None, scalping_mode: bool = False) -> str:
+    def run(self, df: pd.DataFrame, cfg: RunConfig, theta: Optional[Theta] = None, scalping_mode: bool = False, use_phase_accumulation: bool = True) -> str:
         theta = theta or DEFAULT_THETA
         run_id = make_run_id(cfg.exchange_id, cfg.symbol, cfg.timeframe)
         run_dir = ensure_run_dir(self.runs_root, run_id)
@@ -36,10 +36,16 @@ class BacktestEngine:
             "theta": asdict(theta),
             "data_path": cfg.data_path,
             "scalping_mode": scalping_mode,
+            "use_phase_accumulation": use_phase_accumulation,
         }
         dump_resolved_config(run_dir, resolved)
 
-        equity_df, trades_df, signals_df, nav_df = simulate(df, theta, cfg.costs, cfg.bt, mtf=cfg.mtf, scalping_mode=scalping_mode)
+        equity_df, trades_df, signals_df, nav_df = simulate(
+            df, theta, cfg.costs, cfg.bt,
+            mtf=cfg.mtf,
+            scalping_mode=scalping_mode,
+            use_phase_accumulation=use_phase_accumulation
+        )
 
         save_pq(df, run_dir / "candles.parquet")
         save_pq(equity_df, run_dir / "equity.parquet")

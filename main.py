@@ -64,7 +64,7 @@ def main():
     
     # 백테스팅 설정
     print(f"\n[3/4] 백테스팅 실행 중...")
-    costs = BacktestCosts(fee_bps=2.0, slippage_bps=3.0)
+    costs = BacktestCosts(fee_bps=10.0, slippage_bps=30.0)  # 수수료 0.1% + 슬리피지 0.3%
     bt = BacktestConfig(
         initial_equity=1.0,
         max_hold_bars=30,  # 15분봉: 30봉 = 약 7.5시간
@@ -100,9 +100,18 @@ def main():
     scalping_mode = True  # RSI 다이버전스, 피보나치 반등, Stoch RSI 신호 사용
     print(f"단타 모드: {'활성화' if scalping_mode else '비활성화'}")
 
+    # Phase A/B 양방향 축적 전략 활성화
+    use_phase_accumulation = True  # 박스 피보나치 그리드 거미줄 + 양방향 안전마진
+    print(f"Phase A/B 양방향 축적: {'활성화' if use_phase_accumulation else '비활성화'}")
+    if use_phase_accumulation:
+        print(f"  - 박스 피보나치 그리드 거미줄 (롱+숏)")
+        print(f"  - 롱: fib_236, fib_382, fib_500 레벨에서 박스 하단 근처 매수")
+        print(f"  - 숏: fib_618, fib_786 레벨에서 박스 상단 근처 매도")
+        print(f"  - 방향별 비율: Accumulation(롱 70%/숏 30%), Distribution(롱 30%/숏 70%)")
+
     # 백테스트 실행
     engine = BacktestEngine(runs_root=str(REPO_ROOT / "runs"))
-    run_id = engine.run(df, cfg, theta=DEFAULT_THETA, scalping_mode=scalping_mode)
+    run_id = engine.run(df, cfg, theta=DEFAULT_THETA, scalping_mode=scalping_mode, use_phase_accumulation=use_phase_accumulation)
     print(f"[완료] 백테스팅 완료: {run_id}")
     
     # 결과 경로
@@ -141,22 +150,82 @@ def main():
         stop_trades = trades_df[trades_df['type'] == 'STOP']
         time_exit_trades = trades_df[trades_df['type'] == 'TIME_EXIT']
 
-        print(f"\n총 진입 횟수: {len(entry_trades)}")
+        # 양방향 축적 거래 통계
+        accum_long_trades = trades_df[trades_df['type'] == 'ACCUM_LONG']
+        accum_short_trades = trades_df[trades_df['type'] == 'ACCUM_SHORT']
+        accum_long_tp = trades_df[trades_df['type'] == 'ACCUM_LONG_TP']
+        accum_long_stop = trades_df[trades_df['type'] == 'ACCUM_LONG_STOP']
+        accum_short_tp = trades_df[trades_df['type'] == 'ACCUM_SHORT_TP']
+        accum_short_stop = trades_df[trades_df['type'] == 'ACCUM_SHORT_STOP']
+
+        # 레거시 호환
+        accum_trades = trades_df[trades_df['type'].isin(['ACCUM', 'ACCUM_LONG', 'ACCUM_SHORT'])]
+        accum_tp_trades = trades_df[trades_df['type'].isin(['ACCUM_TP', 'ACCUM_LONG_TP', 'ACCUM_SHORT_TP'])]
+        accum_stop_trades = trades_df[trades_df['type'].isin(['ACCUM_STOP', 'ACCUM_LONG_STOP', 'ACCUM_SHORT_STOP'])]
+
+        print(f"\n=== 메인 전략 (Phase C) ===")
+        print(f"총 진입 횟수: {len(entry_trades)}")
         print(f"목표가 달성(TP): {len(tp_trades)}회")
         print(f"손절(STOP): {len(stop_trades)}회")
         print(f"시간 청산: {len(time_exit_trades)}회")
+
+        if len(accum_trades) > 0:
+            print(f"\n=== 양방향 축적 전략 (Phase A/B) ===")
+
+            # 롱 축적 통계
+            print(f"\n[롱 축적]")
+            print(f"  롱 진입: {len(accum_long_trades)}회")
+            if 'event' in accum_long_trades.columns and len(accum_long_trades) > 0:
+                spider_long = len(accum_long_trades[accum_long_trades['event'].str.contains('spider', case=False, na=False)])
+                safety_long = len(accum_long_trades[accum_long_trades['event'].str.contains('safety', case=False, na=False)])
+                print(f"    - 피보나치 그리드: {spider_long}회")
+                print(f"    - 안전마진: {safety_long}회")
+            print(f"  롱 익절: {len(accum_long_tp)}회")
+            print(f"  롱 손절: {len(accum_long_stop)}회")
+            if len(accum_long_tp) + len(accum_long_stop) > 0:
+                long_winrate = len(accum_long_tp) / (len(accum_long_tp) + len(accum_long_stop)) * 100
+                print(f"  롱 승률: {long_winrate:.1f}%")
+
+            # 숏 축적 통계
+            print(f"\n[숏 축적]")
+            print(f"  숏 진입: {len(accum_short_trades)}회")
+            if 'event' in accum_short_trades.columns and len(accum_short_trades) > 0:
+                spider_short = len(accum_short_trades[accum_short_trades['event'].str.contains('spider', case=False, na=False)])
+                safety_short = len(accum_short_trades[accum_short_trades['event'].str.contains('safety', case=False, na=False)])
+                print(f"    - 피보나치 그리드: {spider_short}회")
+                print(f"    - 안전마진: {safety_short}회")
+            print(f"  숏 익절: {len(accum_short_tp)}회")
+            print(f"  숏 손절: {len(accum_short_stop)}회")
+            if len(accum_short_tp) + len(accum_short_stop) > 0:
+                short_winrate = len(accum_short_tp) / (len(accum_short_tp) + len(accum_short_stop)) * 100
+                print(f"  숏 승률: {short_winrate:.1f}%")
+
+            # 전체 축적 손익
+            print(f"\n[축적 전체]")
+            total_accum = len(accum_trades)
+            print(f"  총 축적: {total_accum}회 (롱 {len(accum_long_trades)}, 숏 {len(accum_short_trades)})")
+            if len(accum_tp_trades) + len(accum_stop_trades) > 0:
+                accum_win = len(accum_tp_trades)
+                accum_loss = len(accum_stop_trades)
+                accum_winrate = accum_win / (accum_win + accum_loss) * 100
+                print(f"  전체 승률: {accum_winrate:.1f}% ({accum_win}승/{accum_loss}패)")
 
         # 거래별 손익률 계산
         print(f"\n{'='*60}")
         print(f"거래 내역 및 손익 분석")
         print(f"{'='*60}")
 
+        # 메인 거래만 필터링 (ACCUM 관련 제외)
+        accum_types = ['ACCUM', 'ACCUM_LONG', 'ACCUM_SHORT', 'ACCUM_TP', 'ACCUM_STOP',
+                       'ACCUM_LONG_TP', 'ACCUM_LONG_STOP', 'ACCUM_SHORT_TP', 'ACCUM_SHORT_STOP']
+        main_trades = trades_df[~trades_df['type'].isin(accum_types)]
+
         if len(entry_trades) > 0:
             trade_groups = []
             current_entry = None
             current_exits = []
 
-            for idx, trade in trades_df.iterrows():
+            for idx, trade in main_trades.iterrows():
                 if trade['type'] == 'ENTRY':
                     if current_entry is not None:
                         trade_groups.append((current_entry, current_exits))
@@ -303,5 +372,147 @@ def main():
     print(f"리포트: {run_dir / 'reports'}")
     print(f"{'='*60}\n")
 
+def run_multi_symbol_test():
+    """BTC, ETH, XRP, TRX, BNB에 대한 멀티 심볼 백테스팅"""
+
+    symbols = ["BTC/USDT", "ETH/USDT", "XRP/USDT", "TRX/USDT", "BNB/USDT"]
+    exchange = "binance"
+    timeframe = "15m"
+    days = 90  # 3개월
+
+    results = {}
+
+    print(f"\n{'='*70}")
+    print(f"멀티 심볼 백테스팅: Wyckoff 양방향 축적 전략")
+    print(f"{'='*70}")
+    print(f"심볼: {', '.join(symbols)}")
+    print(f"타임프레임: {timeframe}")
+    print(f"기간: {days}일")
+    print(f"슬리피지: 0.3% (30bps)")
+    print(f"{'='*70}\n")
+
+    for symbol in symbols:
+        print(f"\n{'#'*70}")
+        print(f"# {symbol} 백테스팅")
+        print(f"{'#'*70}")
+
+        # 데이터 경로
+        safe_symbol = symbol.replace("/", "-")
+        data_path = REPO_ROOT / "data" / "raw" / f"{exchange}_{safe_symbol}_{timeframe}.parquet"
+        data_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # 데이터 다운로드 (강제 재다운로드)
+        fetch_ohlcv_to_parquet(
+            exchange_id=exchange,
+            symbol=symbol,
+            timeframe=timeframe,
+            days=days,
+            out_path=str(data_path),
+            api_key=None,
+            secret=None,
+        )
+
+        # 데이터 로드
+        df = load_parquet(str(data_path))
+
+        # 백테스팅 설정 - 슬리피지 0.3% (30bps)
+        costs = BacktestCosts(fee_bps=10.0, slippage_bps=30.0)  # 수수료 0.1% + 슬리피지 0.3%
+        bt = BacktestConfig(
+            initial_equity=1.0,
+            max_hold_bars=30,
+            tp1_frac=0.5,
+            use_tp2=True,
+            conf_min=0.50,
+            edge_min=0.60,
+            confirm_bars=1,
+            chaos_ret_atr=3.0,
+            adx_len=14,
+            adx_trend=15.0,
+        )
+
+        cfg = RunConfig(
+            exchange_id=exchange,
+            symbol=symbol,
+            timeframe=timeframe,
+            days=days,
+            costs=costs,
+            bt=bt,
+            use_tuning=False,
+            wf={},
+            mtf=["1h", "4h"],
+            data_path=str(data_path),
+        )
+
+        # 백테스트 실행
+        engine = BacktestEngine(runs_root=str(REPO_ROOT / "runs"))
+        run_id = engine.run(df, cfg, theta=DEFAULT_THETA, scalping_mode=True, use_phase_accumulation=True)
+
+        # 결과 로드
+        run_dir = REPO_ROOT / "runs" / run_id
+        equity_df = pd.read_parquet(run_dir / "equity.parquet")
+        trades_df = pd.read_parquet(run_dir / "trades.parquet")
+
+        # 성과 계산
+        initial_equity = 1.0
+        final_equity = equity_df['equity'].iloc[-1]
+        total_return = ((final_equity - initial_equity) / initial_equity) * 100
+
+        equity_series = equity_df['equity']
+        cummax = equity_series.cummax()
+        drawdown = (equity_series - cummax) / cummax * 100
+        max_drawdown = drawdown.min()
+
+        # 거래 통계
+        entry_trades = trades_df[trades_df['type'] == 'ENTRY']
+        accum_trades = trades_df[trades_df['type'].isin(['ACCUM_LONG', 'ACCUM_SHORT'])]
+        accum_tp = trades_df[trades_df['type'].isin(['ACCUM_LONG_TP', 'ACCUM_SHORT_TP'])]
+        accum_stop = trades_df[trades_df['type'].isin(['ACCUM_LONG_STOP', 'ACCUM_SHORT_STOP'])]
+
+        long_accum = len(trades_df[trades_df['type'] == 'ACCUM_LONG'])
+        short_accum = len(trades_df[trades_df['type'] == 'ACCUM_SHORT'])
+
+        results[symbol] = {
+            'total_return': total_return,
+            'max_drawdown': max_drawdown,
+            'total_trades': len(entry_trades),
+            'accum_trades': len(accum_trades),
+            'long_accum': long_accum,
+            'short_accum': short_accum,
+            'accum_win': len(accum_tp),
+            'accum_loss': len(accum_stop),
+            'run_id': run_id
+        }
+
+        print(f"[{symbol}] 완료: 수익률 {total_return:+.2f}%, MDD {max_drawdown:.2f}%")
+
+    # 최종 결과 출력
+    print(f"\n{'='*70}")
+    print(f"멀티 심볼 백테스팅 결과 요약")
+    print(f"{'='*70}")
+    print(f"{'심볼':<12} {'수익률':>10} {'MDD':>10} {'메인거래':>10} {'축적(롱/숏)':>15} {'축적승률':>10}")
+    print(f"{'-'*70}")
+
+    total_return_sum = 0
+    for symbol, r in results.items():
+        accum_total = r['accum_win'] + r['accum_loss']
+        accum_winrate = r['accum_win'] / accum_total * 100 if accum_total > 0 else 0
+        print(f"{symbol:<12} {r['total_return']:>+9.2f}% {r['max_drawdown']:>9.2f}% {r['total_trades']:>10d} {r['long_accum']:>6d}/{r['short_accum']:<6d} {accum_winrate:>9.1f}%")
+        total_return_sum += r['total_return']
+
+    print(f"{'-'*70}")
+    print(f"{'합계':<12} {total_return_sum:>+9.2f}%")
+    print(f"{'평균':<12} {total_return_sum/len(results):>+9.2f}%")
+    print(f"{'='*70}\n")
+
+    return results
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "--multi":
+        # 멀티 심볼 테스트
+        run_multi_symbol_test()
+    else:
+        # 단일 심볼 테스트
+        main()
