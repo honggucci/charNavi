@@ -21,30 +21,15 @@ def fetch_ohlcv_to_parquet(
     api_key: Optional[str] = None,
     secret: Optional[str] = None,
     limit: int = 1500,
+    start_date: Optional[str] = None,  # "YYYY-MM-DD" 형식
+    end_date: Optional[str] = None,    # "YYYY-MM-DD" 형식
 ) -> str:
-    import ccxt  # local import
-
-    exchange_cls = getattr(ccxt, exchange_id)
-    params = {"enableRateLimit": True}
-    if api_key and secret:
-        params.update({"apiKey": api_key, "secret": secret})
-    # For some exchanges you may need: options.defaultType = 'swap' or 'future'.
-    if "options" not in params:
-        params["options"] = {}
-    if exchange_id in ("binance", "binanceusdm", "binancecoinm"):
-        # USDT-M futures recommended: binanceusdm.
-        params["options"].setdefault("defaultType", "swap")
-
-    ex = exchange_cls(params)
-    ex.load_markets()
-
-    end = _now_utc()
-    start = end - timedelta(days=int(days))
-    since = _to_ms(start)
-    end_ms = _to_ms(end)
-
     # reuse the in-memory fetch helper and then save to parquet
-    df = fetch_ohlcv_df(exchange_id, symbol, timeframe, days, api_key=api_key, secret=secret, limit=limit)
+    df = fetch_ohlcv_df(
+        exchange_id, symbol, timeframe, days,
+        api_key=api_key, secret=secret, limit=limit,
+        start_date=start_date, end_date=end_date
+    )
     df.to_parquet(out_path, index=True)
     return out_path
 
@@ -57,11 +42,17 @@ def fetch_ohlcv_df(
     api_key: Optional[str] = None,
     secret: Optional[str] = None,
     limit: int = 1500,
+    start_date: Optional[str] = None,  # "YYYY-MM-DD" 형식
+    end_date: Optional[str] = None,    # "YYYY-MM-DD" 형식
 ) -> pd.DataFrame:
     """Fetch OHLCV from ccxt and return a pandas.DataFrame indexed by datetime.
 
     This mirrors `fetch_ohlcv_to_parquet` but keeps results in-memory so callers
     can pass the dataframe directly to the backtester without writing parquet.
+
+    Args:
+        start_date: 시작 날짜 (YYYY-MM-DD), 지정하면 days 무시
+        end_date: 종료 날짜 (YYYY-MM-DD), 기본값은 오늘
     """
     import ccxt  # local import
 
@@ -77,8 +68,20 @@ def fetch_ohlcv_df(
     ex = exchange_cls(params)
     ex.load_markets()
 
-    end = _now_utc()
-    start = end - timedelta(days=int(days))
+    # 시작/종료 날짜 계산
+    if start_date and end_date:
+        # 특정 기간 지정
+        start = datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        end = datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    elif start_date:
+        # 시작 날짜만 지정 → 오늘까지
+        start = datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        end = _now_utc()
+    else:
+        # 기존 방식 (days 사용)
+        end = _now_utc()
+        start = end - timedelta(days=int(days))
+
     since = _to_ms(start)
     end_ms = _to_ms(end)
 

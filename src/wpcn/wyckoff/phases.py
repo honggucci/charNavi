@@ -1,15 +1,33 @@
 """
 Wyckoff Phase Detection & Bidirectional Accumulation Strategies
 
-Accumulation (롱 축적):
+=== 전통적 패턴 (Classic Patterns) ===
+
+Accumulation (롱 축적) - 바닥권:
   Phase A: Selling Climax (SC) → Automatic Rally (AR) - 거미줄 기법
   Phase B: 횡보 구간 - 안전마진 전략 (박스 하단 매수)
   Phase C: Spring - 기존 전략 (잔여 자금 집중)
 
-Distribution (숏 축적):
+Distribution (숏 축적) - 고점권:
   Phase A: Buying Climax (BC) → Automatic Reaction (AR) - 거미줄 기법
   Phase B: 횡보 구간 - 안전마진 전략 (박스 상단 매도)
   Phase C: UTAD - 기존 전략 (잔여 자금 집중)
+
+=== 추세 중 패턴 (Trend-Aligned Patterns) ===
+
+Re-Accumulation (상승 중 매집):
+  - 상승 추세 도중 횡보 박스
+  - 저점이 이전보다 높은 상태 (Higher Lows)
+  - 고점은 유지 또는 조금 상승
+  - 거래량은 흡수형 (폭발적 증가 X)
+  - 의미: 상승 추세 유지하면서 추가 물량 흡수
+
+Re-Distribution (하락 중 분산):
+  - 하락 추세 도중 횡보 박스
+  - 고점이 이전보다 낮은 상태 (Lower Highs)
+  - 저점은 유지 또는 조금 하락
+  - 거래량은 분산형
+  - 의미: 하락 추세 유지하면서 보유 물량 추가 매도
 
 박스 피보나치 그리드:
   - 박스 저점~고점 구간을 피보나치 레벨로 분할
@@ -30,8 +48,8 @@ from wpcn.wyckoff.box import box_engine_freeze
 class WyckoffPhase:
     """Wyckoff 페이즈 상태"""
     phase: str  # 'A', 'B', 'C', 'D', 'E', 'unknown'
-    sub_phase: str  # 'SC', 'AR', 'ST', 'Spring', 'UTAD', 'BC', 'LPSY', etc.
-    direction: str  # 'accumulation', 'distribution', 'unknown'
+    sub_phase: str  # 'SC', 'AR', 'ST', 'Spring', 'UTAD', 'BC', 'LPSY', 'ReAccum', 'ReDistrib', etc.
+    direction: str  # 'accumulation', 'distribution', 're_accumulation', 're_distribution', 'unknown'
     confidence: float  # 0-1
     start_idx: int
     box_low: float
@@ -63,9 +81,11 @@ FIB_LEVELS = {
 
 # 방향별 포지션 비율 설정
 DIRECTION_RATIOS = {
-    'accumulation': {'long': 0.70, 'short': 0.30},   # 롱 70%, 숏 30%
-    'distribution': {'long': 0.30, 'short': 0.70},   # 롱 30%, 숏 70%
-    'unknown': {'long': 0.50, 'short': 0.50}         # 50/50
+    'accumulation': {'long': 0.70, 'short': 0.30},        # 전통적 매집: 롱 70%, 숏 30%
+    'distribution': {'long': 0.30, 'short': 0.70},        # 전통적 분산: 롱 30%, 숏 70%
+    're_accumulation': {'long': 0.80, 'short': 0.20},     # 상승 중 매집: 롱 80%, 숏 20%
+    're_distribution': {'long': 0.20, 'short': 0.80},     # 하락 중 분산: 롱 20%, 숏 80%
+    'unknown': {'long': 0.50, 'short': 0.50}              # 50/50
 }
 
 
@@ -75,23 +95,35 @@ def detect_wyckoff_phase(
     lookback: int = 50
 ) -> pd.DataFrame:
     """
-    Wyckoff 페이즈를 감지합니다.
+    Wyckoff 페이즈를 감지합니다. (전통적 + 추세 중 패턴)
 
+    === 전통적 패턴 ===
     Phase Detection Logic:
-    - Phase A: 큰 하락 후 급반등 (SC → AR)
-        - 거래량 급증 + 큰 음봉 후 양봉 반등
-    - Phase B: 횡보 구간
-        - 박스권 내에서 가격 진동
-    - Phase C: Spring/UTAD
-        - 박스 하단 돌파 후 회복 (Spring)
-        - 박스 상단 돌파 후 회귀 (UTAD)
+    - Phase A: 큰 하락 후 급반등 (SC → AR) / 큰 상승 후 급반락 (BC → AR)
+    - Phase B: 횡보 구간 (박스권 내에서 가격 진동)
+    - Phase C: Spring (박스 하단 돌파 후 회복) / UTAD (박스 상단 돌파 후 회귀)
     - Phase D: Markup/Markdown 시작
     - Phase E: 추세 지속
+
+    === 추세 중 패턴 ===
+    Re-Accumulation (상승 중 매집):
+    - 상승 추세 도중 횡보 박스
+    - Higher Lows (저점이 점점 높아짐)
+    - EMA 50 > EMA 200 (상승 추세 확인)
+
+    Re-Distribution (하락 중 분산):
+    - 하락 추세 도중 횡보 박스
+    - Lower Highs (고점이 점점 낮아짐)
+    - EMA 50 < EMA 200 (하락 추세 확인)
     """
     _atr = atr(df, theta.atr_len)
     box = box_engine_freeze(df, theta)
     _rsi = rsi(df['close'], 14)
     z = zscore(df['close'], 20)
+
+    # EMA for trend detection (Re-Accumulation / Re-Distribution)
+    ema_50 = df['close'].ewm(span=50, adjust=False).mean()
+    ema_200 = df['close'].ewm(span=200, adjust=False).mean()
 
     df2 = df.join(_atr.rename('atr')).join(box).join(_rsi.rename('rsi')).join(z.rename('zscore'))
 
@@ -125,6 +157,8 @@ def detect_wyckoff_phase(
     bl_arr = box['box_low'].values
     bh_arr = box['box_high'].values
     bw_arr = box['box_width'].values
+    ema_50_arr = ema_50.values
+    ema_200_arr = ema_200.values
 
     # Phase detection state
     current_phase = 'unknown'
@@ -201,8 +235,53 @@ def detect_wyckoff_phase(
         in_box = (bl - margin) <= close <= (bh + margin)
         z_bounded = abs(curr_z) < 2.0 if not np.isnan(curr_z) else True  # 더 완화
 
+        # === Re-Accumulation / Re-Distribution 감지 ===
+        # EMA 기반 추세 확인
+        ema50 = ema_50_arr[i] if not np.isnan(ema_50_arr[i]) else close
+        ema200 = ema_200_arr[i] if not np.isnan(ema_200_arr[i]) else close
+        is_uptrend = ema50 > ema200  # 상승 추세
+        is_downtrend = ema50 < ema200  # 하락 추세
+
+        # Higher Lows / Lower Highs 감지 (최근 20봉)
+        if i >= 20:
+            recent_lows = low_arr[i-20:i+1]
+            recent_highs = high_arr[i-20:i+1]
+
+            # 최근 저점들의 추세 (Higher Lows)
+            first_half_low = np.min(recent_lows[:10])
+            second_half_low = np.min(recent_lows[10:])
+            has_higher_lows = second_half_low > first_half_low
+
+            # 최근 고점들의 추세 (Lower Highs)
+            first_half_high = np.max(recent_highs[:10])
+            second_half_high = np.max(recent_highs[10:])
+            has_lower_highs = second_half_high < first_half_high
+        else:
+            has_higher_lows = False
+            has_lower_highs = False
+
         if in_box and z_bounded:
-            # Phase A 후 또는 독립적 횡보 (더 완화된 조건)
+            # === Re-Accumulation: 상승 추세 중 횡보 + Higher Lows ===
+            if is_uptrend and has_higher_lows and vol_r < 1.5:
+                current_phase = 'B'
+                direction = 're_accumulation'
+                phases.iloc[i, phases.columns.get_loc('phase')] = 'B'
+                phases.iloc[i, phases.columns.get_loc('sub_phase')] = 'ReAccum'
+                phases.iloc[i, phases.columns.get_loc('direction')] = 're_accumulation'
+                phases.iloc[i, phases.columns.get_loc('confidence')] = 0.75
+                continue
+
+            # === Re-Distribution: 하락 추세 중 횡보 + Lower Highs ===
+            if is_downtrend and has_lower_highs and vol_r < 1.5:
+                current_phase = 'B'
+                direction = 're_distribution'
+                phases.iloc[i, phases.columns.get_loc('phase')] = 'B'
+                phases.iloc[i, phases.columns.get_loc('sub_phase')] = 'ReDistrib'
+                phases.iloc[i, phases.columns.get_loc('direction')] = 're_distribution'
+                phases.iloc[i, phases.columns.get_loc('confidence')] = 0.75
+                continue
+
+            # Phase A 후 또는 독립적 횡보 (전통적 패턴)
             if current_phase in ['A', 'B'] or (current_phase == 'unknown' and vol_r < 2.0):
                 current_phase = 'B'
                 phases.iloc[i, phases.columns.get_loc('phase')] = 'B'
@@ -559,7 +638,10 @@ def detect_phase_signals(
     # 페이즈 통계
     accum_count = (phases_df['direction'] == 'accumulation').sum()
     dist_count = (phases_df['direction'] == 'distribution').sum()
-    print(f"[Phase Detection] Accumulation bars: {accum_count}, Distribution bars: {dist_count}")
+    reaccum_count = (phases_df['direction'] == 're_accumulation').sum()
+    redistrib_count = (phases_df['direction'] == 're_distribution').sum()
+    print(f"[Phase Detection] Classic Accum: {accum_count}, Classic Distrib: {dist_count}")
+    print(f"[Phase Detection] Re-Accum: {reaccum_count}, Re-Distrib: {redistrib_count}")
 
     # 2. 박스 피보나치 그리드 거미줄 기법
     spider_signals = detect_spider_web_signals(
