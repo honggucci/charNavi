@@ -30,3 +30,5 @@ sessions/
 # OS files
 .DS_Store
 Thumbs.db
+nul
+_ul
