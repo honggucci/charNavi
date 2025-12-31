@@ -1,0 +1,36 @@
+exchange_id: binance
+symbol: BTC/USDT
+timeframe: 15m
+days: 30
+costs:
+  fee_bps: 10.0
+  slippage_bps: 30.0
+bt:
+  initial_equity: 1.0
+  max_hold_bars: 30
+  tp1_frac: 0.5
+  use_tp2: true
+  conf_min: 0.5
+  edge_min: 0.6
+  confirm_bars: 1
+  chaos_ret_atr: 3.0
+  adx_len: 14
+  adx_trend: 15.0
+use_tuning: false
+wf: {}
+mtf:
+- 1h
+- 4h
+theta:
+  pivot_lr: 4
+  box_L: 96
+  m_freeze: 32
+  atr_len: 14
+  x_atr: 0.35
+  m_bw: 0.1
+  N_reclaim: 3
+  N_fill: 5
+  F_min: 0.7
+data_path: C:\Users\gkghd\OneDrive\바탕 화면\coin_master\wpcn-backtester-cli-noflask\src\wpcn\001_crypto\001_binance\001_spot\001_backtest\data\raw\binance_BTC-USDT_15m.parquet
+scalping_mode: true
+use_phase_accumulation: true
