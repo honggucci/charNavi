@@ -19,6 +19,14 @@ coin_master/
 # Claude Code
 .claude/
 
+# Environment variables (secrets)
+.env
+
+# AI Team module (private)
+src/wpcn/ai_team/
+test_ai_team.py
+sessions/
+
 # OS files
 .DS_Store
 Thumbs.db

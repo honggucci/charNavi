@@ -1,0 +1,32 @@
+{
+  "history": [
+    {
+      "date": "2024-12-30",
+      "version": "v2.0",
+      "commit": null,
+      "changes": "폴더 구조 개편, 축적 매매 로직 추가",
+      "config": {
+        "strategy": "futures_v2",
+        "BTC/USDT": {
+          "leverage": 15,
+          "accumulation_pct": 0.03,
+          "max_accumulation_pct": 0.15,
+          "tp_pct": 0.015,
+          "sl_pct": 0.010
+        },
+        "ETH/USDT": {
+          "leverage": 5,
+          "accumulation_pct": 0.03,
+          "max_accumulation_pct": 0.15,
+          "tp_pct": 0.020,
+          "sl_pct": 0.012
+        }
+      },
+      "results": {
+        "BTC/USDT": {"2024": {"return": 43.14, "mdd": -27.45, "trades": 89, "win_rate": 58.4, "liquidations": 0}},
+        "ETH/USDT": {"2024": {"return": 11.51, "mdd": -11.53, "trades": 76, "win_rate": 55.2, "liquidations": 0}}
+      },
+      "notes": "선물 롱/숏, 축적 매매, 6시간 시간청산"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "ETH/USDT",
+  "strategy": "futures_v2",
+  "leverage": 5,
+  "config": {
+    "accumulation_pct": 0.03,
+    "max_accumulation_pct": 0.15,
+    "tp_pct": 0.020,
+    "sl_pct": 0.012,
+    "max_hold_bars": 72
+  },
+  "results": {
+    "2024": {"return": 11.51, "mdd": -11.53, "trades": 76, "win_rate": 55.2, "profit_factor": 1.89, "liquidations": 0},
+    "2023": {"return": 14.23, "mdd": -9.87, "trades": 82, "win_rate": 57.8, "profit_factor": 2.01, "liquidations": 0},
+    "2022": {"return": 8.92, "mdd": -14.21, "trades": 64, "win_rate": 52.1, "profit_factor": 1.65, "liquidations": 0}
+  },
+  "updated_at": "2024-12-30"
+}

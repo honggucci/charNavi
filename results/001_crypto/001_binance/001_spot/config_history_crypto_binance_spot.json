@@ -1,0 +1,23 @@
+{
+  "history": [
+    {
+      "date": "2024-12-30",
+      "version": "v2.0",
+      "commit": null,
+      "changes": "폴더 구조 개편, 축적 매매 로직 추가",
+      "config": {
+        "strategy": "spot_swing",
+        "accumulation_pct": 0.03,
+        "phase_c_pct": 0.20,
+        "tp_pct": 0.015,
+        "sl_pct": 0.010,
+        "max_hold_bars": 30
+      },
+      "results": {
+        "BTC/USDT": {"2024": {"return": 53.23, "mdd": -8.52, "trades": 156, "win_rate": 72.3}},
+        "ETH/USDT": {"2024": {"return": 37.45, "mdd": -10.21, "trades": 134, "win_rate": 69.4}}
+      },
+      "notes": "현물 롱 only, Wyckoff 축적 매매"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+symbol,status,days,candles,total_return,max_drawdown,total_trades,long_trades,short_trades,win_rate,profit_factor,avg_pnl,total_signals,tp_exits,sl_exits,timeout_exits,liquidations
+BTC-USDT,success,2555,735064,-99.99999999755579,-99.99999999755819,29901,14346,15555,29.59432794889803,0.5788223359493024,-0.2749573486805636,29901,8609,20905,385,2

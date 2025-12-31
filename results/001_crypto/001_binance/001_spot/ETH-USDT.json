@@ -1,0 +1,16 @@
+{
+  "symbol": "ETH/USDT",
+  "strategy": "spot_swing",
+  "config": {
+    "accumulation_pct": 0.03,
+    "phase_c_pct": 0.20,
+    "tp_pct": 0.020,
+    "sl_pct": 0.012
+  },
+  "results": {
+    "2024": {"return": 37.45, "mdd": -10.21, "trades": 134, "win_rate": 69.4, "profit_factor": 2.12},
+    "2023": {"return": 32.18, "mdd": -14.56, "trades": 128, "win_rate": 66.2, "profit_factor": 1.95},
+    "2022": {"return": 24.67, "mdd": -18.43, "trades": 89, "win_rate": 62.8, "profit_factor": 1.72}
+  },
+  "updated_at": "2024-12-30"
+}

@@ -1,0 +1,16 @@
+{
+  "symbol": "BTC/USDT",
+  "strategy": "spot_swing",
+  "config": {
+    "accumulation_pct": 0.03,
+    "phase_c_pct": 0.20,
+    "tp_pct": 0.015,
+    "sl_pct": 0.010
+  },
+  "results": {
+    "2024": {"return": 53.23, "mdd": -8.52, "trades": 156, "win_rate": 72.3, "profit_factor": 2.45},
+    "2023": {"return": 48.71, "mdd": -12.14, "trades": 142, "win_rate": 68.9, "profit_factor": 2.21},
+    "2022": {"return": 31.24, "mdd": -15.32, "trades": 98, "win_rate": 65.1, "profit_factor": 1.89}
+  },
+  "updated_at": "2024-12-30"
+}
