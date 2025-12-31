@@ -117,7 +117,7 @@ def detect_wyckoff_phase(
     - EMA 50 < EMA 200 (하락 추세 확인)
     """
     _atr = atr(df, theta.atr_len)
-    box = box_engine_freeze(df, theta)
+    box = box_engine_freeze(df, theta)  # 롤링 박스 (참조용)
     _rsi = rsi(df['close'], 14)
     z = zscore(df['close'], 20)
 
@@ -318,6 +318,14 @@ def detect_wyckoff_phase(
             phases.iloc[i, phases.columns.get_loc('confidence')] = 0.75
             continue
 
+        # UTAD 후 박스 하단 돌파 → Markdown
+        if current_phase == 'C' and close < bl:
+            phases.iloc[i, phases.columns.get_loc('phase')] = 'D'
+            phases.iloc[i, phases.columns.get_loc('sub_phase')] = 'SOW'  # Sign of Weakness
+            phases.iloc[i, phases.columns.get_loc('direction')] = 'distribution'
+            phases.iloc[i, phases.columns.get_loc('confidence')] = 0.75
+            continue
+
         # === Default: 이전 상태 유지 ===
         if i > 0:
             phases.iloc[i, phases.columns.get_loc('phase')] = phases.iloc[i-1]['phase']
@@ -342,19 +350,18 @@ def detect_spider_web_signals(
     Accumulation (롱):
       - 박스 하단 피보나치 레벨에서 롱 진입
       - fib_236, fib_382, fib_500 레벨에서 매수
-      - 손절: 박스 저점 - 1.5 ATR
-      - 익절: 박스 고점
+      - 손절: 진입가 -1.0%
+      - 익절: 진입가 +1.5%
 
     Distribution (숏):
       - 박스 상단 피보나치 레벨에서 숏 진입
       - fib_618, fib_786 레벨 및 박스 상단에서 매도
-      - 손절: 박스 고점 + 1.5 ATR
-      - 익절: 박스 저점
+      - 손절: 진입가 +1.0%
+      - 익절: 진입가 -1.5%
     """
     signals: List[AccumulationSignal] = []
 
     _atr = atr(df, theta.atr_len)
-    box = box_engine_freeze(df, theta)
 
     # Pre-extract arrays
     idx = df.index
@@ -362,8 +369,10 @@ def detect_spider_web_signals(
     high_arr = df['high'].values
     low_arr = df['low'].values
     atr_arr = _atr.values
-    bl_arr = box['box_low'].values
-    bh_arr = box['box_high'].values
+
+    # 롤링 박스 사용
+    bl_arr = phases_df['box_low'].values
+    bh_arr = phases_df['box_high'].values
 
     # 피보나치 레벨 터치 추적
     long_fib_touched = set()
@@ -411,9 +420,10 @@ def detect_spider_web_signals(
                     long_fib_touched.add(fib_name)
                     adjusted_pct = position_pct * ratios['long']
                     if adjusted_pct > 0.001:
-                        # 15분봉 스윙 전략: TP 1.5% / SL 1.0% (비용 0.4% 고려)
+                        # 진입가 기준 % 방식 TP/SL
                         tp_target = close * 1.015  # +1.5% 익절
                         sl_target = close * 0.990  # -1.0% 손절
+
                         signals.append(AccumulationSignal(
                             t_signal=idx[i],
                             side='long',
@@ -451,9 +461,10 @@ def detect_spider_web_signals(
                     short_fib_touched.add(fib_name)
                     adjusted_pct = position_pct * ratios['short']
                     if adjusted_pct > 0.001:
-                        # 15분봉 스윙 전략: TP 1.5% / SL 1.0% (비용 0.4% 고려)
+                        # 진입가 기준 % 방식 TP/SL
                         tp_target = close * 0.985  # -1.5% 익절 (숏)
                         sl_target = close * 1.010  # +1.0% 손절 (숏)
+
                         signals.append(AccumulationSignal(
                             t_signal=idx[i],
                             side='short',
@@ -496,20 +507,19 @@ def detect_safety_margin_signals(
 
     롱 (Accumulation):
       - 박스 하단 근처(0.5 ATR 이내)에서 롱 진입
-      - 손절: 박스 하단 - 1.5 ATR
-      - 익절: 박스 상단
+      - 손절: 진입가 -1.0%
+      - 익절: 진입가 +1.5%
 
     숏 (Distribution):
       - 박스 상단 근처(0.5 ATR 이내)에서 숏 진입
-      - 손절: 박스 상단 + 1.5 ATR
-      - 익절: 박스 하단
+      - 손절: 진입가 +1.0%
+      - 익절: 진입가 -1.5%
 
     목표: 평균 진입가를 유리하게 하면서 Phase C 대비
     """
     signals: List[AccumulationSignal] = []
 
     _atr = atr(df, theta.atr_len)
-    box = box_engine_freeze(df, theta)
 
     # Pre-extract arrays
     idx = df.index
@@ -517,8 +527,10 @@ def detect_safety_margin_signals(
     high_arr = df['high'].values
     low_arr = df['low'].values
     atr_arr = _atr.values
-    bl_arr = box['box_low'].values
-    bh_arr = box['box_high'].values
+
+    # 롤링 박스 사용
+    bl_arr = phases_df['box_low'].values
+    bh_arr = phases_df['box_high'].values
 
     last_long_i = -10
     last_short_i = -10
@@ -558,9 +570,10 @@ def detect_safety_margin_signals(
             if (0 < distance_to_bottom < 0.5 * at or (low <= bl + 0.2 * at and close > bl)) and is_bullish_candle:
                 adjusted_pct = position_pct * ratios['long']
                 if adjusted_pct > 0.001:
-                    # 15분봉 스윙 전략: TP 1.5% / SL 1.0%
+                    # 진입가 기준 % 방식 TP/SL
                     tp_target = close * 1.015  # +1.5% 익절
                     sl_target = close * 0.990  # -1.0% 손절
+
                     event_name = 'safety_margin_bottom' if distance_to_bottom < 0.5 * at else 'safety_margin_touch'
                     signals.append(AccumulationSignal(
                         t_signal=idx[i],
@@ -592,9 +605,10 @@ def detect_safety_margin_signals(
             if (0 < distance_to_top < 0.5 * at or (high >= bh - 0.2 * at and close < bh)) and is_bearish_candle:
                 adjusted_pct = position_pct * ratios['short']
                 if adjusted_pct > 0.001:
-                    # 15분봉 스윙 전략: TP 1.5% / SL 1.0%
+                    # 진입가 기준 % 방식 TP/SL
                     tp_target = close * 0.985  # -1.5% 익절 (숏)
                     sl_target = close * 1.010  # +1.0% 손절 (숏)
+
                     event_name = 'safety_margin_top' if distance_to_top < 0.5 * at else 'safety_margin_touch_top'
                     signals.append(AccumulationSignal(
                         t_signal=idx[i],

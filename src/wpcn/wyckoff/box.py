@@ -1,16 +1,20 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import Optional
 import numpy as np
 import pandas as pd
 from wpcn.core.types import Theta
 
+
 @dataclass
 class BoxState:
+    """Wyckoff 박스 상태"""
     high: float = np.nan
     low: float = np.nan
     mid: float = np.nan
     width: float = np.nan
     frozen_until_i: int = -1
+
 
 def box_engine_freeze(df: pd.DataFrame, theta: Theta) -> pd.DataFrame:
     hi_roll = df["high"].rolling(theta.box_L, min_periods=theta.box_L).max()
