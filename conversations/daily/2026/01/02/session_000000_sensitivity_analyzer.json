@@ -1,0 +1,128 @@
+{
+  "backup_info": {
+    "created_at": "2026-01-02",
+    "priority": 1,
+    "feature": "Sensitivity Analyzer (과적합 방지)",
+    "version": "v2.1",
+    "description": "파라미터 민감도 분석 - ±5%, ±10% perturbation으로 안정성 검증"
+  },
+  "files_modified": [
+    {
+      "path": "_08_tuning/sensitivity_analyzer.py",
+      "action": "NEW",
+      "description": "신규 생성 - 민감도 분석 핵심 모듈"
+    },
+    {
+      "path": "_08_tuning/param_store.py",
+      "action": "MODIFIED",
+      "description": "ParamConfidence에 sensitivity 필드 추가"
+    },
+    {
+      "path": "_08_tuning/run_tuning.py",
+      "action": "MODIFIED",
+      "description": "Phase 4.5 Sensitivity Analysis 추가"
+    },
+    {
+      "path": "_08_tuning/__init__.py",
+      "action": "MODIFIED",
+      "description": "SensitivityAnalyzer 관련 export 추가"
+    }
+  ],
+  "new_files": {
+    "sensitivity_analyzer.py": {
+      "classes": [
+        {
+          "name": "ParamSensitivity",
+          "type": "dataclass",
+          "fields": ["param_name", "base_value", "perturbations", "scores", "base_score", "sensitivity", "is_stable"]
+        },
+        {
+          "name": "SensitivityResult",
+          "type": "dataclass",
+          "fields": ["param_sensitivities", "overall_score", "stable_params", "unstable_params", "base_score"],
+          "properties": ["is_robust", "stability_grade"]
+        },
+        {
+          "name": "SensitivityAnalyzer",
+          "type": "class",
+          "methods": ["analyze", "analyze_param", "quick_check"],
+          "constants": {
+            "DEFAULT_PERTURBATIONS": [-0.10, -0.05, 0.05, 0.10],
+            "STABLE_THRESHOLD": 0.30,
+            "UNSTABLE_THRESHOLD": 0.50
+          }
+        }
+      ],
+      "functions": ["compute_sensitivity_score", "classify_params_by_stability"]
+    }
+  },
+  "param_store_changes": {
+    "ParamConfidence": {
+      "new_fields": [
+        {"name": "sensitivity_score", "type": "float", "default": 0.0, "description": "파라미터 민감도 (0~1, 낮을수록 좋음)"},
+        {"name": "stability_grade", "type": "str", "default": "", "description": "안정성 등급 (A~F)"},
+        {"name": "unstable_params", "type": "List[str]", "default": [], "description": "불안정 파라미터 목록"}
+      ],
+      "confidence_score_formula": {
+        "v2.1": [
+          "overfit_score * 15",
+          "cv_consistency * 10",
+          "temporal_stability * 10",
+          "cycle_quality * 15",
+          "fold_consistency * 10",
+          "fft_reliability * 10",
+          "stability_score * 20 (NEW)",
+          "(oos_performance or 0) * 10"
+        ],
+        "note": "stability_score = max(0, 1 - sensitivity_score)"
+      }
+    }
+  },
+  "run_tuning_changes": {
+    "new_phase": {
+      "name": "Phase 4.5: Sensitivity Analysis",
+      "location": "after Walk-Forward, before Save",
+      "code_snippet": "analyzer = SensitivityAnalyzer(backtest_func=backtest_func, score_key='sharpe_ratio')\nsensitivity_result = analyzer.analyze(df=df, params=wf_result.robust_params, verbose=True)"
+    },
+    "metrics_additions": [
+      "sensitivity_score",
+      "stability_grade",
+      "unstable_params"
+    ]
+  },
+  "init_exports": {
+    "new_imports": [
+      "SensitivityAnalyzer",
+      "SensitivityResult",
+      "ParamSensitivity",
+      "compute_sensitivity_score",
+      "classify_params_by_stability"
+    ]
+  },
+  "stability_grades": {
+    "A": {"range": "< 0.15", "meaning": "매우 안정적"},
+    "B": {"range": "0.15 ~ 0.25", "meaning": "안정적"},
+    "C": {"range": "0.25 ~ 0.35", "meaning": "보통"},
+    "D": {"range": "0.35 ~ 0.50", "meaning": "불안정"},
+    "F": {"range": ">= 0.50", "meaning": "매우 불안정 (과적합 의심)"}
+  },
+  "usage_example": {
+    "code": [
+      "from wpcn._08_tuning import SensitivityAnalyzer",
+      "",
+      "analyzer = SensitivityAnalyzer(",
+      "    backtest_func=backtest_func,",
+      "    score_key='sharpe_ratio'",
+      ")",
+      "",
+      "result = analyzer.analyze(",
+      "    df=df,",
+      "    params=optimized_params,",
+      "    verbose=True",
+      ")",
+      "",
+      "print(f'Stability Grade: {result.stability_grade}')",
+      "print(f'Unstable Params: {result.unstable_params}')"
+    ]
+  }
+}

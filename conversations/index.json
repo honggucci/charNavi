@@ -1,34 +1,79 @@
 {
-  "total_conversations": 8,
-  "last_updated": "2025-12-31",
+  "total_conversations": 15,
+  "last_updated": "2026-01-02",
+  "structure": "daily/YYYY/MM/DD/session_HHMMSS_*.json",
+
+  "daily_sessions": {
+    "2025-12-30": {
+      "path": "daily/2025/12/30/",
+      "files": ["sessions.json"],
+      "count": 1,
+      "topics": ["폴더 구조", "정리/삭제", "결과 관리", "대화 기록"]
+    },
+    "2025-12-31": {
+      "path": "daily/2025/12/31/",
+      "files": [
+        "session_001_walk_forward_optimization.json",
+        "session_002.md",
+        "session_003_spot_vs_futures.md"
+      ],
+      "count": 3,
+      "topics": ["Walk-Forward 최적화", "박스 락 롤백", "현물/선물 비교"]
+    },
+    "2026-01-01": {
+      "path": "daily/2026/01/01/",
+      "files": [
+        "session_193600_architecture_summary.json",
+        "session_194100_execution_profiles.json",
+        "session_194500_critical_fixes.json",
+        "session_202000_bugfix_cost.json",
+        "session_213200_probability_tuning.json",
+        "session_221700_folder_organization.md",
+        "session_223500.json",
+        "session_224900_refactor_completed.json",
+        "session_225700_refactor_plan.json",
+        "session_230100_tuning_process_complete.json"
+      ],
+      "count": 10,
+      "topics": ["아키텍처 요약", "실행 프로필", "버그 수정", "확률 필터", "튜닝 모듈", "폴더 구조 정리"]
+    },
+    "2026-01-02": {
+      "path": "daily/2026/01/02/",
+      "files": [
+        "session_000000_sensitivity_analyzer.json"
+      ],
+      "count": 1,
+      "topics": ["민감도 분석", "과적합 방지"]
+    }
+  },
+
   "tags": {
-    "refactor": ["2024-12-30-001", "2025-12-31-002"],
-    "structure": ["2024-12-30-001", "2025-12-31-002"],
-    "config": ["2024-12-30-001"],
-    "cleanup": ["2024-12-30-002", "2024-12-30-003"],
-    "legacy": ["2024-12-30-002"],
-    "results": ["2024-12-30-004"],
-    "json": ["2024-12-30-004"],
-    "conversations": ["2024-12-30-005"],
-    "logging": ["2024-12-30-005"],
-    "walk-forward": ["2025-12-31-001"],
-    "optimization": ["2025-12-31-001"],
-    "spot": ["2025-12-31-003"],
-    "futures": ["2025-12-31-003"],
-    "wyckoff": ["2025-12-31-003"]
+    "refactor": ["2024-12-30", "2025-12-31"],
+    "structure": ["2024-12-30", "2025-12-31", "2026-01-01"],
+    "walk-forward": ["2025-12-31", "2026-01-01"],
+    "optimization": ["2025-12-31", "2026-01-01"],
+    "spot": ["2025-12-31", "2026-01-01"],
+    "futures": ["2025-12-31"],
+    "wyckoff": ["2025-12-31"],
+    "probability": ["2026-01-01"],
+    "tuning": ["2026-01-01"],
+    "integration": ["2026-01-01"],
+    "mtf": ["2026-01-01"],
+    "bugfix": ["2026-01-01"],
+    "architecture": ["2026-01-01"]
   },
+
   "topics": {
-    "폴더 구조": ["2024-12-30-001", "2024-12-30-002", "2025-12-31-002"],
-    "정리/삭제": ["2024-12-30-002", "2024-12-30-003"],
-    "결과 관리": ["2024-12-30-004"],
-    "대화 기록": ["2024-12-30-005"],
-    "Walk-Forward 최적화": ["2025-12-31-001"],
-    "박스 락 롤백": ["2025-12-31-002"],
-    "현물/선물 비교": ["2025-12-31-003"]
-  },
-  "files": {
-    "2025-12-31-001": "2025-12-31_walk_forward_optimization.json",
-    "2025-12-31-002": "2025-12-31_session.md",
-    "2025-12-31-003": "daily/2025-12-31_spot_vs_futures.md"
+    "폴더 구조": ["2024-12-30", "2026-01-01"],
+    "정리/삭제": ["2024-12-30"],
+    "결과 관리": ["2024-12-30"],
+    "대화 기록": ["2024-12-30"],
+    "Walk-Forward 최적화": ["2025-12-31", "2026-01-01"],
+    "박스 락 롤백": ["2025-12-31"],
+    "현물/선물 비교": ["2025-12-31"],
+    "확률 필터": ["2026-01-01"],
+    "모듈 연동": ["2026-01-01"],
+    "버그 수정": ["2026-01-01"],
+    "아키텍처": ["2026-01-01"]
   }
 }
