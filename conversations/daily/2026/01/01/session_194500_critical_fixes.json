@@ -1,0 +1,279 @@
+{
+  "date": "2026-01-01",
+  "title": "WPCN 치명적 수정사항 최종 정리",
+  "version": "1.0.0",
+  "status": "APPROVED - 코드 수정 대기",
+  "summary": "파라미터 조합이 서로 싸우는 중 → 이 싸움부터 말려야 돈이 남는다",
+
+  "diagnosis": {
+    "positive": [
+      "모듈 분리 (events/phases/box/navigation) = 정답",
+      "Spring/UTAD '이탈 + reclaim' 계약화 = 좋음",
+      "runs/{run_id}/ parquet 출력 구조 = 디버깅 최적",
+      "코딩 잘하는 사람처럼 생김"
+    ],
+    "critical_problem": "돈 버는 사람처럼 운영되지 않음",
+    "root_cause": "한 엔진이 두 세계(Scalping/Navigation)를 동시에 만족시키려 함"
+  },
+
+  "critical_fixes": {
+    "priority_1": {
+      "title": "비용 vs TP 구조 정합성",
+      "severity": "CRITICAL - 이거 하나로 전략이 다 죽을 수 있음",
+      "current_problem": {
+        "fee_bps": 10.0,
+        "slippage_bps": 30.0,
+        "total_one_way": "40bps = 0.40%",
+        "total_round_trip": "~0.8%",
+        "scalping_tp": "0.5%",
+        "result": "TP 자체가 마이너스 게임"
+      },
+      "fix": {
+        "option_A": {
+          "description": "비용 가정을 현실화 (권장)",
+          "spot_btc": {"fee_bps": 7.5, "slippage_bps": 3.0, "total": "10.5bps"},
+          "spot_alt": {"fee_bps": 10.0, "slippage_bps": 10.0, "total": "20bps"},
+          "futures": {"fee_bps": 4.0, "slippage_bps": 5.0, "total": "9bps"}
+        },
+        "option_B": {
+          "description": "TP를 ATR 기반으로 변경",
+          "tp1_method": "close + tp1_mult * ATR",
+          "tp2_method": "close + tp2_mult * ATR",
+          "min_rr_ratio": 1.5,
+          "note": "비용 대비 TP가 최소 1.5배 이상이어야 함"
+        }
+      },
+      "files_to_modify": [
+        "src/wpcn/_03_common/_01_core/types.py",
+        "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/main.py:67",
+        "src/wpcn/_03_common/_03_wyckoff/events.py:216-218"
+      ]
+    },
+
+    "priority_2": {
+      "title": "conf_min/edge_min 상향 + Unknown 늘리기",
+      "severity": "HIGH - 쓰레기 신호 허용 중",
+      "current_problem": {
+        "conf_min": 0.50,
+        "edge_min": 0.60,
+        "result": "사실상 아무거나 들어가도 됨"
+      },
+      "fix": {
+        "conf_min": 0.65,
+        "edge_min": 0.70,
+        "target_no_trade_ratio": "30% 이상",
+        "philosophy": "안 들어가는 날이 많아져야 계좌가 산다"
+      },
+      "files_to_modify": [
+        "src/wpcn/_03_common/_01_core/types.py:19-20",
+        "src/wpcn/_00_config/backtest.py:27-28",
+        "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/main.py:73-74"
+      ]
+    },
+
+    "priority_3": {
+      "title": "Spot direction_ratios → cash_exposure",
+      "severity": "HIGH - 실행 불가능한 스펙",
+      "current_problem": {
+        "accumulation": {"long": 0.70, "short": 0.30},
+        "issue": "현물에서 short 30%는 실행 불가"
+      },
+      "fix": {
+        "DIRECTION_RATIOS_SPOT": {
+          "accumulation": {"long_exposure": 0.70, "cash_exposure": 0.30},
+          "distribution": {"long_exposure": 0.30, "cash_exposure": 0.70},
+          "re_accumulation": {"long_exposure": 0.80, "cash_exposure": 0.20},
+          "re_distribution": {"long_exposure": 0.20, "cash_exposure": 0.80},
+          "unknown": {"long_exposure": 0.50, "cash_exposure": 0.50}
+        },
+        "DIRECTION_RATIOS_FUTURES": "기존 유지 (long/short)",
+        "philosophy": "short 비율 = 현금 비중(관망/현금화)"
+      },
+      "files_to_modify": [
+        "src/wpcn/_03_common/_03_wyckoff/phases.py:83-88"
+      ]
+    },
+
+    "priority_4": {
+      "title": "confirm_bars + reclaim 유지 조건",
+      "severity": "MEDIUM - 휩쏘에 취약",
+      "current_problem": {
+        "box_L": 96,
+        "N_reclaim": 3,
+        "confirm_bars": 1,
+        "issue": "구조는 길게 보는데 확정은 너무 빨리 찍음"
+      },
+      "fix": {
+        "confirm_bars": 2,
+        "reclaim_hold_bars": 2,
+        "logic": "reclaim 후 박스 내부 유지 2봉 확인",
+        "philosophy": "reclaim만 하고 다음 봉에 다시 빠지면 쓰레기"
+      },
+      "files_to_modify": [
+        "src/wpcn/_03_common/_01_core/types.py:21",
+        "src/wpcn/_03_common/_03_wyckoff/events.py"
+      ]
+    },
+
+    "priority_5": {
+      "title": "F_min 정의 명확화",
+      "severity": "LOW - 디버깅 악몽 예방",
+      "current_problem": {
+        "F_min": 0.70,
+        "issue": "fib confidence? fill probability? filter? 불명확"
+      },
+      "fix": {
+        "definition": {
+          "name": "Fill Probability Minimum",
+          "meaning": "pending order 체결 확률 최소값",
+          "range": "0.0 ~ 1.0",
+          "calculation": "volume_ratio * price_proximity",
+          "usage": "pending_orders 처리 시 F_min 미만이면 취소"
+        },
+        "documentation": "types.py 주석에 명시"
+      },
+      "files_to_modify": [
+        "src/wpcn/_03_common/_01_core/types.py:41"
+      ]
+    }
+  },
+
+  "spring_utad_enhancements": {
+    "title": "Spring/UTAD 실전 강화 3종 세트",
+    "current_logic": {
+      "spring": "low < box_low - x_atr*ATR + close >= box_low + m_bw*box_width",
+      "utad": "대칭"
+    },
+    "enhancements": {
+      "1_reclaim_hold": {
+        "description": "Reclaim 이후 유지 조건",
+        "implementation": "reclaim 후 2-3봉 동안 박스 내부 유지 확인",
+        "reason": "reclaim만 하고 다음 봉에 박스 밖으로 빠지면 쓰레기"
+      },
+      "2_effort_vs_result": {
+        "description": "흡수/고갈 가점",
+        "implementation": "거래량/변동 크지만 가격이 더 못 밀면 진짜 spring 확률 UP",
+        "formula": "effort = volume_ratio, result = price_change / ATR",
+        "signal_boost": "effort > result → confidence +0.1"
+      },
+      "3_chaos_filter": {
+        "description": "CHAOS 레짐에서 spring/utad 금지",
+        "implementation": "chaos_ret_atr=3.0 구간에서 이벤트 진입 차단",
+        "reason": "이 구간에서 진입하면 그냥 폭발"
+      }
+    }
+  },
+
+  "execution_profiles_architecture": {
+    "title": "프로파일 분기 구조 (핵심)",
+    "problem": "한 엔진이 두 세계를 동시에 만족시키려 함",
+    "solution": {
+      "CoreNavigation": {
+        "description": "현물/선물 공통 로직",
+        "components": ["box_engine", "events", "phases", "indicators", "navigation"]
+      },
+      "ExecutionProfileSpot": {
+        "description": "현물 전용 실행 프로파일",
+        "direction": "long_only",
+        "ratios": "long_exposure / cash_exposure",
+        "costs": {"fee_bps": 7.5, "slippage_bps": 5.0}
+      },
+      "ExecutionProfileFutures": {
+        "description": "선물 전용 실행 프로파일",
+        "direction": "both",
+        "ratios": "long / short",
+        "costs": {"fee_bps": 4.0, "slippage_bps": 5.0},
+        "extras": ["leverage", "liquidation_buffer", "funding_rate"]
+      },
+      "ScalpingProfile": {
+        "description": "단타 전용 프로파일 (별도)",
+        "signals": ["rsi_div", "fib_bounce", "stoch_cross"],
+        "max_hold_bars": 30,
+        "tp_method": "ATR 기반",
+        "cost_validation": "TP/비용 > 1.5 필수"
+      },
+      "NavigationProfile": {
+        "description": "와이코프 구조 프로파일",
+        "signals": ["spring", "utad"],
+        "max_hold_bars": 192,
+        "tp_method": "box_mid / box_edge",
+        "hold_philosophy": "Phase B/C/D 구조를 먹을 시간 확보"
+      }
+    }
+  },
+
+  "max_hold_conflict": {
+    "title": "max_hold_bars vs Wyckoff Phase 충돌",
+    "problem": {
+      "current_max_hold": 30,
+      "timeframe": "15m",
+      "hold_hours": 7.5,
+      "wyckoff_phase_scale": "하루 ~ 며칠",
+      "result": "Phase B/C/D 먹기 전에 시간청산으로 잘려나감"
+    },
+    "fix": {
+      "scalping_max_hold": 30,
+      "navigation_max_hold": 192,
+      "navigation_hold_hours": 48,
+      "philosophy": "스캘핑과 네비게이션은 완전히 분리된 실행 프로파일로 운용"
+    }
+  },
+
+  "implementation_order": [
+    {
+      "step": 1,
+      "action": "BacktestCosts 수정",
+      "files": ["types.py", "main.py"],
+      "changes": "비용 현실화 (Spot BTC 10.5bps, Futures 9bps)"
+    },
+    {
+      "step": 2,
+      "action": "conf_min/edge_min 상향",
+      "files": ["types.py", "backtest.py", "main.py"],
+      "changes": "conf 0.65, edge 0.70"
+    },
+    {
+      "step": 3,
+      "action": "DIRECTION_RATIOS_SPOT 추가",
+      "files": ["phases.py"],
+      "changes": "short → cash_exposure 재정의"
+    },
+    {
+      "step": 4,
+      "action": "confirm_bars + reclaim_hold 추가",
+      "files": ["types.py", "events.py"],
+      "changes": "confirm_bars=2, reclaim_hold_bars=2"
+    },
+    {
+      "step": 5,
+      "action": "F_min 정의 문서화",
+      "files": ["types.py"],
+      "changes": "주석에 fill probability 정의 명시"
+    },
+    {
+      "step": 6,
+      "action": "Effort vs Result 로직 추가",
+      "files": ["events.py"],
+      "changes": "거래량/가격 비율로 신호 신뢰도 조정"
+    },
+    {
+      "step": 7,
+      "action": "ExecutionProfile enum/class 분리",
+      "files": ["types.py", "broker_sim.py"],
+      "changes": "Spot/Futures/Scalping 프로파일 명시적 분리"
+    }
+  ],
+
+  "final_recommendation": {
+    "before_any_code_change": [
+      "비용 가정 검증 (실제 거래소 데이터로)",
+      "백테스트 결과에서 No-trade 비율 확인",
+      "Scalping/Navigation 분리 여부 결정"
+    ],
+    "testing_checklist": [
+      "비용 변경 후 승률/손익비 변화 확인",
+      "conf_min/edge_min 상향 후 거래 횟수 감소 확인 (30%↓ 목표)",
+      "reclaim_hold 추가 후 휩쏘 필터링 효과 확인"
+    ]
+  }
+}

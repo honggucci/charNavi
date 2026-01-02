@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backtest Results - {{ run_name }}</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+        }
+
+        .charts-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .chart-box {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 100px;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ run_name }}</h1>
+            <a href="/" class="back-btn">← Back to Dashboard</a>
+        </div>
+
+        <div id="loading">Loading charts...</div>
+
+        <div class="charts-container" id="charts" style="display: none;">
+            <div class="chart-box">
+                <div class="chart-title">Price & Wyckoff Analysis</div>
+                <div id="price-chart"></div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">RSI</div>
+                <div id="rsi-chart"></div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">Equity Curve</div>
+                <div id="equity-chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const runName = '{{ run_name }}';
+
+        async function loadChartData() {
+            try {
+                const response = await fetch(`/api/chart/${runName}`);
+                const data = await response.json();
+
+                // Hide loading, show charts
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('charts').style.display = 'grid';
+
+                createPriceChart(data);
+                createRSIChart(data);
+                createEquityChart(data);
+            } catch (error) {
+                console.error('Error loading chart data:', error);
+                document.getElementById('loading').innerHTML = 'Error loading data';
+            }
+        }
+
+        function createPriceChart(data) {
+            const traces = [];
+
+            // Candlestick
+            traces.push({
+                type: 'candlestick',
+                x: data.candles.time,
+                open: data.candles.open,
+                high: data.candles.high,
+                low: data.candles.low,
+                close: data.candles.close,
+                name: 'Price',
+                increasing: {line: {color: '#26a69a'}},
+                decreasing: {line: {color: '#ef5350'}}
+            });
+
+            // Wyckoff Box High
+            traces.push({
+                type: 'scatter',
+                x: data.candles.time,
+                y: data.wyckoff.box_high,
+                mode: 'lines',
+                line: {color: 'red', width: 1, dash: 'dot'},
+                name: 'Box High',
+                opacity: 0.6
+            });
+
+            // Wyckoff Box Low
+            traces.push({
+                type: 'scatter',
+                x: data.candles.time,
+                y: data.wyckoff.box_low,
+                mode: 'lines',
+                line: {color: 'green', width: 1, dash: 'dot'},
+                name: 'Box Low',
+                opacity: 0.6
+            });
+
+            // Entry signals
+            if (data.trades.entry.length > 0) {
+                traces.push({
+                    type: 'scatter',
+                    x: data.trades.entry.map(t => t.time),
+                    y: data.trades.entry.map(t => t.price),
+                    mode: 'markers',
+                    marker: {
+                        symbol: 'triangle-up',
+                        size: 15,
+                        color: 'lime',
+                        line: {color: 'darkgreen', width: 2}
+                    },
+                    name: 'Entry'
+                });
+            }
+
+            // TP exits
+            if (data.trades.tp.length > 0) {
+                traces.push({
+                    type: 'scatter',
+                    x: data.trades.tp.map(t => t.time),
+                    y: data.trades.tp.map(t => t.price),
+                    mode: 'markers',
+                    marker: {
+                        symbol: 'triangle-down',
+                        size: 15,
+                        color: '#26a69a',
+                        line: {color: 'darkgreen', width: 2}
+                    },
+                    name: 'Take Profit'
+                });
+            }
+
+            // SL exits
+            if (data.trades.sl.length > 0) {
+                traces.push({
+                    type: 'scatter',
+                    x: data.trades.sl.map(t => t.time),
+                    y: data.trades.sl.map(t => t.price),
+                    mode: 'markers',
+                    marker: {
+                        symbol: 'triangle-down',
+                        size: 15,
+                        color: '#ef5350',
+                        line: {color: 'darkred', width: 2}
+                    },
+                    name: 'Stop Loss'
+                });
+            }
+
+            const layout = {
+                height: 600,
+                paper_bgcolor: '#16213e',
+                plot_bgcolor: '#16213e',
+                font: {color: 'white'},
+                xaxis: {
+                    rangeslider: {visible: false},
+                    gridcolor: '#2a3f5f'
+                },
+                yaxis: {
+                    gridcolor: '#2a3f5f'
+                },
+                hovermode: 'x unified'
+            };
+
+            Plotly.newPlot('price-chart', traces, layout, {responsive: true});
+        }
+
+        function createRSIChart(data) {
+            const trace = {
+                type: 'scatter',
+                x: data.rsi.time,
+                y: data.rsi.value,
+                mode: 'lines',
+                line: {color: 'cyan', width: 2},
+                name: 'RSI'
+            };
+
+            const layout = {
+                height: 250,
+                paper_bgcolor: '#16213e',
+                plot_bgcolor: '#16213e',
+                font: {color: 'white'},
+                xaxis: {gridcolor: '#2a3f5f'},
+                yaxis: {
+                    range: [0, 100],
+                    gridcolor: '#2a3f5f'
+                },
+                shapes: [
+                    {
+                        type: 'line',
+                        x0: data.rsi.time[0],
+                        x1: data.rsi.time[data.rsi.time.length - 1],
+                        y0: 70,
+                        y1: 70,
+                        line: {color: 'red', width: 1, dash: 'dash'}
+                    },
+                    {
+                        type: 'line',
+                        x0: data.rsi.time[0],
+                        x1: data.rsi.time[data.rsi.time.length - 1],
+                        y0: 30,
+                        y1: 30,
+                        line: {color: 'green', width: 1, dash: 'dash'}
+                    }
+                ]
+            };
+
+            Plotly.newPlot('rsi-chart', [trace], layout, {responsive: true});
+        }
+
+        function createEquityChart(data) {
+            const trace = {
+                type: 'scatter',
+                x: data.equity.time,
+                y: data.equity.value,
+                mode: 'lines',
+                fill: 'tozeroy',
+                line: {color: 'purple', width: 3},
+                fillcolor: 'rgba(128, 0, 128, 0.3)',
+                name: 'Equity'
+            };
+
+            const layout = {
+                height: 300,
+                paper_bgcolor: '#16213e',
+                plot_bgcolor: '#16213e',
+                font: {color: 'white'},
+                xaxis: {gridcolor: '#2a3f5f'},
+                yaxis: {gridcolor: '#2a3f5f'}
+            };
+
+            Plotly.newPlot('equity-chart', [trace], layout, {responsive: true});
+        }
+
+        // Load data on page load
+        loadChartData();
+    </script>
+</body>
+</html>

@@ -2,12 +2,182 @@ from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 import numpy as np
 import pandas as pd
+import os
 
 from wpcn._03_common._01_core.types import Theta, BacktestCosts, BacktestConfig
 from wpcn._04_execution.cost import apply_costs
 from wpcn._03_common._03_wyckoff.events import detect_spring_utad, detect_all_signals
 from wpcn._03_common._03_wyckoff.phases import detect_phase_signals, AccumulationSignal
 from wpcn._06_engine.navigation import compute_navigation
+from wpcn._03_common._02_features.dynamic_params import DynamicParameterEngine
+from wpcn._03_common._02_features.indicators import stoch_rsi, detect_rsi_divergence
+
+
+def find_oversold_overbought_extremes(df: pd.DataFrame, stoch_k: pd.Series, lookback: int = 20) -> Dict[str, List]:
+    """
+    15M Stoch RSI 과매수/과매도 구간에서 종가 극값 찾기
+
+    Args:
+        df: 15분봉 DataFrame
+        stoch_k: Stoch RSI K 값
+        lookback: 구간 탐지 룩백
+
+    Returns:
+        {'oversold_extremes': [(time, price)], 'overbought_extremes': [(time, price)]}
+    """
+    oversold = stoch_k < 0.30  # 과매도 (30%)
+    overbought = stoch_k > 0.70  # 과매수 (70%)
+
+    oversold_extremes = []
+    overbought_extremes = []
+
+    # 연속된 과매도 구간 찾기
+    in_oversold_zone = False
+    zone_start = None
+
+    for i, (t, is_oversold) in enumerate(oversold.items()):
+        if is_oversold and not in_oversold_zone:
+            # 새로운 과매도 구간 시작
+            in_oversold_zone = True
+            zone_start = i
+        elif not is_oversold and in_oversold_zone:
+            # 과매도 구간 종료 - 이 구간에서 종가 최저점 찾기
+            zone_end = i - 1
+            zone_df = df.iloc[zone_start:zone_end+1]
+            if len(zone_df) > 0:
+                min_close_idx = zone_df['close'].idxmin()
+                oversold_extremes.append((min_close_idx, df.loc[min_close_idx, 'close']))
+            in_oversold_zone = False
+
+    # 마지막 구간 처리
+    if in_oversold_zone and zone_start is not None:
+        zone_df = df.iloc[zone_start:]
+        if len(zone_df) > 0:
+            min_close_idx = zone_df['close'].idxmin()
+            oversold_extremes.append((min_close_idx, df.loc[min_close_idx, 'close']))
+
+    # 연속된 과매수 구간 찾기
+    in_overbought_zone = False
+    zone_start = None
+
+    for i, (t, is_overbought) in enumerate(overbought.items()):
+        if is_overbought and not in_overbought_zone:
+            # 새로운 과매수 구간 시작
+            in_overbought_zone = True
+            zone_start = i
+        elif not is_overbought and in_overbought_zone:
+            # 과매수 구간 종료 - 이 구간에서 종가 최고점 찾기
+            zone_end = i - 1
+            zone_df = df.iloc[zone_start:zone_end+1]
+            if len(zone_df) > 0:
+                max_close_idx = zone_df['close'].idxmax()
+                overbought_extremes.append((max_close_idx, df.loc[max_close_idx, 'close']))
+            in_overbought_zone = False
+
+    # 마지막 구간 처리
+    if in_overbought_zone and zone_start is not None:
+        zone_df = df.iloc[zone_start:]
+        if len(zone_df) > 0:
+            max_close_idx = zone_df['close'].idxmax()
+            overbought_extremes.append((max_close_idx, df.loc[max_close_idx, 'close']))
+
+    return {
+        'oversold_extremes': oversold_extremes,
+        'overbought_extremes': overbought_extremes
+    }
+
+
+def check_mtf_entry_signal(
+    df_15m: pd.DataFrame,
+    df_5m: pd.DataFrame | None,
+    bar_time: pd.Timestamp,
+    side: str,  # 'long' or 'short'
+    stoch_k_15m: pd.Series,
+    div_15m: pd.DataFrame,
+    div_5m: pd.DataFrame | None,
+    oversold_times: List,
+    overbought_times: List
+) -> Tuple[bool, float, Dict]:
+    """
+    MTF 진입 신호 체크
+
+    Returns:
+        (signal_valid, score, reasons)
+    """
+    score = 0.0
+    reasons = {}
+
+    # === 1. 15M Stoch RSI 체크 ===
+    if bar_time not in stoch_k_15m.index:
+        return False, 0.0, {'error': 'NO_STOCH_DATA'}
+
+    stoch_k = stoch_k_15m.loc[bar_time]
+
+    if side == 'long':
+        if stoch_k >= 0.30:
+            return False, 0.0, {'stoch_15m': f'NOT_OVERSOLD ({stoch_k*100:.1f}%)'}
+        reasons['stoch_15m'] = f'OVERSOLD ({stoch_k*100:.1f}%)'
+        score += 2.0
+    else:
+        if stoch_k <= 0.70:
+            return False, 0.0, {'stoch_15m': f'NOT_OVERBOUGHT ({stoch_k*100:.1f}%)'}
+        reasons['stoch_15m'] = f'OVERBOUGHT ({stoch_k*100:.1f}%)'
+        score += 2.0
+
+    # === 2. 과매수/과매도 구간 내 극값인지 체크 ===
+    extreme_times = oversold_times if side == 'long' else overbought_times
+    is_extreme = bar_time in extreme_times
+
+    if not is_extreme:
+        return False, score, {**reasons, 'extreme': 'NOT_ZONE_EXTREME'}
+
+    reasons['extreme'] = 'ZONE_LOWEST_CLOSE' if side == 'long' else 'ZONE_HIGHEST_CLOSE'
+    score += 2.0
+
+    # === 3. 15M RSI Divergence (윈도우 체크: 극값 전후 5봉) - OPTIONAL ===
+    if bar_time in div_15m.index:
+        # 극값 바 근처 윈도우에서 다이버전스 체크 (±5봉)
+        bar_idx = div_15m.index.get_loc(bar_time)
+        window_start = max(0, bar_idx - 5)
+        window_end = min(len(div_15m), bar_idx + 6)
+        div_window = div_15m.iloc[window_start:window_end]
+
+        div_col = 'bullish_div' if side == 'long' else 'bearish_div'
+        has_div_15m = div_window[div_col].any()
+
+        if has_div_15m:
+            # 윈도우 내 최대 다이버전스 강도 사용
+            div_strength_15m = div_window.loc[div_window[div_col], 'div_strength'].max()
+            reasons['div_15m'] = f'BULLISH_DIV ({div_strength_15m:.2f})' if side == 'long' else f'BEARISH_DIV ({div_strength_15m:.2f})'
+            score += 2.5 * min(div_strength_15m, 1.0)
+        else:
+            reasons['div_15m'] = 'NO_DIV_IN_WINDOW'
+    else:
+        reasons['div_15m'] = 'NO_DIV_DATA'
+
+    # === 4. 5M RSI Divergence (해당 15분봉 내 5분봉들 체크) ===
+    if df_5m is not None and div_5m is not None:
+        # 15분봉 시간대 = [bar_time - 15min, bar_time) 범위의 5분봉 3개
+        bar_start = bar_time - pd.Timedelta(minutes=15)
+        df_5m_window = div_5m[(div_5m.index >= bar_start) & (div_5m.index < bar_time)]
+
+        if len(df_5m_window) > 0:
+            # 5분봉 중 하나라도 다이버전스 있는지 체크
+            has_div_5m = df_5m_window['bullish_div' if side == 'long' else 'bearish_div'].any()
+
+            if has_div_5m:
+                div_strength_5m = df_5m_window['div_strength'].max()
+                reasons['div_5m'] = f'BULLISH_DIV ({div_strength_5m:.2f})' if side == 'long' else f'BEARISH_DIV ({div_strength_5m:.2f})'
+                score += 2.0 * min(div_strength_5m, 1.0)
+            else:
+                reasons['div_5m'] = 'NO_DIV'
+        else:
+            reasons['div_5m'] = 'NO_5M_DATA'
+    else:
+        reasons['div_5m'] = '5M_DISABLED'
+
+    return True, score, reasons
+
 
 def approx_pfill_det(df: pd.DataFrame, t_idx: int, entry_price: float, N_fill: int) -> float:
     end = min(len(df), t_idx + 1 + N_fill)
@@ -17,15 +187,53 @@ def approx_pfill_det(df: pd.DataFrame, t_idx: int, entry_price: float, N_fill: i
     hit = ((window["low"] <= entry_price) & (entry_price <= window["high"])).any()
     return 1.0 if hit else 0.0
 
-def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: BacktestConfig, mtf: List[str] | None = None, scalping_mode: bool = False, use_phase_accumulation: bool = True, spot_mode: bool = True) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta = None, costs: BacktestCosts = None, cfg: BacktestConfig = None, mtf: List[str] | None = None, scalping_mode: bool = False, use_phase_accumulation: bool = False, spot_mode: bool = True, use_fractal_gate: bool = False) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-    백테스트 시뮬레이션
+    백테스트 시뮬레이션 (MTF + 와이코프 + 피보나치 전략)
 
     Args:
+        df: 15분봉 DataFrame (메인 타임프레임)
+        df_5m: 5분봉 DataFrame (보조 타임프레임, MTF 신호용)
         spot_mode: True면 현물 (숏 비활성화), False면 선물 (숏 가능)
+        use_phase_accumulation: DEPRECATED - 항상 False (313번 물타기 방지)
     """
     df = df.sort_index()
+    if df_5m is not None:
+        df_5m = df_5m.sort_index()
     mtf = mtf or []
+
+    # === 동적 파라미터 계산 (전체 시계열) ===
+    print("  Computing dynamic parameters...")
+    dyn_engine = DynamicParameterEngine(
+        vol_lookback=100,
+        fft_min_period=10,
+        fft_max_period=200,
+        hilbert_smooth=5
+    )
+    # 전체 시계열에 대한 동적 파라미터 계산 (미리 계산)
+    dyn_params_df = dyn_engine.compute_params_series(df, min_lookback=50)
+    print(f"  Dynamic parameters computed for {len(dyn_params_df)} bars")
+
+    # === MTF 지표 계산 ===
+    print("  Computing MTF indicators...")
+
+    # 15M Stoch RSI
+    stoch_k_15m, stoch_d_15m = stoch_rsi(df['close'], 14, 14, 3, 3)
+
+    # 15M RSI Divergence
+    div_15m = detect_rsi_divergence(df, rsi_len=14, lookback=20)
+
+    # 5M RSI Divergence (if available)
+    div_5m = None
+    if df_5m is not None:
+        div_5m = detect_rsi_divergence(df_5m, rsi_len=14, lookback=20)
+        print(f"    5M RSI Divergence computed for {len(div_5m)} bars")
+
+    # Find oversold/overbought extremes
+    extremes = find_oversold_overbought_extremes(df, stoch_k_15m)
+    oversold_times = [t for t, _ in extremes['oversold_extremes']]
+    overbought_times = [t for t, _ in extremes['overbought_extremes']]
+    print(f"    Found {len(oversold_times)} oversold extremes, {len(overbought_times)} overbought extremes")
 
     # navigation (page probs + Unknown gate)
     nav = compute_navigation(df, theta, cfg, mtf)
@@ -33,18 +241,8 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
     # Use scalping signals if scalping_mode is enabled
     signals = detect_all_signals(df, theta, scalping_mode=scalping_mode)
 
-    # Phase A/B accumulation signals (거미줄 + 안전마진)
-    if use_phase_accumulation:
-        phases_df, spider_signals, safety_signals = detect_phase_signals(
-            df, theta, accumulation_pct=0.03  # 3%씩 매수 (자산 배분 강화)
-        )
-        accum_signals = spider_signals + safety_signals
-        # 현물 모드: 숏 신호 제거
-        if spot_mode:
-            accum_signals = [s for s in accum_signals if s.side == 'long']
-    else:
-        phases_df = None
-        accum_signals = []
+    # Phase detection for box levels (but NOT for accumulation signals)
+    phases_df, _, _ = detect_phase_signals(df, theta, accumulation_pct=0.03)
 
     # 현물 모드: 메인 신호에서도 숏 제거
     if spot_mode:
@@ -56,30 +254,44 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
     } for s in signals]).sort_values("time") if signals else pd.DataFrame(columns=["time"])
 
     cash = float(cfg.initial_equity)
-    pos_qty = 0.0
-    pos_side = 0  # +1 long, -1 short
-    entry_px = np.nan  # 진입 가격 저장
-    stop_price = np.nan
-    tp1 = np.nan
-    tp2 = np.nan
+
+    # MTF-based spot position management
+    total_qty = 0.0  # 총 포지션 수량 (MTF 진입)
+    avg_entry_px = 0.0  # 평균 진입가 (MTF 진입)
+    pos_side = 0  # +1 long, 0 no position
     entry_i = -1
-    tp1_done = False
+    stop_price = np.nan
+    tp1_price = np.nan
+    tp2_price = np.nan
 
-    # Phase A/B 롱 축적 포지션 (별도 관리)
-    accum_positions: List[Dict[str, Any]] = []  # 축적된 포지션들
-    accum_total_qty = 0.0  # 축적된 총 수량
-    accum_avg_price = 0.0  # 평균 매수가
-    accum_stop_price = np.nan  # 축적 포지션 손절가
-    accum_tp_price = np.nan  # 축적 포지션 익절가
-    accum_last_entry_i = -10  # 마지막 진입 바 인덱스
+    # MTF exit tracking
+    tp1_exited = False
+    tp2_exited = False
 
-    # Phase A/B 숏 축적 포지션 (별도 관리)
-    short_accum_positions: List[Dict[str, Any]] = []
+    # Legacy signal-based position (for compatibility)
+    pos_qty = 0.0  # 레거시 신호 기반 포지션 수량
+
+    # Spring/UTAD event tracking
+    spring_detected_i = -100  # Spring 발생 바 인덱스
+    utad_detected_i = -100  # UTAD 발생 바 인덱스
+    active_box_high = np.nan
+    active_box_low = np.nan
+
+    # Accumulation position tracking (Phase A/B)
+    accum_total_qty = 0.0
+    accum_avg_price = 0.0
+    accum_last_entry_i = -1
     short_accum_total_qty = 0.0
     short_accum_avg_price = 0.0
-    short_accum_stop_price = np.nan
-    short_accum_tp_price = np.nan
-    short_accum_last_entry_i = -10  # 마지막 진입 바 인덱스
+    short_accum_last_entry_i = -1
+
+    # TP tracking
+    tp1_done = False
+    tp2_done = False
+    short_tp1_done = False
+    short_tp2_done = False
+    tp1 = np.nan
+    tp2 = np.nan
 
     pending_orders: List[Dict[str, Any]] = []
     trades: List[Dict[str, Any]] = []
@@ -89,10 +301,8 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
     for s in signals:
         sig_by_time.setdefault(s.t_signal, []).append(s)
 
-    # 축적 신호를 시간별로 인덱싱
-    accum_by_time: Dict[Any, List[AccumulationSignal]] = {}
-    for a in accum_signals:
-        accum_by_time.setdefault(a.t_signal, []).append(a)
+    # Phase accumulation signals by time
+    accum_by_time: Dict[Any, List[Any]] = {}
 
     # OPTIMIZATION: Pre-extract numpy arrays for faster iteration
     idx = df.index
@@ -109,9 +319,248 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
         t = idx[i]
         o, h, l, c = open_arr[i], high_arr[i], low_arr[i], close_arr[i]
 
-        # === Phase A/B 축적 신호 처리 (양방향) ===
-        if t in accum_by_time and pos_side == 0:  # 메인 포지션 없을 때만 축적
+        # Get current box levels from phases_df
+        if t in phases_df.index:
+            current_box_high = phases_df.loc[t, 'box_high']
+            current_box_low = phases_df.loc[t, 'box_low']
+            box_range = current_box_high - current_box_low
+
+            # Calculate Fibonacci levels
+            fib_0 = current_box_low
+            fib_236 = current_box_low + box_range * 0.236
+            fib_382 = current_box_low + box_range * 0.382
+            fib_500 = current_box_low + box_range * 0.5
+            fib_618 = current_box_low + box_range * 0.618
+            fib_786 = current_box_low + box_range * 0.786
+            fib_1 = current_box_high
+        else:
+            fib_0 = fib_236 = fib_382 = fib_500 = fib_618 = fib_786 = fib_1 = np.nan
+
+        # === Spring/UTAD 감지 ===
+        # Spring/UTAD 신호가 발생하면 box level 저장
+        if t in sig_by_time:
+            for sig in sig_by_time[t]:
+                if sig.event in ['spring', 'upthrust'] and sig.side == 'long':
+                    spring_detected_i = i
+                    # 새로운 Spring이면 플래그 리셋
+                    fib_236_filled = fib_382_filled = fib_500_filled = False
+                    fib_618_exited = fib_786_exited = False
+                    if t in phases_df.index:
+                        active_box_high = phases_df.loc[t, 'box_high']
+                        active_box_low = phases_df.loc[t, 'box_low']
+                        print(f"[Spring] {t}: box_low={active_box_low:.2f}, box_high={active_box_high:.2f}, fib_236={fib_236 if not np.isnan(fib_236) else 'NaN'}")
+                elif sig.event in ['utad', 'downthrust'] and sig.side == 'short':
+                    utad_detected_i = i
+                    if t in phases_df.index:
+                        active_box_high = phases_df.loc[t, 'box_high']
+                        active_box_low = phases_df.loc[t, 'box_low']
+
+        # === MTF 기반 현물 진입 (15M Stoch RSI + 5M/15M RSI Divergence) ===
+        if pos_side == 0:
+            # 롱 진입 체크
+            long_valid, long_score, long_reasons = check_mtf_entry_signal(
+                df_15m=df,
+                df_5m=df_5m,
+                bar_time=t,
+                side='long',
+                stoch_k_15m=stoch_k_15m,
+                div_15m=div_15m,
+                div_5m=div_5m,
+                oversold_times=oversold_times,
+                overbought_times=overbought_times
+            )
+
+            # Debug: 높은 스코어 신호 로깅 (score >= 2.0)
+            if long_score >= 2.0 and i % 1000 == 0:  # 1000봉마다 샘플링
+                print(f"[MTF CHECK] {t}: valid={long_valid}, score={long_score:.1f}, reasons={long_reasons}")
+
+            if long_valid and long_score >= 4.0:  # MIN_SCORE from .env
+                # Navigation Gate 체크 - MTF 신호는 자체 필터링이 강력하므로 게이트 우회
+                gate_ok = True  # MTF signals bypass Navigation Gate
+                print(f"[MTF SIGNAL PASSED] {t}: gate_ok={gate_ok}, box_low={active_box_low:.2f}, reasons={long_reasons}")
+
+                if gate_ok:
+                    # 현물 전액 진입 (POSITION_PCT=0.95 사용)
+                    position_pct = float(os.getenv("POSITION_PCT", "0.95"))
+                    entry_px = apply_costs(c, costs)  # 현재가 진입
+                    qty = (cash * position_pct) / entry_px
+
+                    if qty > 0:
+                        cash -= qty * entry_px
+                        total_qty = qty
+                        avg_entry_px = entry_px
+                        pos_side = 1
+                        entry_i = i
+
+                        # MTF 진입 시 active box 설정
+                        if t in phases_df.index:
+                            active_box_high = current_box_high
+                            active_box_low = current_box_low
+
+                        # 동적 파라미터 기반 TP/SL 설정
+                        dyn_params = dyn_params_df.loc[t]
+                        box_width = active_box_high - active_box_low if active_box_high > 0 else entry_px * 0.05
+
+                        # 동적 TP/SL 비율 적용
+                        tp1_ratio = dyn_params['atr_mult_tp1']  # 박스 폭 비율 (0.5-0.8)
+                        tp2_ratio = dyn_params['atr_mult_tp2']  # 박스 폭 비율 (0.7-1.2)
+                        sl_ratio = dyn_params['atr_mult_stop']  # 박스 폭 비율 (0.15-0.35)
+
+                        tp1_price = entry_px + (box_width * tp1_ratio)
+                        tp2_price = entry_px + (box_width * tp2_ratio)
+                        stop_price = entry_px - (box_width * sl_ratio)
+
+                        # TP1/TP2 청산 플래그 초기화
+                        tp1_exited = False
+                        tp2_exited = False
+
+                        print(f"[MTF ENTRY SPOT] {t}: score={long_score:.1f}, px={entry_px:.2f}, qty={qty:.6f}")
+                        print(f"  TP1={tp1_price:.2f} (box_width*{tp1_ratio:.2f}), TP2={tp2_price:.2f} (box_width*{tp2_ratio:.2f}), SL={stop_price:.2f} (box_width*{sl_ratio:.2f})")
+                        print(f"  Reasons: {long_reasons}")
+
+                        trades.append({
+                            "time": t,
+                            "type": "ENTRY_MTF_SPOT",
+                            "side": "long",
+                            "price": entry_px,
+                            "qty": qty,
+                            "tp1": tp1_price,
+                            "tp2": tp2_price,
+                            "sl": stop_price
+                        })
+
+        # === 동적 파라미터 기반 현물 청산 (롱) ===
+        if pos_side == 1 and total_qty > 0:
+            # 손절: 동적 SL
+            if l <= stop_price:
+                exit_px = apply_costs(stop_price, costs)
+                cash += total_qty * exit_px
+                pnl_pct = (exit_px - avg_entry_px) / avg_entry_px * 100
+                trades.append({
+                    "time": t,
+                    "type": "STOP_MTF",
+                    "side": "long",
+                    "price": exit_px,
+                    "qty": total_qty,
+                    "pnl_pct": pnl_pct
+                })
+                print(f"[MTF STOP] {t}: px={exit_px:.2f}, pnl={pnl_pct:.2f}%")
+                # 포지션 리셋
+                total_qty = 0.0
+                avg_entry_px = 0.0
+                pos_side = 0
+                tp1_exited = False
+                tp2_exited = False
+                continue
+
+            # TP1 익절 (50% 청산, TP1_FRAC from .env)
+            tp1_frac = cfg.tp1_frac if cfg else 0.5
+            if not tp1_exited and h >= tp1_price:
+                exit_qty = total_qty * tp1_frac
+                exit_px = apply_costs(tp1_price, costs)
+                cash += exit_qty * exit_px
+                total_qty -= exit_qty
+                tp1_exited = True
+                pnl_pct = (exit_px - avg_entry_px) / avg_entry_px * 100
+
+                # SL을 진입가로 이동 (Break-even)
+                stop_price = avg_entry_px
+
+                trades.append({
+                    "time": t,
+                    "type": "TP1_MTF",
+                    "side": "long",
+                    "price": exit_px,
+                    "qty": exit_qty,
+                    "pnl_pct": pnl_pct
+                })
+                print(f"[MTF TP1] {t}: px={exit_px:.2f}, qty={exit_qty:.6f}, pnl={pnl_pct:.2f}%, SL→BE")
+
+            # TP2 익절 (나머지 전체 청산)
+            elif tp1_exited and cfg.use_tp2 and not tp2_exited and h >= tp2_price:
+                exit_px = apply_costs(tp2_price, costs)
+                cash += total_qty * exit_px
+                pnl_pct = (exit_px - avg_entry_px) / avg_entry_px * 100
+                trades.append({
+                    "time": t,
+                    "type": "TP2_MTF",
+                    "side": "long",
+                    "price": exit_px,
+                    "qty": total_qty,
+                    "pnl_pct": pnl_pct
+                })
+                print(f"[MTF TP2] {t}: px={exit_px:.2f}, qty={total_qty:.6f}, pnl={pnl_pct:.2f}%")
+                # 포지션 리셋
+                total_qty = 0.0
+                avg_entry_px = 0.0
+                pos_side = 0
+                tp1_exited = False
+                tp2_exited = False
+                continue
+
+            # 최대 보유 기간 초과 시 강제 청산
+            if cfg.max_hold_bars and (i - entry_i) >= cfg.max_hold_bars:
+                exit_px = apply_costs(c, costs)
+                cash += total_qty * exit_px
+                pnl_pct = (exit_px - avg_entry_px) / avg_entry_px * 100
+                trades.append({
+                    "time": t,
+                    "type": "TIME_EXIT_MTF",
+                    "side": "long",
+                    "price": exit_px,
+                    "qty": total_qty,
+                    "pnl_pct": pnl_pct
+                })
+                print(f"[MTF TIME_EXIT] {t}: px={exit_px:.2f}, pnl={pnl_pct:.2f}%, hold_bars={i-entry_i}")
+                # 포지션 리셋
+                total_qty = 0.0
+                avg_entry_px = 0.0
+                pos_side = 0
+                tp1_exited = False
+                tp2_exited = False
+                continue
+
+        # === 기존 pending orders 로직 (레거시, Spring 없을 때 폴백용) ===
+        # place new orders (activate next bar) if gate open
+        if pos_side == 0 and t in sig_by_time:
+            gate_ok = bool(int(nav_gate.get(t, 1)))
+            if use_fractal_gate:
+                # HTF Phase 확인 (4h 우선, 없으면 1h)
+                htf_phase_4h = nav.loc[t, "phase_4h"] if "phase_4h" in nav.columns and t in nav.index else "unknown"
+                htf_phase_1h = nav.loc[t, "phase_1h"] if "phase_1h" in nav.columns and t in nav.index else "unknown"
+
+                # Phase C (Markup/Markdown) = 추세장 → Navigation Gate 엄격 적용
+                if htf_phase_4h == "C" or (htf_phase_4h == "unknown" and htf_phase_1h == "C"):
+                    gate_ok = bool(int(nav_gate.get(t, 1)))  # 원래 Navigation Gate 적용
+                # Phase A/B (Accumulation/Distribution) = 횡보장 → Navigation Gate 비활성화
+                else:
+                    gate_ok = True  # 횡보장에서는 Phase 축적 신호 허용
+            else:
+                # 기존 로직: Navigation Gate 무조건 적용
+                gate_ok = bool(int(nav_gate.get(t, 1)))
+
+            if not gate_ok:
+                continue  # Navigation Gate 통과 못하면 축적 신호 무시
+
+            if t not in accum_by_time:
+                continue  # 축적 신호 없으면 스킵
+
             for acc_sig in accum_by_time[t]:
+                # === 동적 추세 필터링 ===
+                dyn_params = dyn_params_df.loc[t]
+                trend_direction = dyn_params['trend_direction']
+                trend_strength = dyn_params['trend_strength']
+
+                # 추세 기반 진입 필터링
+                # 하락 추세(bearish)일 때 롱 신호 필터링
+                # 상승 추세(bullish)일 때 숏 신호 필터링
+                # 추세 강도가 0.3 이상일 때 적용 (중간 이상 추세 필터)
+                if trend_strength >= 0.3:
+                    if acc_sig.side == 'long' and trend_direction == 'bearish':
+                        continue  # 하락 추세에서 롱 진입 스킵
+                    if acc_sig.side == 'short' and trend_direction == 'bullish':
+                        continue  # 상승 추세에서 숏 진입 스킵
+
                 # 축적에 사용할 금액 (현금의 position_pct%)
                 alloc_amount = cash * acc_sig.position_pct
                 if alloc_amount < 0.0001:  # 최소 금액 체크
@@ -166,22 +615,65 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                         "phase": acc_sig.phase, "position_pct": acc_sig.position_pct
                     })
 
-        # === 롱 축적 포지션 익절/손절 처리 (평균 진입가 기준 동적 계산) ===
-        # 진입 바에서는 익절/손절 검사 스킵 (다음 바부터 검사)
+        # === 롱 축적 포지션 청산 로직 (Wyckoff Phase 기반 스윙 전략 + 동적 파라미터) ===
+        # 진입 바에서는 청산 검사 스킵 (다음 바부터 검사)
         if accum_total_qty > 0 and accum_avg_price > 0 and i > accum_last_entry_i:
-            # 15분봉 스윙 전략: 비용(0.4%) 대비 충분한 마진 확보
-            # TP 1.5% / SL 1.0% = 손익비 1.5:1 (비용 고려 시 실질 1.1% / 0.6%)
-            dynamic_tp = accum_avg_price * 1.015  # +1.5% 익절
-            dynamic_sl = accum_avg_price * 0.990  # -1.0% 손절
+            # Wyckoff 박스 레벨 및 Phase 정보 가져오기
+            current_box_high = phases_df.loc[t, 'box_high']
+            current_box_low = phases_df.loc[t, 'box_low']
+            current_box_width = current_box_high - current_box_low
+            current_phase = phases_df.loc[t, 'phase']
+            current_direction = phases_df.loc[t, 'direction']
 
-            # 익절 검사 (고가가 TP에 도달)
-            if h >= dynamic_tp:
-                exit_px = apply_costs(dynamic_tp, costs)
+            # 동적 파라미터 가져오기
+            dyn_params = dyn_params_df.loc[t]
+
+            # 동적 TP/SL 비율 계산 (Wyckoff 박스 폭 기준)
+            # 변동성/사이클/추세에 따라 동적으로 조정
+            # tp1_ratio: 0.5 ~ 0.8 (저변동성: 박스 상단까지, 고변동성: 박스 중간)
+            # tp2_ratio: 0.7 ~ 1.2 (저변동성: 박스 돌파, 고변동성: 박스 상단)
+            # sl_ratio: 0.15 ~ 0.35 (저변동성: 좁은 SL, 고변동성: 넓은 SL)
+            tp1_ratio = dyn_params['atr_mult_tp1']  # 동적 TP1 박스 비율
+            tp2_ratio = dyn_params['atr_mult_tp2']  # 동적 TP2 박스 비율
+            sl_ratio = dyn_params['atr_mult_stop']  # 동적 SL 박스 비율
+
+            # 피보나치 되돌림 기반 동적 TP/SL
+            # 평균 진입가 기준으로 박스 폭 × 동적 비율로 TP/SL 설정
+            box_tp1 = accum_avg_price + (current_box_width * tp1_ratio)  # TP1: 동적 (변동성 기반)
+            box_tp2 = accum_avg_price + (current_box_width * tp2_ratio)  # TP2: 동적 (변동성 기반)
+            box_sl = accum_avg_price - (current_box_width * sl_ratio)  # SL: 동적 (변동성 기반)
+
+            # TIME_EXIT: 최대 보유 기간 초과 시 강제 청산 (동적 보유 기간)
+            hold_bars = i - accum_last_entry_i
+            optimal_hold = int(dyn_params['optimal_hold_bars'])
+            dynamic_max_hold = max(optimal_hold, cfg.max_hold_bars)  # 동적 또는 설정값 중 큰 값
+            time_exit_triggered = hold_bars >= dynamic_max_hold
+
+            # Phase 변화 감지: Phase A/B/C → D/E (Markup/Trend) 전환 시 청산
+            # Phase D (Markup 시작) 이후 일정 기간 경과 시 청산
+            # Phase C (Spring)은 여전히 축적 구간이므로 유지
+            phase_exit_triggered = False  # Phase 기반 청산은 보수적으로 접근
+
+            # 박스 변경 감지
+            if i > 0:
+                prev_box_high = phases_df.iloc[i-1]['box_high']
+                prev_box_low = phases_df.iloc[i-1]['box_low']
+                prev_box_width = prev_box_high - prev_box_low
+
+                box_center_change = abs((current_box_high + current_box_low) / 2 - (prev_box_high + prev_box_low) / 2)
+                box_size_change = abs(current_box_width - prev_box_width) / (prev_box_width + 1e-12)
+                box_changed = (box_size_change > 0.5) or (box_center_change > prev_box_width * 0.5)
+            else:
+                box_changed = False
+
+            # 1. TP2: 박스 폭 80% 도달 시 전체 청산 (고가가 TP2에 도달)
+            if h >= box_tp2:
+                exit_px = apply_costs(box_tp2, costs)
                 pnl_pct = (exit_px - accum_avg_price) / accum_avg_price * 100
                 cash += accum_total_qty * exit_px
                 trades.append({
                     "time": t,
-                    "type": "ACCUM_TP",
+                    "type": "ACCUM_TP2",
                     "side": "long",
                     "price": exit_px,
                     "qty": accum_total_qty,
@@ -193,13 +685,76 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                 accum_stop_price = np.nan
                 accum_tp_price = np.nan
                 accum_positions = []
-            # 손절 검사 (저가가 SL에 도달)
-            elif l <= dynamic_sl:
-                exit_px = apply_costs(dynamic_sl, costs)
+            # 2. TP1: 박스 폭 50% 도달 시 부분 청산 (cfg.tp1_frac 비율)
+            elif h >= box_tp1 and accum_total_qty > 0:
+                exit_qty = accum_total_qty * cfg.tp1_frac  # 50% 청산
+                exit_px = apply_costs(box_tp1, costs)
+                pnl_pct = (exit_px - accum_avg_price) / accum_avg_price * 100
+                cash += exit_qty * exit_px
+                trades.append({
+                    "time": t,
+                    "type": "ACCUM_TP1",
+                    "side": "long",
+                    "price": exit_px,
+                    "qty": exit_qty,
+                    "avg_entry": accum_avg_price,
+                    "pnl_pct": pnl_pct
+                })
+                accum_total_qty -= exit_qty
+                # TP1 후 남은 포지션은 trailing stop으로 전환 (SL을 진입가로 이동)
+                box_sl = accum_avg_price
+            # 2. 손절: 박스 하단 돌파 (저가가 SL 이하)
+            elif l <= box_sl:
+                exit_px = apply_costs(box_sl, costs)
                 pnl_pct = (exit_px - accum_avg_price) / accum_avg_price * 100
                 cash += accum_total_qty * exit_px
                 trades.append({
-                    "time": t, "type": "ACCUM_LONG_STOP", "side": "long",
+                    "time": t, "type": "ACCUM_SL", "side": "long",
+                    "price": exit_px, "qty": accum_total_qty,
+                    "avg_entry": accum_avg_price, "pnl_pct": pnl_pct
+                })
+                accum_total_qty = 0.0
+                accum_avg_price = 0.0
+                accum_stop_price = np.nan
+                accum_tp_price = np.nan
+                accum_positions = []
+            # 3. Phase 전환 청산: Phase A/B → C/D/E (Markup 시작)
+            elif phase_exit_triggered and hold_bars >= 8:  # 최소 8봉 이상 보유 후 Phase 전환 시
+                exit_px = apply_costs(c, costs)
+                pnl_pct = (exit_px - accum_avg_price) / accum_avg_price * 100
+                cash += accum_total_qty * exit_px
+                trades.append({
+                    "time": t, "type": "PHASE_EXIT", "side": "long",
+                    "price": exit_px, "qty": accum_total_qty,
+                    "avg_entry": accum_avg_price, "pnl_pct": pnl_pct
+                })
+                accum_total_qty = 0.0
+                accum_avg_price = 0.0
+                accum_stop_price = np.nan
+                accum_tp_price = np.nan
+                accum_positions = []
+            # 4. 박스 패턴 변경: 새로운 박스로 진입 시 기존 포지션 청산
+            elif box_changed:
+                exit_px = apply_costs(c, costs)
+                pnl_pct = (exit_px - accum_avg_price) / accum_avg_price * 100
+                cash += accum_total_qty * exit_px
+                trades.append({
+                    "time": t, "type": "BOX_CHANGE_EXIT", "side": "long",
+                    "price": exit_px, "qty": accum_total_qty,
+                    "avg_entry": accum_avg_price, "pnl_pct": pnl_pct
+                })
+                accum_total_qty = 0.0
+                accum_avg_price = 0.0
+                accum_stop_price = np.nan
+                accum_tp_price = np.nan
+                accum_positions = []
+            # 5. TIME_EXIT: 최대 보유 기간 초과 시 강제 청산
+            elif time_exit_triggered:
+                exit_px = apply_costs(c, costs)
+                pnl_pct = (exit_px - accum_avg_price) / accum_avg_price * 100
+                cash += accum_total_qty * exit_px
+                trades.append({
+                    "time": t, "type": "TIME_EXIT", "side": "long",
                     "price": exit_px, "qty": accum_total_qty,
                     "avg_entry": accum_avg_price, "pnl_pct": pnl_pct
                 })
@@ -209,24 +764,53 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                 accum_tp_price = np.nan
                 accum_positions = []
 
-        # === 숏 축적 포지션 익절/손절 처리 (평균 진입가 기준 동적 계산) ===
-        # 진입 바에서는 익절/손절 검사 스킵 (다음 바부터 검사)
+        # === 숏 축적 포지션 청산 로직 (Wyckoff Box 기반 스윙 전략 + 동적 파라미터) ===
+        # 진입 바에서는 청산 검사 스킵 (다음 바부터 검사)
         if short_accum_total_qty > 0 and short_accum_avg_price > 0 and i > short_accum_last_entry_i:
-            # 15분봉 스윙 전략: 비용(0.4%) 대비 충분한 마진 확보
-            # TP 1.5% / SL 1.0% = 손익비 1.5:1
-            dynamic_tp = short_accum_avg_price * 0.985  # -1.5% 익절 (숏)
-            dynamic_sl = short_accum_avg_price * 1.010  # +1.0% 손절 (숏)
+            # Wyckoff 박스 레벨 가져오기 (phases_df)
+            current_box_high = phases_df.loc[t, 'box_high']
+            current_box_low = phases_df.loc[t, 'box_low']
+            current_box_width = current_box_high - current_box_low
+
+            # 동적 파라미터 가져오기
+            dyn_params = dyn_params_df.loc[t]
+            tp1_ratio = dyn_params['atr_mult_tp1']
+            tp2_ratio = dyn_params['atr_mult_tp2']
+            sl_ratio = dyn_params['atr_mult_stop']
+
+            # 피보나치 되돌림 기반 동적 TP/SL (숏 포지션)
+            box_tp1 = short_accum_avg_price - (current_box_width * tp1_ratio)  # TP1: 동적
+            box_tp2 = short_accum_avg_price - (current_box_width * tp2_ratio)  # TP2: 동적
+            box_sl = short_accum_avg_price + (current_box_width * sl_ratio)  # SL: 동적
+
+            # TIME_EXIT: 최대 보유 기간 초과 시 강제 청산 (동적 보유 기간)
+            hold_bars = i - short_accum_last_entry_i
+            optimal_hold = int(dyn_params['optimal_hold_bars'])
+            dynamic_max_hold = max(optimal_hold, cfg.max_hold_bars)
+            time_exit_triggered = hold_bars >= dynamic_max_hold
+
+            # 박스 변경 감지
+            if i > 0:
+                prev_box_high = phases_df.iloc[i-1]['box_high']
+                prev_box_low = phases_df.iloc[i-1]['box_low']
+                prev_box_width = prev_box_high - prev_box_low
+
+                box_center_change = abs((current_box_high + current_box_low) / 2 - (prev_box_high + prev_box_low) / 2)
+                box_size_change = abs(current_box_width - prev_box_width) / (prev_box_width + 1e-12)
+                box_changed = (box_size_change > 0.5) or (box_center_change > prev_box_width * 0.5)
+            else:
+                box_changed = False
 
             total_margin = sum(p.get('margin', 0) for p in short_accum_positions)
 
-            # 숏 익절 검사 (저가가 TP에 도달)
-            if l <= dynamic_tp:
-                exit_px = apply_costs(dynamic_tp, costs)
+            # 1. 숏 TP2: 박스 폭 80% 도달 시 전체 청산
+            if l <= box_tp2:
+                exit_px = apply_costs(box_tp2, costs)
                 pnl_pct = (short_accum_avg_price - exit_px) / short_accum_avg_price * 100
                 pnl_amount = short_accum_total_qty * (short_accum_avg_price - exit_px)
                 cash += total_margin + pnl_amount
                 trades.append({
-                    "time": t, "type": "ACCUM_SHORT_TP", "side": "short",
+                    "time": t, "type": "ACCUM_SHORT_TP2", "side": "short",
                     "price": exit_px, "qty": short_accum_total_qty,
                     "avg_entry": short_accum_avg_price, "pnl_pct": pnl_pct
                 })
@@ -235,15 +819,64 @@ def simulate(df: pd.DataFrame, theta: Theta, costs: BacktestCosts, cfg: Backtest
                 short_accum_stop_price = np.nan
                 short_accum_tp_price = np.nan
                 short_accum_positions = []
-            # 숏 손절 검사 (고가가 SL에 도달)
-            elif h >= dynamic_sl:
-                exit_px = apply_costs(dynamic_sl, costs)
+            # 2. 숏 TP1: 박스 폭 50% 도달 시 부분 청산
+            elif l <= box_tp1 and short_accum_total_qty > 0:
+                exit_qty = short_accum_total_qty * cfg.tp1_frac
+                exit_px = apply_costs(box_tp1, costs)
+                pnl_pct = (short_accum_avg_price - exit_px) / short_accum_avg_price * 100
+                pnl_amount = exit_qty * (short_accum_avg_price - exit_px)
+                cash += (total_margin * cfg.tp1_frac) + pnl_amount
+                trades.append({
+                    "time": t, "type": "ACCUM_SHORT_TP1", "side": "short",
+                    "price": exit_px, "qty": exit_qty,
+                    "avg_entry": short_accum_avg_price, "pnl_pct": pnl_pct
+                })
+                short_accum_total_qty -= exit_qty
+                # TP1 후 trailing stop
+                box_sl = short_accum_avg_price
+            # 2. 숏 손절: 박스 상단 돌파 (고가가 SL 이상)
+            elif h >= box_sl:
+                exit_px = apply_costs(box_sl, costs)
                 pnl_pct = (short_accum_avg_price - exit_px) / short_accum_avg_price * 100
                 raw_pnl = short_accum_total_qty * (short_accum_avg_price - exit_px)
                 pnl_amount = max(raw_pnl, -total_margin)
                 cash += total_margin + pnl_amount
                 trades.append({
-                    "time": t, "type": "ACCUM_SHORT_STOP", "side": "short",
+                    "time": t, "type": "ACCUM_SHORT_SL", "side": "short",
+                    "price": exit_px, "qty": short_accum_total_qty,
+                    "avg_entry": short_accum_avg_price, "pnl_pct": pnl_pct
+                })
+                short_accum_total_qty = 0.0
+                short_accum_avg_price = 0.0
+                short_accum_stop_price = np.nan
+                short_accum_tp_price = np.nan
+                short_accum_positions = []
+            # 3. 박스 패턴 변경: 새로운 박스로 진입 시 기존 포지션 청산
+            elif box_changed:
+                exit_px = apply_costs(c, costs)
+                pnl_pct = (short_accum_avg_price - exit_px) / short_accum_avg_price * 100
+                raw_pnl = short_accum_total_qty * (short_accum_avg_price - exit_px)
+                pnl_amount = max(raw_pnl, -total_margin)
+                cash += total_margin + pnl_amount
+                trades.append({
+                    "time": t, "type": "BOX_CHANGE_EXIT", "side": "short",
+                    "price": exit_px, "qty": short_accum_total_qty,
+                    "avg_entry": short_accum_avg_price, "pnl_pct": pnl_pct
+                })
+                short_accum_total_qty = 0.0
+                short_accum_avg_price = 0.0
+                short_accum_stop_price = np.nan
+                short_accum_tp_price = np.nan
+                short_accum_positions = []
+            # 4. TIME_EXIT: 최대 보유 기간 초과 시 강제 청산
+            elif time_exit_triggered:
+                exit_px = apply_costs(c, costs)
+                pnl_pct = (short_accum_avg_price - exit_px) / short_accum_avg_price * 100
+                raw_pnl = short_accum_total_qty * (short_accum_avg_price - exit_px)
+                pnl_amount = max(raw_pnl, -total_margin)
+                cash += total_margin + pnl_amount
+                trades.append({
+                    "time": t, "type": "TIME_EXIT", "side": "short",
                     "price": exit_px, "qty": short_accum_total_qty,
                     "avg_entry": short_accum_avg_price, "pnl_pct": pnl_pct
                 })

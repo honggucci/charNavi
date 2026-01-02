@@ -12,7 +12,10 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from wpcn.core.types import BacktestCosts, BacktestConfig, RunConfig
+from wpcn.core.types import (
+    BacktestCosts, BacktestConfig, RunConfig,
+    COSTS_SPOT_BTC, COSTS_SPOT_ALT, CONFIG_NAVIGATION, CONFIG_SCALPING
+)
 from wpcn.data.ccxt_fetch import fetch_ohlcv_to_parquet
 from wpcn.data.loaders import load_parquet
 from wpcn.engine.backtest import BacktestEngine, DEFAULT_THETA
@@ -64,19 +67,54 @@ def main():
     
     # 백테스팅 설정
     print(f"\n[3/4] 백테스팅 실행 중...")
-    costs = BacktestCosts(fee_bps=10.0, slippage_bps=30.0)  # 수수료 0.1% + 슬리피지 0.3%
-    bt = BacktestConfig(
-        initial_equity=1.0,
-        max_hold_bars=30,  # 15분봉: 30봉 = 약 7.5시간
-        tp1_frac=0.5,
-        use_tp2=True,
-        conf_min=0.50,  # 단타용: 완화
-        edge_min=0.60,  # 단타용: 완화
-        confirm_bars=1,
-        chaos_ret_atr=3.0,
-        adx_len=14,
-        adx_trend=15.0,  # 단타용: 완화
-    )
+
+    # ============================================================================
+    # 비용 설정 (현실화)
+    # - 기존: fee=10bps + slip=30bps = 40bps (0.4%) → 너무 보수적
+    # - 변경: BTC는 COSTS_SPOT_BTC (10.5bps), ALT는 COSTS_SPOT_ALT (20bps)
+    # ============================================================================
+    is_btc = "BTC" in symbol.upper()
+    costs = COSTS_SPOT_BTC if is_btc else COSTS_SPOT_ALT
+    print(f"비용 설정: fee={costs.fee_bps}bps, slip={costs.slippage_bps}bps (편도 {costs.total_one_way_pct():.3f}%)")
+
+    # ============================================================================
+    # Gate 설정 (상향 조정)
+    # - 기존: conf=0.50, edge=0.60 → 쓰레기 신호 허용
+    # - 변경: conf=0.65, edge=0.70 (Navigation), conf=0.60, edge=0.65 (Scalping)
+    # 철학: "안 들어가는 날이 많아져야 계좌가 산다"
+    # ============================================================================
+    scalping_mode = True  # True: 단타 모드, False: 네비게이션 모드
+
+    if scalping_mode:
+        bt = BacktestConfig(
+            initial_equity=1.0,
+            max_hold_bars=30,           # 15분봉: 30봉 = 약 7.5시간
+            tp1_frac=0.5,
+            use_tp2=True,
+            conf_min=0.60,              # 0.50 → 0.60 (상향)
+            edge_min=0.65,              # 0.60 → 0.65 (상향)
+            confirm_bars=1,             # 단타: 빠른 진입
+            reclaim_hold_bars=1,        # 단타: 짧은 유지
+            chaos_ret_atr=3.0,
+            adx_len=14,
+            adx_trend=15.0,
+        )
+        print(f"모드: Scalping (conf≥{bt.conf_min}, edge≥{bt.edge_min}, hold≤{bt.max_hold_bars}봉)")
+    else:
+        bt = BacktestConfig(
+            initial_equity=1.0,
+            max_hold_bars=192,          # 15분봉: 192봉 = 48시간
+            tp1_frac=0.5,
+            use_tp2=True,
+            conf_min=0.65,              # 0.50 → 0.65 (상향)
+            edge_min=0.70,              # 0.60 → 0.70 (상향)
+            confirm_bars=2,             # 1 → 2 (휩쏘 방지)
+            reclaim_hold_bars=2,        # NEW: reclaim 후 유지 확인
+            chaos_ret_atr=3.0,
+            adx_len=14,
+            adx_trend=20.0,
+        )
+        print(f"모드: Navigation (conf≥{bt.conf_min}, edge≥{bt.edge_min}, hold≤{bt.max_hold_bars}봉)")
 
     # 다중 타임프레임 설정: 15분봉 기준으로 1시간봉, 4시간봉 확인
     mtf_timeframes = ["1h", "4h"]
@@ -95,9 +133,6 @@ def main():
     )
 
     print(f"MTF 활성화: {', '.join(mtf_timeframes)} (상위 타임프레임 추세 확인)")
-
-    # 단타 모드 활성화
-    scalping_mode = True  # RSI 다이버전스, 피보나치 반등, Stoch RSI 신호 사용
     print(f"단타 모드: {'활성화' if scalping_mode else '비활성화'}")
 
     # Phase A/B 양방향 축적 전략 활성화

@@ -7,12 +7,20 @@ from wpcn.features.indicators import atr, detect_rsi_divergence, detect_fib_boun
 from wpcn.features.dynamic_params import DynamicParameterEngine, DynamicParams
 from wpcn.wyckoff.box import box_engine_freeze
 
-def detect_spring_utad(df: pd.DataFrame, theta: Theta, use_trend_filter: bool = True) -> List[EventSignal]:
+def detect_spring_utad(
+    df: pd.DataFrame,
+    theta: Theta,
+    use_trend_filter: bool = True,
+    reclaim_hold_bars: int = 2
+) -> List[EventSignal]:
     """
-    Wyckoff Spring/UTAD 신호 감지 (추세 필터 적용)
+    Wyckoff Spring/UTAD 신호 감지 (추세 필터 + reclaim 유지 조건 적용)
 
     - Spring: 박스권 하단 돌파 후 회복 → 롱 (하락 추세에서는 무시)
     - UTAD: 박스권 상단 돌파 후 회복 → 숏 (상승 추세에서는 무시)
+
+    reclaim_hold_bars: reclaim 후 박스 내부 유지해야 하는 봉 수 (휩쏘 방지)
+    - reclaim만 하고 다음 봉에 다시 박스 밖으로 빠지면 무효화
     """
     _atr = atr(df, theta.atr_len)
     box = box_engine_freeze(df, theta)
@@ -71,66 +79,102 @@ def detect_spring_utad(df: pd.DataFrame, theta: Theta, use_trend_filter: bool = 
             allow_short = True
 
         # expire pending break
-        if pending is not None and i > pending["break_i"] + theta.N_reclaim:
+        if pending is not None and i > pending["break_i"] + theta.N_reclaim + reclaim_hold_bars:
             pending = None
 
         # new break
         if pending is None:
             if low < bl - theta.x_atr * at:
-                pending = {"type":"spring", "break_i": i, "bl": bl, "bh": bh, "bw": bw, "atr": at}
+                pending = {"type":"spring", "break_i": i, "bl": bl, "bh": bh, "bw": bw, "atr": at, "reclaim_i": None}
                 continue
             if high > bh + theta.x_atr * at:
-                pending = {"type":"utad", "break_i": i, "bl": bl, "bh": bh, "bw": bw, "atr": at}
+                pending = {"type":"utad", "break_i": i, "bl": bl, "bh": bh, "bw": bw, "atr": at, "reclaim_i": None}
                 continue
         else:
             if pending["type"] == "spring" and allow_long:
                 reclaim_level = pending["bl"] + theta.m_bw * pending["bw"]
-                if close >= reclaim_level:
-                    entry = reclaim_level
-                    stop = pending["bl"] - stop_mult * pending["atr"]
-                    tp1 = (pending["bl"] + pending["bh"]) / 2.0
-                    tp2 = pending["bh"]
-                    signals.append(EventSignal(
-                        t_signal=idx[i],
-                        side="long",
-                        event="spring",
-                        entry_price=float(entry),
-                        stop_price=float(stop),
-                        tp1=float(tp1),
-                        tp2=float(tp2),
-                        meta={
-                            "break_time": idx[pending["break_i"]],
-                            "box_low": pending["bl"],
-                            "box_high": pending["bh"],
-                            "trend": trend_dir,
-                            "trend_strength": trend_str
-                        }
-                    ))
-                    pending = None
+
+                # Step 1: reclaim 감지
+                if pending["reclaim_i"] is None and close >= reclaim_level:
+                    pending["reclaim_i"] = i
+                    continue
+
+                # Step 2: reclaim 후 유지 확인 (reclaim_hold_bars 동안 박스 내부 유지)
+                if pending["reclaim_i"] is not None:
+                    # 박스 밖으로 다시 빠지면 무효화 (휩쏘)
+                    if low < pending["bl"] - theta.x_atr * pending["atr"]:
+                        pending = None  # 휩쏘 - 신호 무효화
+                        continue
+
+                    # reclaim_hold_bars 동안 유지 확인
+                    bars_since_reclaim = i - pending["reclaim_i"]
+                    if bars_since_reclaim >= reclaim_hold_bars:
+                        entry = reclaim_level
+                        stop = pending["bl"] - stop_mult * pending["atr"]
+                        tp1 = (pending["bl"] + pending["bh"]) / 2.0
+                        tp2 = pending["bh"]
+                        signals.append(EventSignal(
+                            t_signal=idx[i],
+                            side="long",
+                            event="spring",
+                            entry_price=float(entry),
+                            stop_price=float(stop),
+                            tp1=float(tp1),
+                            tp2=float(tp2),
+                            meta={
+                                "break_time": idx[pending["break_i"]],
+                                "reclaim_time": idx[pending["reclaim_i"]],
+                                "hold_bars": bars_since_reclaim,
+                                "box_low": pending["bl"],
+                                "box_high": pending["bh"],
+                                "trend": trend_dir,
+                                "trend_strength": trend_str
+                            }
+                        ))
+                        pending = None
+
             elif pending["type"] == "utad" and allow_short:
                 reclaim_level = pending["bh"] - theta.m_bw * pending["bw"]
-                if close <= reclaim_level:
-                    entry = reclaim_level
-                    stop = pending["bh"] + stop_mult * pending["atr"]
-                    tp1 = (pending["bl"] + pending["bh"]) / 2.0
-                    tp2 = pending["bl"]
-                    signals.append(EventSignal(
-                        t_signal=idx[i],
-                        side="short",
-                        event="utad",
-                        entry_price=float(entry),
-                        stop_price=float(stop),
-                        tp1=float(tp1),
-                        tp2=float(tp2),
-                        meta={
-                            "break_time": idx[pending["break_i"]],
-                            "box_low": pending["bl"],
-                            "box_high": pending["bh"],
-                            "trend": trend_dir,
-                            "trend_strength": trend_str
-                        }
-                    ))
-                    pending = None
+
+                # Step 1: reclaim 감지
+                if pending["reclaim_i"] is None and close <= reclaim_level:
+                    pending["reclaim_i"] = i
+                    continue
+
+                # Step 2: reclaim 후 유지 확인
+                if pending["reclaim_i"] is not None:
+                    # 박스 밖으로 다시 빠지면 무효화 (휩쏘)
+                    if high > pending["bh"] + theta.x_atr * pending["atr"]:
+                        pending = None  # 휩쏘 - 신호 무효화
+                        continue
+
+                    # reclaim_hold_bars 동안 유지 확인
+                    bars_since_reclaim = i - pending["reclaim_i"]
+                    if bars_since_reclaim >= reclaim_hold_bars:
+                        entry = reclaim_level
+                        stop = pending["bh"] + stop_mult * pending["atr"]
+                        tp1 = (pending["bl"] + pending["bh"]) / 2.0
+                        tp2 = pending["bl"]
+                        signals.append(EventSignal(
+                            t_signal=idx[i],
+                            side="short",
+                            event="utad",
+                            entry_price=float(entry),
+                            stop_price=float(stop),
+                            tp1=float(tp1),
+                            tp2=float(tp2),
+                            meta={
+                                "break_time": idx[pending["break_i"]],
+                                "reclaim_time": idx[pending["reclaim_i"]],
+                                "hold_bars": bars_since_reclaim,
+                                "box_low": pending["bl"],
+                                "box_high": pending["bh"],
+                                "trend": trend_dir,
+                                "trend_strength": trend_str
+                            }
+                        ))
+                        pending = None
+
             elif pending["type"] == "spring" and not allow_long:
                 # 하락 추세에서 Spring 무시
                 pending = None

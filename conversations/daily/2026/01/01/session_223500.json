@@ -1,0 +1,28 @@
+{
+  "id": "2026-01-01T22:35:00",
+  "title": "확률 필터 및 튜닝 모듈 연동 + 대화 저장 구조 설계",
+  "tags": ["probability", "tuning", "integration", "conversations", "folder-structure"],
+  "files_changed": [
+    "src/wpcn/_04_execution/broker_sim_mtf.py",
+    "src/wpcn/_01_crypto/001_binance/001_spot/002_sub/run_spot_backtest_mtf.py",
+    ".env",
+    "conversations/index.json",
+    "conversations/2026-01-01_probability_tuning_integration.json"
+  ],
+  "summary": "1) _05_probability 모듈을 broker_sim_mtf.py에 연동 (4.5단계 확률 필터). 2) _08_tuning 모듈을 run_spot_backtest_mtf.py에 연동 (0단계 Walk-Forward 튜닝). 3) .env에 튜닝 설정 추가. 4) conversations 폴더 구조 재설계 논의 (daily/YYYY/MM/DD/ 구조).",
+  "key_decisions": [
+    "확률 필터: P(TP) >= 0.50, EV_R >= 0.05 조건 사용",
+    "튜닝: 60일 훈련 / 30일 테스트 / 50개 후보 기본값",
+    "대화 저장: 하이브리드 방식 (개별 세션 파일 + 나중에 병합)"
+  ],
+  "env_changes": {
+    "USE_TUNING": "False",
+    "TUNING_TRAIN_DAYS": "60",
+    "TUNING_TEST_DAYS": "30",
+    "TUNING_N_CANDIDATES": "50"
+  },
+  "next_steps": [
+    "weekly/monthly 요약 자동화 스크립트 작성",
+    "기존 conversations 파일들 새 구조로 마이그레이션"
+  ]
+}

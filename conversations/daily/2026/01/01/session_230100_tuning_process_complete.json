@@ -1,0 +1,257 @@
+{
+  "title": "_08_tuning 전체 프로세스 정리",
+  "created_at": "2026-01-01",
+  "updated_at": "2026-01-01T23:30:00",
+  "version": "v2.1",
+  "status": "Phase 0-3 완료, GAP 4개 해결",
+
+  "overview": {
+    "purpose": "암호화폐 트레이딩 파라미터의 적응형 최적화 파이프라인",
+    "core_principle": "시간(분) 단위 저장, 런타임에 봉(bars) 변환",
+    "timeframe_focus": "15m (공식 네비게이션 전략)"
+  },
+
+  "process_flow": {
+    "phase_1_cycle_analysis": {
+      "module": "cycle_analyzer.py",
+      "input": "Raw OHLCV 데이터 (15m, 1h, 4h)",
+      "process": [
+        "Wyckoff 페이즈 감지 (A, B, C)",
+        "완전한 사이클 추출 (A->B->C 시퀀스 검증)",
+        "사이클 통계 계산 (median, p25, p75)",
+        "FFT 지배 사이클 탐지"
+      ],
+      "output": {
+        "complete_cycles": "120 cycles",
+        "high_purity_cycles": "45 cycles (purity >= 0.6)",
+        "median_cycle_length": "96 bars",
+        "fft_dominant": "89 bars"
+      }
+    },
+
+    "phase_2_adaptive_space": {
+      "module": "adaptive_space.py",
+      "input": "cycle_analyzer 결과",
+      "process": [
+        "완전 + 고순도 사이클만 필터링",
+        "사이클 통계에서 범위 계산",
+        "box_L: p25-p75 + margin",
+        "m_freeze: box_L/6 ~ box_L/2",
+        "제약 조건 적용: m_freeze <= box_L * 0.6"
+      ],
+      "output": {
+        "param_space": "Dict with min/max ranges",
+        "hints": "ParamHints (recommended values)"
+      }
+    },
+
+    "phase_3_data_loading": {
+      "module": "run_tuning.py",
+      "input": "Symbol, days, timeframe, market",
+      "process": [
+        "bronze parquet에서 OHLCV 로드",
+        "중복 제거 및 타임스탬프 정렬",
+        "최근 N일 필터링",
+        "최소 봉 수 검증 (5000+)"
+      ],
+      "output": "df [timestamp, open, high, low, close, volume]"
+    },
+
+    "phase_4_walk_forward": {
+      "module": "walk_forward.py",
+      "input": "df, param_space, config, backtest_func",
+      "process": {
+        "per_fold": [
+          "Train Window (8-12주): Random/Bayesian 탐색 (30회)",
+          "backtest_func(df_train, params) 호출",
+          "Score: Sharpe ratio",
+          "Train에서 best_params 찾기",
+          "Test Window (2주): best_params로 OOS 평가",
+          "Overfit 감지: test < train * 0.5"
+        ],
+        "aggregation": [
+          "평균 train/test 점수",
+          "Overfit ratio: 과적합 폴드 비율",
+          "Robust params: 모든 폴드의 Median 값"
+        ]
+      },
+      "output": {
+        "robust_params": "{box_L: 96, m_freeze: 30, ...}",
+        "avg_train_score": "1.25",
+        "avg_test_score": "0.89",
+        "overfit_ratio": "15%"
+      }
+    },
+
+    "phase_5_storage": {
+      "module": "param_store.py",
+      "input": "robust_params from WalkForwardResult",
+      "process": [
+        "파라미터 검증 (m_freeze <= box_L*0.6)",
+        "OptimizedParams 객체 생성",
+        "JSON 저장: results/params/{market}/{SYMBOL}_{TF}_{TIMESTAMP}.json",
+        "인덱스 업데이트"
+      ],
+      "output": {
+        "schema_version": 2,
+        "symbol": "BTC-USDT",
+        "timeframe": "15m",
+        "params": "{box_L: 96, m_freeze: 30, ...}",
+        "confidence": "{confidence_score: 72.5}",
+        "performance": "{train: {}, val: {}, oos: null}"
+      }
+    }
+  },
+
+  "module_dependencies": {
+    "run_tuning.py": {
+      "role": "Main Orchestrator",
+      "calls": ["cycle_analyzer", "adaptive_space", "walk_forward", "param_store"]
+    },
+    "cycle_analyzer.py": {
+      "role": "Wyckoff 사이클 분석",
+      "depends_on": ["_03_common.wyckoff.phases.detect_wyckoff_phase"]
+    },
+    "adaptive_space.py": {
+      "role": "적응형 탐색 공간 생성",
+      "depends_on": ["cycle_analyzer 결과"]
+    },
+    "walk_forward.py": {
+      "role": "Walk-Forward 최적화",
+      "depends_on": ["param_optimizer", "backtest_func (외부)"]
+    },
+    "param_store.py": {
+      "role": "파라미터 저장/로드",
+      "depends_on": ["param_schema (단위 변환)"]
+    },
+    "scheduler.py": {
+      "role": "주간 자동 스케줄러",
+      "depends_on": ["run_tuning.py (미연결)", "scalping.weekly_optimizer"]
+    }
+  },
+
+  "parameter_constraints": {
+    "primary": "box_L",
+    "dependencies": {
+      "m_freeze": "<= box_L * 0.6 (필수)",
+      "pivot_lr": "<= box_L / 10",
+      "min_box": "box_L * 0.8",
+      "max_box": "box_L * 1.2"
+    },
+    "additional": {
+      "tp_pct": "> sl_pct"
+    }
+  },
+
+  "unit_conversion": {
+    "storage": "minutes (분)",
+    "runtime": "bars (봉)",
+    "functions": {
+      "minutes_to_bars(minutes, timeframe)": "분 -> 봉",
+      "bars_to_minutes(bars, timeframe)": "봉 -> 분",
+      "convert_params_to_bars(params_minutes, timeframe)": "전체 변환"
+    },
+    "examples": {
+      "15m": "1440분 = 96봉 (24시간)",
+      "5m": "1440분 = 288봉 (24시간)",
+      "1h": "1440분 = 24봉 (24시간)"
+    }
+  },
+
+  "current_gaps": [
+    {
+      "id": "GAP-1",
+      "issue": "Theta <-> BacktestConfig 변환 핸들러 미흡",
+      "detail": "단위 변환이 백테스트 경계에서 누락될 수 있음",
+      "impact": "파라미터 불일치 오류 가능"
+    },
+    {
+      "id": "GAP-2",
+      "issue": "분석 실패 시 폴백 전략 없음",
+      "detail": "cycle_analyzer가 빈 결과 반환 시 V8_PARAM_SPACE 기본값 사용",
+      "impact": "시장 구조 인사이트 손실"
+    },
+    {
+      "id": "GAP-3",
+      "issue": "OOS (Out-of-Sample) 검증 미구현",
+      "detail": "param_store.oos_performance 필드가 항상 null",
+      "impact": "파라미터 노후화 감지 불가"
+    },
+    {
+      "id": "GAP-4",
+      "issue": "멀티 타임프레임 조화 검증 없음",
+      "detail": "15m, 1h, 4h가 독립적으로 분석됨",
+      "impact": "타임프레임 간 충돌 신호 가능"
+    },
+    {
+      "id": "GAP-5",
+      "issue": "scheduler.py와 run_tuning.py 미연결",
+      "detail": "주간 배치 프로세서가 run_tuning 호출 안 함",
+      "impact": "수동 트리거 필요, 자동 재튜닝 없음"
+    },
+    {
+      "id": "GAP-6",
+      "issue": "민감도 분석 없음",
+      "detail": "box_L +/-5% 변경 시 성능 영향 모름",
+      "impact": "robust_params의 실제 안정성 불명"
+    },
+    {
+      "id": "GAP-7",
+      "issue": "신뢰도 점수 계산 불완전",
+      "detail": "FFT 신뢰도, 사이클 수 임계값 등 미포함",
+      "impact": "저품질 파라미터 승인 가능"
+    }
+  ],
+
+  "phase_3_tasks": {
+    "status": "대기",
+    "tasks": [
+      {
+        "id": "3-1",
+        "file": "run_tuning.py",
+        "description": "cycle_analyzer -> adaptive_space -> walk_forward 파이프라인 연결 확인"
+      },
+      {
+        "id": "3-2",
+        "file": "main.py",
+        "description": "ParamStore에서 동적 파라미터 로드",
+        "changes": [
+          "시작 시 ParamStore.load_reliable() 호출",
+          "신뢰도 기반 fallback 로직"
+        ]
+      },
+      {
+        "id": "3-3",
+        "file": "param_store.py",
+        "description": "신뢰도 기반 파라미터 선택 로직 (이미 구현됨)",
+        "logic": "confidence_score >= 60이면 적용, 아니면 이전 주 또는 DEFAULT"
+      },
+      {
+        "id": "3-4",
+        "file": "scheduler.py",
+        "description": "run_tuning.py 호출 연결 (GAP-5 해결)"
+      }
+    ]
+  },
+
+  "implementation_status": {
+    "completed": [
+      "Phase 0: scheduler.py 긴급 수정 (market/timeframe, STUB 경고)",
+      "Phase 1: param_schema.py 신규 (TUNABLE/FIXED, 단위 변환)",
+      "Phase 1: param_store.py v2 (SCHEMA_VERSION=2, ParamConfidence, load_reliable)",
+      "Phase 2: weekly_optimizer -> scalping/ 분리",
+      "Phase 2: walk_forward = 15m 공식 최적화기",
+      "Phase 2: __init__.py v2 API 정리"
+    ],
+    "pending": [
+      "Phase 3: main.py ParamStore 연동",
+      "Phase 3: scheduler.py -> run_tuning.py 연결"
+    ],
+    "future": [
+      "OOS 성능 추적",
+      "멀티 타임프레임 조화 검증",
+      "민감도 분석기",
+      "파라미터 버전 관리 (A/B 테스트)"
+    ]
+  }
+}

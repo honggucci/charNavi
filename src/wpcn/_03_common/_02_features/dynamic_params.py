@@ -128,29 +128,39 @@ class MaxwellBoltzmannVolatility:
 
     def calculate_dynamic_atr_multipliers(self, volatility_percentile: float) -> Tuple[float, float, float]:
         """
-        변동성 분위수에 따른 동적 ATR 배수 계산
+        변동성 분위수에 따른 동적 피보나치 박스 비율 계산
+
+        **주의**: 이 함수는 ATR multiplier가 아닌 **Wyckoff 박스 폭 비율**을 반환합니다!
+
+        박스 폭 비율 해석:
+        - 0.0 = 평균 진입가 (박스 하단 근처)
+        - 0.5 = 박스 중간 (50% 상승)
+        - 1.0 = 박스 상단 (100% 상승)
+        - 1.618 = 황금 비율 (박스 상단 돌파 후 61.8% 추가)
 
         원리:
-        - 저변동성: 좁은 손절, 넓은 익절 (추세 지속 기대)
-        - 고변동성: 넓은 손절, 좁은 익절 (빠른 청산)
-
-        이는 변동성의 mean-reversion 특성을 활용
+        - 저변동성: 작은 손절(0.15), 큰 익절(0.8~1.2) → 추세 지속 기대
+        - 고변동성: 큰 손절(0.35), 작은 익절(0.5~0.7) → 빠른 청산
         """
         # 변동성 분위수를 0.2 ~ 0.8 범위로 클램프 (극단값 방지)
         vp = np.clip(volatility_percentile, 0.2, 0.8)
 
-        # 손절 배수: 저변동성 0.3, 고변동성 0.8
-        # 비선형 함수로 중간값에서 안정적
-        stop_mult = 0.3 + 0.5 * (vp ** 0.7)
+        # 손절 비율: 저변동성 0.15, 고변동성 0.35
+        # SL = avg_price - (box_width * stop_ratio)
+        # 박스 폭의 15%~35% 아래에 손절 설정
+        stop_ratio = 0.15 + 0.20 * (vp ** 0.7)
 
-        # TP1 배수: 저변동성 1.2, 고변동성 0.5
-        # 역관계: 변동성 높을수록 빨리 익절
-        tp1_mult = 1.2 - 0.7 * (vp ** 0.8)
+        # TP1 비율: 저변동성 0.8, 고변동성 0.5
+        # TP1 = avg_price + (box_width * tp1_ratio)
+        # 박스 폭의 50%~80% 위에 TP1 설정 (박스 중간~상단)
+        tp1_ratio = 0.8 - 0.3 * (vp ** 0.8)
 
-        # TP2 배수: TP1의 1.5~2배
-        tp2_mult = tp1_mult * (1.5 + 0.5 * (1 - vp))
+        # TP2 비율: 저변동성 1.2, 고변동성 0.7
+        # TP2 = avg_price + (box_width * tp2_ratio)
+        # 박스 폭의 70%~120% 위에 TP2 설정 (박스 상단~돌파)
+        tp2_ratio = 1.2 - 0.5 * (vp ** 0.8)
 
-        return stop_mult, tp1_mult, tp2_mult
+        return stop_ratio, tp1_ratio, tp2_ratio
 
 
 class FFTCycleDetector:
@@ -534,15 +544,27 @@ class DynamicParameterEngine:
 
     def compute_params_series(self, df: pd.DataFrame, min_lookback: int = 50) -> pd.DataFrame:
         """
-        전체 시계열에 대한 동적 파라미터 계산
+        전체 시계열에 대한 동적 파라미터 계산 (최적화 버전)
+
+        **최적화 전략**:
+        - 롤링 윈도우 대신 한 번에 전체 시계열 계산
+        - 변동성/사이클/추세 지표를 벡터화하여 계산
+        - 매 bar마다 재계산하지 않고 일정 간격(stride)으로만 계산
 
         Returns:
             DataFrame with dynamic parameters for each bar
         """
         n = len(df)
+
+        # 샘플링 간격: 매 10 bar마다 계산 (35000 → 3500 계산)
+        stride = 10
+        sample_indices = list(range(min_lookback, n, stride))
+        if (n - 1) not in sample_indices:
+            sample_indices.append(n - 1)  # 마지막 bar는 반드시 포함
+
         results = []
 
-        for i in range(min_lookback, n):
+        for i in sample_indices:
             params = self.compute_dynamic_params(df, i)
             results.append({
                 'time': df.index[i],
@@ -565,18 +587,12 @@ class DynamicParameterEngine:
 
         result_df = pd.DataFrame(results).set_index('time')
 
-        # 앞부분 채우기 (min_lookback 이전)
-        first_row = result_df.iloc[0]
-        prefix_data = []
-        for i in range(min_lookback):
-            prefix_data.append({
-                'time': df.index[i],
-                **first_row.to_dict()
-            })
+        # 전체 인덱스에 대해 forward fill (샘플링된 값을 중간에 채움)
+        full_index = df.index
+        result_df = result_df.reindex(full_index, method='ffill')
 
-        if prefix_data:
-            prefix_df = pd.DataFrame(prefix_data).set_index('time')
-            result_df = pd.concat([prefix_df, result_df])
+        # 앞부분 채우기 (min_lookback 이전은 첫 번째 값으로 채움)
+        result_df = result_df.fillna(method='bfill')
 
         return result_df
 

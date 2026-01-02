@@ -1,0 +1,50 @@
+{
+  "_description": "대화 백업 가이드 - '저장해줘' 요청 시 참조",
+
+  "trigger_keywords": ["저장해줘", "save", "백업해줘", "대화 저장"],
+
+  "save_steps": [
+    {
+      "step": 1,
+      "action": "현재 시간 확인",
+      "example": "2026-01-01 23:30:00"
+    },
+    {
+      "step": 2,
+      "action": "폴더 생성",
+      "path": "conversations/daily/YYYY/MM/DD/",
+      "command": "mkdir -p conversations/daily/2026/01/01"
+    },
+    {
+      "step": 3,
+      "action": "세션 파일 생성",
+      "filename": "session_HHMMSS_토픽.json",
+      "example": "session_233000_spot_backtest_fix.json"
+    },
+    {
+      "step": 4,
+      "action": "index.json 업데이트",
+      "updates": ["total_conversations++", "daily_sessions에 파일 추가"]
+    }
+  ],
+
+  "session_template": {
+    "id": "YYYY-MM-DDTHH:MM:SS",
+    "title": "대화 주제 (한글)",
+    "tags": ["태그1", "태그2"],
+    "files_changed": ["수정된/파일.py"],
+    "summary": "무엇을 했는지 3-5문장",
+    "key_decisions": ["주요 결정사항"],
+    "env_changes": {"새_환경변수": "값"},
+    "next_steps": ["다음 작업"]
+  },
+
+  "naming_rules": {
+    "time_format": "HHMMSS (24시간제)",
+    "topic": "영문_snake_case (선택)",
+    "examples": [
+      "session_193600_architecture.json",
+      "session_220000.json"
+    ]
+  }
+}

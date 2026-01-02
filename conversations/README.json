@@ -1,0 +1,36 @@
+{
+  "_instruction": "새 세션 시작 시 이 파일들을 순서대로 읽으세요",
+
+  "read_order": [
+    {
+      "file": "EXECUTION_GUIDE.json",
+      "purpose": "프로젝트 실행 흐름 파악 (현물/선물/튜닝)",
+      "when": "항상 먼저 읽기"
+    },
+    {
+      "file": "BACKUP_GUIDE.json",
+      "purpose": "대화 백업 방법",
+      "when": "사용자가 '저장해줘' 요청 시"
+    },
+    {
+      "file": "PROJECT_STRUCTURE.json",
+      "purpose": "전체 폴더/파일 구조 (레퍼런스)",
+      "when": "특정 모듈 위치 찾을 때"
+    }
+  ],
+
+  "project_summary": {
+    "name": "WPCN (Wyckoff Probabilistic Crypto Navigator)",
+    "3_projects": {
+      "1_spot": "현물 백테스트 (롱 only)",
+      "2_futures": "선물 백테스트 (롱/숏)",
+      "3_tuning": "파라미터 최적화 (Walk-Forward)"
+    },
+    "base_path": "src/wpcn/"
+  },
+
+  "quick_commands": {
+    "run_spot_backtest": "python -m wpcn._01_crypto.001_binance.001_spot.002_sub.run_spot_backtest_mtf",
+    "run_futures_backtest": "python -m wpcn._01_crypto.001_binance.002_futures.001_backtest.engine"
+  }
+}

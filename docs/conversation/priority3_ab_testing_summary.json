@@ -1,0 +1,131 @@
+{
+  "priority": 3,
+  "title": "A/B Testing / Version Management",
+  "version": "v2.2.1",
+  "completed_at": "2026-01-02",
+  "status": "completed",
+
+  "overview": {
+    "description": "Champion/Challenger 기반 A/B Testing 시스템 도입",
+    "key_concepts": {
+      "champion": "현재 라이브 트레이딩에 사용 중인 검증된 파라미터",
+      "challenger": "새로 튜닝된 파라미터 (1주일간 OOS 테스트 후 승격 가능)",
+      "active": "현재 OOS 측정 대상 (Challenger와 동일)"
+    },
+    "thresholds": {
+      "promote_oos": 0.95,
+      "promote_confidence": 0.90,
+      "rollback_oos": 0.80
+    }
+  },
+
+  "files_created": [
+    {
+      "file": "param_versioning.py",
+      "description": "Champion/Challenger 버전 관리 모듈",
+      "exports": ["ParamVersionManager", "VersionInfo", "ComparisonResult", "get_version_manager"]
+    }
+  ],
+
+  "files_modified": [
+    {
+      "file": "param_store.py",
+      "changes": ["mark_as_champion()", "get_champion()", "demote_champion()", "is_champion()", "_base_path property"]
+    },
+    {
+      "file": "scheduler.py",
+      "changes": ["v2.1→v2.2 업그레이드", "_auto_promote_or_rollback()", "_register_challenger()"]
+    },
+    {
+      "file": "__init__.py",
+      "changes": ["ParamVersionManager, VersionInfo, ComparisonResult, get_version_manager export 추가"]
+    }
+  ],
+
+  "bugs_fixed": [
+    {
+      "id": 1,
+      "problem": "get_param_store(market) 잘못 호출",
+      "cause": "market이 store_dir로 전달됨",
+      "fix": "get_param_store(market=market)"
+    },
+    {
+      "id": 2,
+      "problem": "store.load(symbol, tf, run_id) TypeError",
+      "cause": "ParamStore.load()는 run_id 미지원",
+      "fix": "store.get_champion(), store.get_active() 사용"
+    },
+    {
+      "id": 3,
+      "problem": "OOS 비교에 dict 사용",
+      "cause": "performance.oos는 dict",
+      "fix": "confidence.oos_performance (float, 0~1) 사용"
+    },
+    {
+      "id": 4,
+      "problem": "confidence.score 없는 필드",
+      "cause": "존재하지 않는 필드 참조",
+      "fix": "confidence.confidence_score (property) 사용"
+    },
+    {
+      "id": 5,
+      "problem": "run_id fallback 형식 오류",
+      "cause": "{symbol}_{tf}_{ts} → 파일명 불일치",
+      "fix": "타임스탬프만 사용: {ts}"
+    },
+    {
+      "id": 6,
+      "problem": "register_challenger() 히스토리 오류",
+      "cause": "set_active 후 get_challenger → 새 버전 반환",
+      "fix": "set_active 전에 old_challenger 저장"
+    },
+    {
+      "id": 7,
+      "problem": "confidence None 비교 TypeError",
+      "cause": "None / float 연산",
+      "fix": "모든 비교에 is not None 체크 추가"
+    },
+    {
+      "id": 8,
+      "problem": "auto_decide() 롤백 체크 truthy 버그",
+      "cause": "if champion_oos and challenger_oos: → 0.0 스킵",
+      "fix": "is not None and > 0 체크로 수정"
+    }
+  ],
+
+  "helper_functions_added": [
+    {
+      "name": "_get_oos_performance(param)",
+      "return_type": "Optional[float]",
+      "description": "confidence.oos_performance (0~1 스케일) 안전 추출"
+    },
+    {
+      "name": "_get_confidence_score(param)",
+      "return_type": "Optional[float]",
+      "description": "confidence.confidence_score (0~100 스케일) 안전 추출"
+    },
+    {
+      "name": "_is_oos_pending(param)",
+      "return_type": "bool",
+      "description": "oos_pending 플래그 안전 체크"
+    }
+  ],
+
+  "verification": {
+    "old_pattern_search": "if comparison.champion_oos and comparison.challenger_oos → 0건",
+    "new_condition_line": 560,
+    "new_condition": "if comparison.champion_oos is not None and comparison.champion_oos > 0 and comparison.challenger_oos is not None:"
+  },
+
+  "behavior_analysis": {
+    "challenger_oos_zero": "ratio=0 → 롤백 트리거",
+    "champion_oos_zero": "ratio 계산 스킵 (기준 무의미)",
+    "both_none": "스킵"
+  },
+
+  "next_priority": {
+    "id": 4,
+    "title": "Unit Tests",
+    "scope": ["param_versioning 테스트", "scheduler A/B 로직 테스트", "rollback side effects 검증"]
+  }
+}

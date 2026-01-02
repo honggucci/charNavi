@@ -1,0 +1,164 @@
+{
+  "date": "2026-01-01",
+  "title": "WPCN 와이코프 패턴 네비게이터 아키텍처 요약",
+  "session_type": "codebase_analysis",
+
+  "project_structure": {
+    "root": "C:\\Users\\hahonggu\\Desktop\\coin_master\\coin_master\\wpcn-backtester-cli-noflask",
+    "main_modules": {
+      "backtest_entry": "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/main.py",
+      "broker_simulator": "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/broker_sim.py",
+      "wyckoff_events": "src/wpcn/_03_common/_03_wyckoff/events.py",
+      "wyckoff_phases": "src/wpcn/_03_common/_03_wyckoff/phases.py",
+      "box_engine": "src/wpcn/_03_common/_03_wyckoff/box.py",
+      "core_types": "src/wpcn/_03_common/_01_core/types.py",
+      "backtest_engine": "src/wpcn/_06_engine/backtest.py",
+      "navigation": "src/wpcn/_06_engine/navigation.py",
+      "indicators": "src/wpcn/_03_common/_02_features/indicators.py"
+    },
+    "folder_structure": {
+      "_00_config": "설정 파일",
+      "_01_crypto": "거래소별 모듈 (Binance spot)",
+      "_02_data": "데이터 로딩/저장/검증",
+      "_03_common": "공통 모듈 (core, features, wyckoff, navigation, metrics, risk, validation, database, gate)",
+      "_04_execution": "백테스트 실행 엔진",
+      "_05_probability": "확률 계산",
+      "_06_engine": "메인 백테스팅 엔진",
+      "_07_reporting": "리포팅 및 차트",
+      "_08_tuning": "파라미터 튜닝",
+      "_09_cli": "CLI 인터페이스"
+    }
+  },
+
+  "wyckoff_strategy": {
+    "spring_signal": {
+      "description": "박스권 하단 돌파 후 회복 → 롱 진입",
+      "logic": [
+        "1. 박스권 하단 돌파: low < box_low - x_atr * ATR",
+        "2. 회복: close >= box_low + m_bw * box_width",
+        "3. Entry: reclaim_level = box_low + m_bw * box_width"
+      ]
+    },
+    "utad_signal": {
+      "description": "박스권 상단 돌파 후 회귀 → 숏 진입",
+      "logic": [
+        "1. 박스권 상단 돌파: high > box_high + x_atr * ATR",
+        "2. 회귀: close <= box_high - m_bw * box_width",
+        "3. Entry: reclaim_level = box_high - m_bw * box_width"
+      ]
+    },
+    "phase_ab_accumulation": {
+      "description": "Phase A/B 양방향 축적 전략",
+      "direction_ratios": {
+        "accumulation": {"long": 0.70, "short": 0.30},
+        "distribution": {"long": 0.30, "short": 0.70},
+        "re_accumulation": {"long": 0.80, "short": 0.20},
+        "re_distribution": {"long": 0.20, "short": 0.80},
+        "unknown": {"long": 0.50, "short": 0.50}
+      },
+      "fib_levels": {
+        "fib_236": 0.236,
+        "fib_382": 0.382,
+        "fib_500": 0.500,
+        "fib_618": 0.618,
+        "fib_786": 0.786
+      }
+    }
+  },
+
+  "default_parameters": {
+    "theta": {
+      "pivot_lr": 4,
+      "box_L": 96,
+      "m_freeze": 32,
+      "atr_len": 14,
+      "x_atr": 0.35,
+      "m_bw": 0.10,
+      "N_reclaim": 3,
+      "N_fill": 5,
+      "F_min": 0.70
+    },
+    "backtest_costs": {
+      "fee_bps": 10.0,
+      "slippage_bps": 30.0
+    },
+    "backtest_config": {
+      "initial_equity": 1.0,
+      "max_hold_bars": 30,
+      "tp1_frac": 0.5,
+      "use_tp2": true,
+      "conf_min": 0.50,
+      "edge_min": 0.60,
+      "confirm_bars": 1,
+      "chaos_ret_atr": 3.0,
+      "adx_len": 14,
+      "adx_trend": 15.0
+    }
+  },
+
+  "broker_simulator": {
+    "position_types": {
+      "main_position": ["pos_qty", "pos_side", "entry_px", "stop_price", "tp1", "tp2"],
+      "long_accumulation": ["accum_total_qty", "accum_avg_price", "accum_stop_price", "accum_tp_price"],
+      "short_accumulation": ["short_accum_total_qty", "short_accum_avg_price", "short_accum_stop_price"]
+    },
+    "trade_types": ["ENTRY", "TP1", "TP2", "STOP", "TIME_EXIT", "ACCUM_LONG", "ACCUM_SHORT", "ACCUM_LONG_TP", "ACCUM_LONG_STOP"],
+    "exit_conditions": {
+      "long": {
+        "stop": "low <= stop_price",
+        "tp1": "high >= tp1",
+        "tp2": "high >= tp2",
+        "time_exit": "i - entry_i >= max_hold_bars"
+      },
+      "short": {
+        "stop": "high >= stop_price",
+        "tp1": "low <= tp1",
+        "tp2": "low <= tp2",
+        "time_exit": "i - entry_i >= max_hold_bars"
+      }
+    }
+  },
+
+  "multi_timeframe": {
+    "main_timeframe": "15m",
+    "higher_timeframes": ["1H", "4H"],
+    "navigation_pages": ["accum", "reaccum", "distrib", "redistr", "spring", "utad"]
+  },
+
+  "scalping_mode": {
+    "signals": ["RSI 다이버전스", "피보나치 반등", "Stochastic RSI"],
+    "tp_targets": {"tp1": "0.5%", "tp2": "0.5%"}
+  },
+
+  "output_structure": {
+    "runs_folder": "runs/{run_id}/",
+    "files": [
+      "config.json",
+      "candles.parquet",
+      "equity.parquet",
+      "trades.parquet",
+      "signals.parquet",
+      "nav.parquet"
+    ],
+    "charts_folder": "charts/",
+    "reports_folder": "reports/"
+  },
+
+  "key_features": [
+    "Wyckoff 방법론 기반 Spring/UTAD 신호 감지",
+    "Phase A/B 양방향 축적 전략 (롱/숏 비율 조절)",
+    "다중 타임프레임 네비게이션 (15m + 1H/4H)",
+    "분할 익절 (TP1 50%, TP2 50%)",
+    "동적 손절 (ATR 기반)",
+    "현실적 비용 반영 (수수료 + 슬리피지)",
+    "단타 모드 (RSI 다이버전스, 피보나치 반등)"
+  ],
+
+  "next_steps": [
+    "전략 검증 - 기존 백테스트 결과 분석",
+    "파라미터 최적화 - Theta 값 튜닝",
+    "신규 전략 개발 - 추가 신호/필터 구현",
+    "코드 리팩토링 - 구조 개선",
+    "실거래 연동 - 라이브 트레이딩 준비"
+  ]
+}

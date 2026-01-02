@@ -1,0 +1,171 @@
+{
+  "id": "2026-01-01-004",
+  "date": "2026-01-01",
+  "title": "확률 필터 및 튜닝 모듈 연동",
+  "summary": "_05_probability와 _08_tuning 모듈을 현물 백테스트 로직에 연동",
+  "tags": ["probability", "tuning", "integration", "spot", "mtf"],
+  "topics": ["확률 필터", "Walk-Forward 튜닝", "모듈 연동"],
+
+  "changes": {
+    "broker_sim_mtf.py": {
+      "path": "src/wpcn/_04_execution/broker_sim_mtf.py",
+      "description": "4.5단계 확률 필터 추가",
+      "additions": [
+        {
+          "type": "import",
+          "code": "from wpcn._05_probability.barrier import calculate_barrier_probability",
+          "description": "배리어 확률 계산 함수 조건부 import"
+        },
+        {
+          "type": "config",
+          "code": "USE_PROBABILITY_MODEL = os.getenv('USE_PROBABILITY_MODEL', 'False').lower() == 'true'\nMIN_TP_PROBABILITY = float(os.getenv('MIN_TP_PROBABILITY', '0.50'))\nMIN_EV_R = float(os.getenv('MIN_EV_R', '0.05'))",
+          "description": "환경변수에서 확률 필터 설정 로드"
+        },
+        {
+          "type": "filter_logic",
+          "location": "Entry logic (4.5단계: Gate 통과 후, 진입 전)",
+          "description": "calculate_barrier_probability() 호출 후 P(TP) >= MIN_TP_PROBABILITY 및 EV_R >= MIN_EV_R 체크"
+        },
+        {
+          "type": "debug",
+          "code": "prob_passed, prob_blocked 카운터 추가",
+          "description": "확률 필터 통과/차단 통계 출력"
+        }
+      ]
+    },
+
+    "run_spot_backtest_mtf.py": {
+      "path": "src/wpcn/_01_crypto/001_binance/001_spot/002_sub/run_spot_backtest_mtf.py",
+      "description": "0단계 Walk-Forward 튜닝 연동",
+      "additions": [
+        {
+          "type": "import",
+          "code": "from wpcn._08_tuning.theta_space import ThetaSpace",
+          "description": "ThetaSpace 조건부 import"
+        },
+        {
+          "type": "config",
+          "code": "USE_TUNING = os.getenv('USE_TUNING', 'False').lower() == 'true'\nTUNING_TRAIN_DAYS = int(os.getenv('TUNING_TRAIN_DAYS', '60'))\nTUNING_TEST_DAYS = int(os.getenv('TUNING_TEST_DAYS', '30'))\nTUNING_N_CANDIDATES = int(os.getenv('TUNING_N_CANDIDATES', '50'))",
+          "description": "환경변수에서 튜닝 설정 로드"
+        },
+        {
+          "type": "function",
+          "name": "run_walk_forward_tuning()",
+          "description": "Walk-Forward 최적화 함수 - Train 기간에서 Theta 후보 탐색, Test 기간에서 검증"
+        },
+        {
+          "type": "integration",
+          "location": "main() 함수 내 백테스트 실행 전",
+          "description": "USE_TUNING=True 시 run_walk_forward_tuning() 호출하여 최적 Theta 획득"
+        }
+      ]
+    }
+  },
+
+  "logic_flow": {
+    "description": "현물 백테스트 실행 흐름",
+    "steps": [
+      {
+        "step": 0,
+        "name": "튜닝 (선택)",
+        "condition": "USE_TUNING=True",
+        "action": "run_walk_forward_tuning() → 최적 Theta 반환"
+      },
+      {
+        "step": 1,
+        "name": "MTF 점수 계산",
+        "action": "compute_mtf_scores()"
+      },
+      {
+        "step": 2,
+        "name": "신호 생성",
+        "action": "generate_mtf_signals()"
+      },
+      {
+        "step": 3,
+        "name": "Navigation Gate",
+        "action": "compute_navigation() → trade_gate 체크"
+      },
+      {
+        "step": 4,
+        "name": "가격 체크",
+        "action": "l <= signal_entry <= h"
+      },
+      {
+        "step": 4.5,
+        "name": "확률 필터 (선택)",
+        "condition": "USE_PROBABILITY_MODEL=True",
+        "action": "calculate_barrier_probability() → P(TP) >= 0.50, EV_R >= 0.05 체크"
+      },
+      {
+        "step": 5,
+        "name": "진입 실행",
+        "action": "리스크 기반 포지션 사이징 → 진입"
+      }
+    ]
+  },
+
+  "env_settings": {
+    "probability_filter": {
+      "USE_PROBABILITY_MODEL": {
+        "type": "boolean",
+        "default": "False",
+        "description": "확률 필터 활성화 여부"
+      },
+      "MIN_TP_PROBABILITY": {
+        "type": "float",
+        "default": "0.50",
+        "description": "최소 TP 적중 확률 (50%)"
+      },
+      "MIN_EV_R": {
+        "type": "float",
+        "default": "0.05",
+        "description": "최소 기대값 (0.05R)"
+      }
+    },
+    "tuning": {
+      "USE_TUNING": {
+        "type": "boolean",
+        "default": "False",
+        "description": "Walk-Forward 튜닝 활성화 여부"
+      },
+      "TUNING_TRAIN_DAYS": {
+        "type": "int",
+        "default": "60",
+        "description": "훈련 기간 (일)"
+      },
+      "TUNING_TEST_DAYS": {
+        "type": "int",
+        "default": "30",
+        "description": "테스트 기간 (일)"
+      },
+      "TUNING_N_CANDIDATES": {
+        "type": "int",
+        "default": "50",
+        "description": "Theta 후보 개수"
+      }
+    }
+  },
+
+  "modules_connected": {
+    "_05_probability": {
+      "file": "barrier.py",
+      "function": "calculate_barrier_probability()",
+      "returns": "BarrierProbability(p_tp, p_sl, p_timeout, ev_r, ...)",
+      "usage": "진입 전 TP 적중 확률 및 기대값 계산"
+    },
+    "_08_tuning": {
+      "file": "theta_space.py",
+      "class": "ThetaSpace",
+      "method": "sample()",
+      "usage": "파라미터 범위 내 랜덤 Theta 샘플링"
+    }
+  },
+
+  "notes": [
+    "확률 필터는 Monte Carlo 시뮬레이션 기반 (n_simulations=1000)",
+    "튜닝 목적함수: 수익률 - MDD",
+    "두 기능 모두 기본값 False로 비활성화 상태",
+    "활성화 시 .env 파일에서 True로 변경 필요"
+  ]
+}

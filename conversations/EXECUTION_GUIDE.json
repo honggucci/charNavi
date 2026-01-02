@@ -1,0 +1,401 @@
+{
+  "_description": "3개 프로젝트 실행 흐름 가이드 (실행 순서대로 정리)",
+  "_updated": "2026-01-01",
+
+  "projects": {
+
+    "1_spot_backtest": {
+      "name": "현물 백테스트",
+      "description": "BTC 현물 롱 only, MTF 점수 시스템",
+      "entry_point": "src/wpcn/_01_crypto/001_binance/001_spot/002_sub/run_spot_backtest_mtf.py",
+      "run_command": "python -m wpcn._01_crypto.001_binance.001_spot.002_sub.run_spot_backtest_mtf",
+
+      "execution_flow": {
+        "step_0_tuning": {
+          "condition": "USE_TUNING=True",
+          "function": "run_walk_forward_tuning()",
+          "location": "run_spot_backtest_mtf.py:87",
+          "description": "Walk-Forward 방식으로 최적 Theta 탐색",
+          "sub_steps": [
+            "ThetaSpace 초기화 (파라미터 범위 정의)",
+            "데이터 분할: Train(60일) + Embargo(1일) + Test(30일)",
+            "50개 후보 랜덤 샘플링 → simulate_mtf() 실행",
+            "목적함수: ret% - MDD% → 최고 점수 선택",
+            "Test 기간에서 검증 → 최종 Theta 반환"
+          ]
+        },
+        "step_1_data_load": {
+          "function": "load_recent_data()",
+          "location": "run_spot_backtest_mtf.py:47",
+          "description": "5분봉 OHLCV 데이터 로드",
+          "returns": "pd.DataFrame (open, high, low, close, volume)"
+        },
+        "step_2_mtf_scoring": {
+          "function": "compute_mtf_scores()",
+          "location": "_03_common/_04_navigation/mtf_scoring.py",
+          "description": "멀티타임프레임 점수 계산",
+          "timeframes": ["15m", "1h", "4h", "1d", "1w"],
+          "returns": "context_score, trigger_score per bar"
+        },
+        "step_3_signal_generation": {
+          "function": "generate_mtf_signals()",
+          "location": "_03_common/_04_navigation/mtf_scoring.py",
+          "description": "MTF 점수 기반 LONG/SHORT 신호 생성",
+          "filters": {
+            "min_score": "4.0",
+            "min_tf_alignment": "2개 이상 TF 정렬",
+            "min_rr_ratio": "1.5 이상"
+          }
+        },
+        "step_4_simulation": {
+          "function": "simulate_mtf()",
+          "location": "_04_execution/broker_sim_mtf.py:102",
+          "description": "백테스트 시뮬레이션 실행",
+          "sub_steps": {
+            "4.1_navigation_gate": {
+              "condition": "USE_NAVIGATION_GATE=True",
+              "function": "compute_navigation()",
+              "check": "conf >= CONF_MIN, edge >= EDGE_MIN"
+            },
+            "4.2_price_check": {
+              "logic": "l <= entry_price <= h (당일 범위 내 진입 가능 여부)"
+            },
+            "4.3_probability_filter": {
+              "condition": "USE_PROBABILITY_MODEL=True",
+              "function": "calculate_barrier_probability()",
+              "location": "_05_probability/barrier.py",
+              "check": "P(TP) >= 0.50, EV_R >= 0.05"
+            },
+            "4.4_position_sizing": {
+              "function": "calc_qty_risk_based()",
+              "location": "broker_sim_mtf.py:45",
+              "logic": "Phase별 리스크% × confidence → 포지션 크기"
+            },
+            "4.5_execution": {
+              "actions": ["진입 체결", "TP1/TP2 관리", "SL 청산", "시간 청산"]
+            }
+          }
+        },
+        "step_5_output": {
+          "returns": {
+            "equity_df": "시간별 자산 곡선",
+            "trades_df": "모든 거래 기록",
+            "signals_df": "생성된 신호 목록",
+            "nav_df": "Navigation Gate 상태"
+          },
+          "saves_to": "runs/ 디렉토리 (parquet)"
+        }
+      },
+
+      "key_files": {
+        "entry": "run_spot_backtest_mtf.py (main 함수)",
+        "simulation": "_04_execution/broker_sim_mtf.py (simulate_mtf)",
+        "mtf_scoring": "_03_common/_04_navigation/mtf_scoring.py",
+        "wyckoff_box": "_03_common/_03_wyckoff/box.py (box_engine_freeze)",
+        "wyckoff_events": "_03_common/_03_wyckoff/events.py (detect_spring_utad)",
+        "probability": "_05_probability/barrier.py (calculate_barrier_probability)",
+        "indicators": "_03_common/_02_features/indicators.py (atr, rsi, stoch_rsi)"
+      },
+
+      "env_variables": {
+        "required": {
+          "SYMBOL": "BTC-USDT",
+          "TIMEFRAME": "15m",
+          "BACKTEST_DAYS": "365"
+        },
+        "theta_params": {
+          "BOX_LOOKBACK": "50 (박스 길이)",
+          "M_FREEZE": "16 (프리즈 기간)",
+          "PIVOT_LR": "3 (피봇 좌우 거리)",
+          "N_FILL": "5 (채움 확인 기간)"
+        },
+        "mtf_filters": {
+          "MIN_SCORE": "4.0",
+          "MIN_TF_ALIGNMENT": "2",
+          "MIN_RR_RATIO": "1.5",
+          "SL_ATR_MULT": "1.5",
+          "TP_ATR_MULT": "2.5"
+        },
+        "optional_features": {
+          "USE_TUNING": "False (튜닝 활성화)",
+          "USE_PROBABILITY_MODEL": "False (확률 필터)",
+          "USE_NAVIGATION_GATE": "False (현재 비활성화)"
+        }
+      },
+
+      "module_dependencies": {
+        "run_spot_backtest_mtf.py": [
+          "wpcn._00_config.config (PATHS, setup_logging)",
+          "wpcn._03_common._01_core.types (Theta, BacktestCosts, BacktestConfig)",
+          "wpcn._04_execution.broker_sim_mtf (simulate_mtf)",
+          "wpcn._08_tuning.theta_space (ThetaSpace) [조건부]"
+        ],
+        "broker_sim_mtf.py": [
+          "wpcn._03_common._04_navigation.mtf_scoring (compute_mtf_scores, generate_mtf_signals)",
+          "wpcn._06_engine.navigation (compute_navigation)",
+          "wpcn._05_probability.barrier (calculate_barrier_probability) [조건부]",
+          "wpcn._04_execution.cost (apply_costs)"
+        ]
+      }
+    },
+
+    "2_futures_backtest": {
+      "name": "선물 백테스트",
+      "description": "롱/숏 양방향, 15분봉 축적 + 5분봉 다이버전스 전략",
+      "entry_point": "src/wpcn/_01_crypto/001_binance/002_futures/001_backtest/run_futures_backtest_v2.py",
+      "run_command": "python -m wpcn._01_crypto.001_binance.002_futures.001_backtest.run_futures_backtest_v2",
+
+      "execution_flow": {
+        "step_1_data_fetch": {
+          "function": "fetch_ohlcv_to_parquet()",
+          "location": "wpcn.data.ccxt_fetch",
+          "description": "CCXT로 Binance에서 5분봉 데이터 다운로드",
+          "output": "data/raw/{exchange}_{symbol}_{tf}_{year}.parquet"
+        },
+        "step_2_data_load": {
+          "function": "load_parquet()",
+          "location": "wpcn.data.loaders",
+          "description": "parquet 파일 로드"
+        },
+        "step_3_simulation": {
+          "function": "simulate_futures_v2()",
+          "location": "002_futures/001_backtest/engine.py:136",
+          "description": "선물 시뮬레이션 엔진",
+          "sub_steps": {
+            "3.1_preprocessing": {
+              "actions": [
+                "5분봉 → 15분봉 리샘플링",
+                "Wyckoff Phase 감지 (15분봉)",
+                "박스 패턴 감지 (15분봉)",
+                "RSI 다이버전스 감지 (5분봉)",
+                "RSI, Stochastic RSI 계산 (5분봉)"
+              ]
+            },
+            "3.2_15m_accumulation": {
+              "description": "15분봉 축적 포지션",
+              "logic": [
+                "Phase 기반 축적 신호 감지",
+                "3%씩 축적, 최대 15%",
+                "TP: +1.5%, SL: -1.0%",
+                "시간 청산: 6시간"
+              ]
+            },
+            "3.3_5m_scalping": {
+              "description": "5분봉 단타 진입",
+              "logic": [
+                "RSI 다이버전스 + RSI 극단값 조건",
+                "2%씩 진입",
+                "TP: +0.8%, SL: -0.5%",
+                "시간 청산: 3시간"
+              ]
+            },
+            "3.4_funding_fee": {
+              "interval": "8시간마다 (96봉)",
+              "rate": "0.01%"
+            }
+          }
+        },
+        "step_4_output": {
+          "returns": {
+            "equity_df": "시간별 자산 곡선",
+            "trades_df": "모든 거래 기록",
+            "stats": "수익률, MDD, 거래 수, 축적 횟수, 청산 횟수, 펀딩비"
+          }
+        }
+      },
+
+      "key_files": {
+        "entry": "run_futures_backtest_v2.py (main 함수)",
+        "simulation": "engine.py (simulate_futures_v2)",
+        "config": "engine.py (FuturesConfigV2, AccumulatedPosition)",
+        "wyckoff": "_03_common/_03_wyckoff/ (box.py, phases.py)",
+        "indicators": "_03_common/_02_features/indicators.py"
+      },
+
+      "futures_config": {
+        "leverage": {"BTC": "15x", "ETH": "5x"},
+        "margin_mode": "isolated",
+        "maintenance_margin": "0.5%",
+        "funding_rate": "0.01% (8시간마다)",
+        "accumulation_15m": {
+          "pct_per_entry": "3%",
+          "max_total": "15%",
+          "tp": "+1.5%",
+          "sl": "-1.0%",
+          "max_hold": "6시간"
+        },
+        "scalping_5m": {
+          "pct_per_entry": "2%",
+          "tp": "+0.8%",
+          "sl": "-0.5%",
+          "max_hold": "3시간"
+        },
+        "divergence_filter": {
+          "rsi_oversold": "45",
+          "rsi_overbought": "55",
+          "stoch_oversold": "40",
+          "stoch_overbought": "60"
+        }
+      },
+
+      "env_variables": {
+        "required": {
+          "SYMBOL": "BTC-USDT or ETH-USDT",
+          "TIMEFRAME": "5m (고정)"
+        },
+        "optional": {
+          "CCXT_API_KEY": "(공개 데이터는 불필요)",
+          "LEVERAGE": "15.0 (BTC), 5.0 (ETH)",
+          "POSITION_PCT": "0.95"
+        }
+      }
+    },
+
+    "3_parameter_tuning": {
+      "name": "파라미터 최적화",
+      "description": "Walk-Forward 방식 Theta 및 전략 파라미터 튜닝",
+      "entry_points": {
+        "integrated": "run_spot_backtest_mtf.py (USE_TUNING=True)",
+        "standalone": "_08_tuning/walk_forward.py"
+      },
+
+      "execution_flow": {
+        "step_1_theta_space": {
+          "class": "ThetaSpace",
+          "location": "_08_tuning/theta_space.py:9",
+          "description": "파라미터 공간 정의",
+          "params": {
+            "pivot_lr": "(2, 5) - 피봇 좌우 거리",
+            "box_L": "(30, 100) - 박스 길이",
+            "m_freeze": "(8, 32) - 프리즈 기간",
+            "atr_len": "(10, 20) - ATR 기간",
+            "x_atr": "(1.5, 3.0) - ATR 배수",
+            "m_bw": "(0.01, 0.05) - 박스폭 비율",
+            "N_reclaim": "(4, 16) - Reclaim 기간",
+            "N_fill": "(3, 10) - 채움 확인 기간",
+            "F_min": "(0.2, 0.5) - 최소 채움 확률"
+          }
+        },
+        "step_2_data_split": {
+          "description": "Walk-Forward 데이터 분할",
+          "default": {
+            "train_days": "60일 (17,280봉)",
+            "embargo_days": "1일 (288봉)",
+            "test_days": "30일 (8,640봉)"
+          },
+          "bars_per_day": "288 (5분봉 기준)"
+        },
+        "step_3_candidate_search": {
+          "function": "theta_space.sample()",
+          "iterations": "n_candidates (기본 50)",
+          "per_iteration": [
+            "랜덤 Theta 샘플링",
+            "simulate_mtf() 실행",
+            "목적함수 계산: ret% - MDD%",
+            "최고 점수면 best_theta 업데이트"
+          ]
+        },
+        "step_4_validation": {
+          "description": "Test 기간에서 최적 Theta 검증",
+          "output": ["테스트 수익률", "테스트 MDD", "최종 Theta 파라미터"]
+        }
+      },
+
+      "key_files": {
+        "theta_space": "_08_tuning/theta_space.py (ThetaSpace 클래스)",
+        "walk_forward": "_08_tuning/walk_forward.py (WalkForwardOptimizer)",
+        "param_optimizer": "_08_tuning/param_optimizer.py (GridSearch, RandomSearch)",
+        "integrated": "run_spot_backtest_mtf.py:run_walk_forward_tuning()"
+      },
+
+      "optimizer_types": {
+        "random_search": {
+          "class": "RandomSearchOptimizer",
+          "location": "param_optimizer.py:98",
+          "method": "랜덤 샘플링"
+        },
+        "grid_search": {
+          "class": "GridSearchOptimizer",
+          "location": "param_optimizer.py:38",
+          "method": "모든 조합 탐색"
+        },
+        "bayesian": {
+          "class": "BayesianOptimizer",
+          "method": "Gaussian Process 기반 (scikit-optimize)"
+        }
+      },
+
+      "v8_param_space": {
+        "_location": "walk_forward.py:416-433",
+        "wyckoff_params": {
+          "pivot_lr": "(2, 8)",
+          "box_L": "(48, 192)",
+          "m_freeze": "(16, 64)",
+          "atr_len": "(10, 20)",
+          "x_atr": "(0.2, 0.5)",
+          "m_bw": "(0.05, 0.15)"
+        },
+        "entry_exit_params": {
+          "tp_pct": "(0.01, 0.03)",
+          "sl_pct": "(0.005, 0.015)",
+          "min_score": "(3.0, 5.0)"
+        },
+        "rsi_params": {
+          "rsi_oversold": "(25, 40)",
+          "rsi_overbought": "(60, 75)"
+        }
+      },
+
+      "env_variables": {
+        "USE_TUNING": "True (활성화)",
+        "TUNING_TRAIN_DAYS": "60",
+        "TUNING_TEST_DAYS": "30",
+        "TUNING_N_CANDIDATES": "50"
+      },
+
+      "objective_functions": {
+        "default": "ret% - MDD% (수익률 - 최대낙폭)",
+        "alternatives": ["sharpe", "calmar", "sortino", "return"]
+      }
+    }
+  },
+
+  "shared_components": {
+    "core_types": {
+      "location": "_03_common/_01_core/types.py",
+      "classes": {
+        "Theta:91": "Wyckoff 박스 파라미터 (pivot_lr, box_L, m_freeze, ...)",
+        "BacktestCosts:16": "거래 비용 (fee_bps, slippage_bps)",
+        "BacktestConfig:47": "백테스트 설정 (conf_min, edge_min, max_hold_bars)"
+      }
+    },
+    "indicators": {
+      "location": "_03_common/_02_features/indicators.py",
+      "functions": ["atr()", "rsi()", "stoch_rsi()", "adx()", "find_pivot_points()", "detect_rsi_divergence()"]
+    },
+    "wyckoff": {
+      "location": "_03_common/_03_wyckoff/",
+      "files": {
+        "box.py": "box_engine_freeze() - 박스 감지 및 고정",
+        "events.py": "detect_spring_utad() - Spring/UTAD 신호",
+        "phases.py": "detect_wyckoff_phase() - A/B/C/D/E 페이즈 판정"
+      }
+    },
+    "probability": {
+      "location": "_05_probability/barrier.py",
+      "function": "calculate_barrier_probability()",
+      "returns": ["p_tp (TP 확률)", "p_sl (SL 확률)", "p_timeout", "ev_r (기대값)"],
+      "method": "Monte Carlo 시뮬레이션 (1000회)"
+    }
+  },
+
+  "design_philosophy": {
+    "core": "안 들어가는 날이 많아져야 계좌가 산다",
+    "target_no_trade_ratio": "30%+",
+    "filters": {
+      "MTF Score": "Context >= 0.5, Trigger >= 0.5",
+      "Navigation Gate": "conf >= 0.55, edge >= 0.0 (현재 비활성화)",
+      "Probability Filter": "P(TP) >= 0.50, EV_R >= 0.05 (선택)"
+    }
+  }
+}

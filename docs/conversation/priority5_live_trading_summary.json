@@ -1,0 +1,231 @@
+{
+  "priority": 5,
+  "title": "Live Trading 연동 - Champion 파라미터 자동 적용",
+  "version": "v2.2.1",
+  "date": "2026-01-02",
+  "status": "completed",
+
+  "objective": "Live Trading 시스템이 Champion 파라미터를 우선 로드하도록 연동",
+
+  "v2_2_1_additions": {
+    "summary": "사용자 피드백 반영: 심볼 정규화 + run_id 추적",
+    "issues_addressed": [
+      {
+        "issue": "심볼 포맷 불일치 위험",
+        "description": "BTCUSDT vs BTC-USDT 포맷 차이로 Champion 조회 실패 가능",
+        "solution": "normalize_symbol() 함수 추가, 모든 로드 함수에 자동 적용"
+      },
+      {
+        "issue": "run_id 추적 불가",
+        "description": "어떤 Champion으로 매매했는지 로깅/감사 불가",
+        "solution": "load_theta_with_run_id() 함수 추가"
+      }
+    ]
+  },
+
+  "changes": [
+    {
+      "file": "src/wpcn/_06_engine/backtest.py",
+      "type": "new_function",
+      "function": "normalize_symbol()",
+      "description": "심볼 포맷 정규화 (v2.2.1)",
+      "details": [
+        "BTCUSDT → BTC-USDT 변환",
+        "BTC/USDT → BTC-USDT 변환",
+        "BTC:USDT → BTC-USDT 변환",
+        "이미 정규화된 형식은 유지",
+        "USDT, USDC, BUSD, USD, BTC, ETH, BNB 쌍 지원"
+      ]
+    },
+    {
+      "file": "src/wpcn/_06_engine/backtest.py",
+      "type": "new_function",
+      "function": "load_theta_with_run_id()",
+      "description": "Theta + run_id 함께 반환 (v2.2.1)",
+      "details": [
+        "Champion 사용 시: (theta, champion_run_id) 반환",
+        "reliable 사용 시: (theta, None) 반환",
+        "DEFAULT_THETA 폴백 시: (DEFAULT_THETA, None) 반환",
+        "손실 구간 디버깅, 감사 로그에 활용"
+      ]
+    },
+    {
+      "file": "src/wpcn/_06_engine/backtest.py",
+      "type": "new_function",
+      "function": "load_champion_theta()",
+      "description": "Champion 파라미터 우선 로드 함수 추가",
+      "details": [
+        "v2.2.1: 심볼 자동 정규화 적용",
+        "symbol, timeframe, market 기반 Champion 조회",
+        "분 단위 → 봉 단위 자동 변환 (convert_params_to_bars)",
+        "Theta 객체로 변환하여 반환",
+        "Champion 없으면 (None, None) 반환",
+        "ImportError graceful 처리"
+      ]
+    },
+    {
+      "file": "src/wpcn/_06_engine/backtest.py",
+      "type": "modified_function",
+      "function": "load_theta_from_store()",
+      "description": "prefer_champion 파라미터 추가 + 심볼 정규화",
+      "details": [
+        "v2.2.1: load_theta_with_run_id() 위임으로 리팩토링",
+        "prefer_champion=True (기본값): Champion 우선 로드",
+        "Champion 없으면 reliable params → DEFAULT_THETA 순으로 폴백",
+        "prefer_champion=False: 기존 로직 유지 (Champion 스킵)"
+      ]
+    },
+    {
+      "file": "src/wpcn/_06_engine/__init__.py",
+      "type": "docstring",
+      "description": "load_theta_with_run_id, normalize_symbol 함수 사용법 주석 추가"
+    }
+  ],
+
+  "new_tests": {
+    "file": "tests/test_live_trading_integration.py",
+    "test_count": 24,
+    "test_classes": [
+      {
+        "class": "TestLoadChampionTheta",
+        "tests": 3
+      },
+      {
+        "class": "TestLoadThetaFromStore",
+        "tests": 4
+      },
+      {
+        "class": "TestParameterConversion",
+        "tests": 3
+      },
+      {
+        "class": "TestMarketSeparation",
+        "tests": 2
+      },
+      {
+        "class": "TestNormalizeSymbol",
+        "tests": 7,
+        "description": "v2.2.1 심볼 정규화 테스트"
+      },
+      {
+        "class": "TestLoadThetaWithRunId",
+        "tests": 3,
+        "description": "v2.2.1 run_id 반환 테스트"
+      },
+      {
+        "class": "TestSymbolNormalizationIntegration",
+        "tests": 2,
+        "description": "v2.2.1 통합 테스트"
+      }
+    ]
+  },
+
+  "test_results": {
+    "total_tests": 82,
+    "passed": 82,
+    "failed": 0,
+    "breakdown": {
+      "test_live_trading_integration.py": 24,
+      "test_param_versioning.py": 27,
+      "test_scheduler_ab.py": 17,
+      "test_rollback_side_effects.py": 14
+    }
+  },
+
+  "usage_examples": {
+    "live_trading_with_run_id": {
+      "code": "theta, run_id = load_theta_with_run_id('BTCUSDT', '15m', 'futures')",
+      "description": "Live Trading에서 Champion + run_id 로드 (권장)"
+    },
+    "live_trading_simple": {
+      "code": "theta = load_theta_from_store('BTCUSDT', '15m', 'futures', prefer_champion=True)",
+      "description": "Live Trading에서 Champion 파라미터 우선 로드"
+    },
+    "backtesting_without_champion": {
+      "code": "theta = load_theta_from_store('BTCUSDT', '15m', 'futures', prefer_champion=False)",
+      "description": "백테스트에서 Champion 로드 스킵 (기존 로직)"
+    },
+    "symbol_normalization": {
+      "code": "normalized = normalize_symbol('BTCUSDT')  # -> 'BTC-USDT'",
+      "description": "심볼 포맷 정규화 (필요시 직접 호출)"
+    }
+  },
+
+  "parameter_flow": {
+    "storage_format": "분 단위 (box_window_minutes, freeze_minutes, pivot_window_minutes)",
+    "runtime_format": "봉 단위 (box_L, m_freeze, pivot_lr)",
+    "conversion": {
+      "formula": "bars = minutes / tf_minutes",
+      "example_15m": {
+        "box_window_minutes": 1440,
+        "box_L": 96
+      },
+      "pivot_lr_formula": "pivot_lr = pivot_window_minutes / tf_minutes / 2"
+    }
+  },
+
+  "symbol_normalization": {
+    "supported_formats": ["BTCUSDT", "BTC-USDT", "BTC/USDT", "BTC:USDT"],
+    "output_format": "BTC-USDT",
+    "quote_currencies": ["USDT", "USDC", "BUSD", "USD", "BTC", "ETH", "BNB"],
+    "examples": {
+      "BTCUSDT": "BTC-USDT",
+      "ETHUSDC": "ETH-USDC",
+      "BTC/USDT": "BTC-USDT",
+      "SOL:USDT": "SOL-USDT"
+    }
+  },
+
+  "fallback_chain": [
+    {
+      "step": 1,
+      "source": "Champion",
+      "condition": "prefer_champion=True && Champion exists",
+      "returns_run_id": true
+    },
+    {
+      "step": 2,
+      "source": "Reliable Params",
+      "condition": "store.load_reliable_as_bars() returns valid params",
+      "returns_run_id": false
+    },
+    {
+      "step": 3,
+      "source": "DEFAULT_THETA",
+      "condition": "All previous sources failed",
+      "returns_run_id": false
+    }
+  ],
+
+  "bugs_fixed": [
+    {
+      "version": "v2.2",
+      "issue": "잘못된 mock patch 경로",
+      "before": "patch('wpcn._06_engine.backtest.get_param_store')",
+      "after": "patch('wpcn._08_tuning.param_store.get_param_store')"
+    },
+    {
+      "version": "v2.2",
+      "issue": "pivot_lr 계산 오류",
+      "before": "assert pivot_lr == 4",
+      "after": "assert pivot_lr == 2"
+    },
+    {
+      "version": "v2.2.1",
+      "issue": "심볼 포맷 불일치",
+      "solution": "normalize_symbol() 자동 적용"
+    },
+    {
+      "version": "v2.2.1",
+      "issue": "run_id 추적 불가",
+      "solution": "load_theta_with_run_id() 함수 추가"
+    }
+  ],
+
+  "integration_notes": {
+    "live_trading_recommendation": "load_theta_with_run_id() 사용 권장 (run_id 로깅)",
+    "backtesting_recommendation": "prefer_champion=False로 A/B 테스트와 독립적 운영",
+    "market_separation": "spot/futures 별도 저장소 사용으로 마켓별 최적화 지원",
+    "symbol_handling": "BTCUSDT, BTC-USDT, BTC/USDT 모두 동일하게 처리"
+  }
+}

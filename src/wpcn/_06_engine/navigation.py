@@ -11,6 +11,7 @@ from wpcn._03_common._02_features.targets import compute_target_candidates
 from wpcn._03_common._09_gate.regime import compute_regime
 from wpcn._03_common._03_wyckoff.box import box_engine_freeze
 from wpcn._03_common._03_wyckoff.events import detect_spring_utad
+from wpcn._03_common._03_wyckoff.phases import detect_wyckoff_phase
 
 PAGES = ["accum", "reaccum", "distrib", "redistr", "spring", "utad"]
 
@@ -36,14 +37,31 @@ def compute_navigation(df: pd.DataFrame, theta: Theta, bt: BacktestConfig, mtf: 
 
     regime = compute_regime(df, theta.atr_len, bt.adx_len, bt.adx_trend, bt.chaos_ret_atr)
 
-    # MTF fusion: resample, compute HTF zscore + RSI, merge back as-of
+    # MTF fusion: resample, compute HTF zscore + RSI + Wyckoff Phase, merge back as-of
     mtf_feats = []
     for tf in mtf or []:
         rule = timeframe_to_pandas_rule(tf)
         htf = resample_ohlcv(df, rule)
+
+        # Traditional HTF indicators
         htf_z = zscore(htf["close"], 20).rename(f"z_{tf}")
         htf_r = rsi(htf["close"], 14).rename(f"rsi_{tf}")
-        merged = merge_asof_back(df.index, pd.concat([htf_z, htf_r], axis=1))
+
+        # Fractal HTF Wyckoff Phase detection
+        try:
+            htf_phases = detect_wyckoff_phase(htf, theta, lookback=50)
+            htf_phase = htf_phases["phase"].rename(f"phase_{tf}")
+            htf_subphase = htf_phases["sub_phase"].rename(f"subphase_{tf}")
+            htf_direction = htf_phases["direction"].rename(f"dir_{tf}")
+            htf_confidence = htf_phases["confidence"].rename(f"conf_{tf}")
+
+            merged = merge_asof_back(df.index, pd.concat([
+                htf_z, htf_r, htf_phase, htf_subphase, htf_direction, htf_confidence
+            ], axis=1))
+        except Exception:
+            # Fallback if Wyckoff phase detection fails
+            merged = merge_asof_back(df.index, pd.concat([htf_z, htf_r], axis=1))
+
         mtf_feats.append(merged)
 
     mtf_df = pd.concat(mtf_feats, axis=1) if mtf_feats else pd.DataFrame(index=df.index)

@@ -1,0 +1,103 @@
+{
+  "priority": 4,
+  "title": "Unit Tests",
+  "completed_at": "2026-01-02",
+  "status": "completed",
+
+  "test_summary": {
+    "total_tests": 58,
+    "passed": 58,
+    "failed": 0,
+    "execution_time": "2.14s"
+  },
+
+  "test_files_created": [
+    {
+      "file": "tests/__init__.py",
+      "description": "테스트 패키지 초기화"
+    },
+    {
+      "file": "tests/test_param_versioning.py",
+      "tests": 27,
+      "categories": [
+        "TestHelperFunctions: 7 tests",
+        "TestComparisonResult: 1 test",
+        "TestParamVersionManager: 5 tests",
+        "TestPromoteRollback: 4 tests",
+        "TestAutoDecide: 7 tests",
+        "TestStatePersistence: 1 test"
+      ]
+    },
+    {
+      "file": "tests/test_scheduler_ab.py",
+      "tests": 17,
+      "categories": [
+        "TestAutoPromoteOrRollback: 5 tests",
+        "TestRegisterChallenger: 3 tests",
+        "TestWeeklyBatchOrder: 2 tests",
+        "TestSchedulerIntegration: 3 tests",
+        "TestRunIdFallback: 2 tests",
+        "TestErrorHandling: 2 tests"
+      ]
+    },
+    {
+      "file": "tests/test_rollback_side_effects.py",
+      "tests": 14,
+      "categories": [
+        "TestRollbackSideEffects: 5 tests",
+        "TestPromoteSideEffects: 3 tests",
+        "TestSequentialOperations: 2 tests",
+        "TestEdgeCases: 4 tests"
+      ]
+    }
+  ],
+
+  "config_files_created": [
+    {
+      "file": "pytest.ini",
+      "description": "pytest 설정 파일"
+    }
+  ],
+
+  "key_test_coverage": {
+    "helper_functions": [
+      "_get_oos_performance()",
+      "_get_confidence_score()",
+      "_is_oos_pending()"
+    ],
+    "param_version_manager": [
+      "register_challenger()",
+      "compare_performance()",
+      "promote_challenger()",
+      "rollback_to_champion()",
+      "auto_decide()"
+    ],
+    "scheduler_ab": [
+      "_auto_promote_or_rollback()",
+      "_register_challenger()",
+      "주간 배치 실행 순서"
+    ],
+    "rollback_side_effects": [
+      "ACTIVE → Champion 복원",
+      "Challenger → retired 히스토리",
+      "challenger_run_id → None",
+      "Champion run_id 유지",
+      "히스토리 파일 저장"
+    ]
+  },
+
+  "v2.2.1_bug_coverage": {
+    "truthy_bug": "test_auto_decide_rollback_with_zero_oos - challenger_oos=0.0일 때 롤백 트리거 확인",
+    "champion_zero": "test_auto_decide_champion_zero_oos_skips_rollback - champion_oos=0.0일 때 ratio 계산 스킵 확인",
+    "none_handling": "test_compare_performance_none_handling - TypeError 없이 실행 확인",
+    "keyword_args": "test_get_version_manager_keyword_args - get_param_store(market=market) 확인"
+  },
+
+  "run_command": "pytest tests/ -v",
+
+  "next_priority": {
+    "id": 5,
+    "title": "Live Trading 연동",
+    "scope": ["Champion 파라미터 자동 적용", "실시간 트레이딩 통합"]
+  }
+}

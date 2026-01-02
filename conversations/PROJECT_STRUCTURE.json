@@ -1,0 +1,239 @@
+{
+  "_description": "WPCN 프로젝트 구조 요약 - 세션 시작 시 Claude가 읽고 바로 이해할 수 있는 형식",
+  "_updated": "2026-01-01",
+
+  "project_overview": {
+    "name": "WPCN (Wyckoff Probabilistic Crypto Navigator)",
+    "purpose": "Wyckoff 분석 + 확률론 기반 암호화폐 백테스트/거래 엔진",
+    "base_timeframe": "5분봉 (MTF: 15m, 1h, 4h, 1d, 1w)",
+    "philosophy": "안 들어가는 날이 많아져야 계좌가 산다"
+  },
+
+  "folder_structure": {
+    "src/wpcn/": {
+      "_00_config": "설정 모듈 (환경변수, 전략, 심볼별 설정)",
+      "_01_crypto": "거래소별 백테스트 실행 (binance/spot, futures)",
+      "_02_data": "데이터 수집/로드 (CCXT, Parquet)",
+      "_03_common": "핵심 라이브러리 (Wyckoff, 지표, 네비게이션, 리스크)",
+      "_04_execution": "거래 시뮬레이션 (broker_sim)",
+      "_05_probability": "배리어 확률 계산 (Monte Carlo)",
+      "_06_engine": "백테스트 엔진 통합",
+      "_07_reporting": "차트/리포트 생성",
+      "_08_tuning": "파라미터 최적화 (Walk-Forward)",
+      "_09_cli": "CLI 명령어",
+      "_10_ai_team": "AI 워크플로우",
+      "_99_legacy": "레거시 코드"
+    }
+  },
+
+  "modules": {
+    "_00_config": {
+      "config.py": {
+        "purpose": "경로 설정 (DATA_DIR, RESULTS_DIR, LOGS_DIR)",
+        "key_classes": ["PathConfig"],
+        "key_functions": ["get_data_path", "setup_logging"]
+      },
+      "strategy.py": {
+        "purpose": "전략별 파라미터",
+        "key_configs": ["SPOT_SWING_STRATEGY", "FUTURES_DUAL_TF_STRATEGY", "FUTURES_SCALPING_STRATEGY"]
+      },
+      "backtest.py": {
+        "purpose": "백테스트 기본 설정",
+        "key_classes": ["BacktestSettings", "ScalpingSettings", "FuturesBacktestSettings"],
+        "key_params": {
+          "fee_bps": 7.5,
+          "slippage_bps": 5.0,
+          "max_hold_bars": 192,
+          "conf_min": 0.65,
+          "edge_min": 0.70
+        }
+      },
+      "symbols.py": {
+        "purpose": "코인별 최적화 파라미터",
+        "key_class": "SymbolConfig"
+      }
+    },
+
+    "_02_data": {
+      "ccxt_fetch.py": {
+        "purpose": "거래소 API로 OHLCV 수집",
+        "key_functions": ["fetch_ohlcv_to_parquet", "fetch_ohlcv_df"]
+      },
+      "loader.py": {
+        "purpose": "Parquet 데이터 로드",
+        "key_class": "DataLoader",
+        "key_functions": ["load_futures", "load_spot"]
+      }
+    },
+
+    "_03_common": {
+      "_01_core/types.py": {
+        "purpose": "핵심 타입 정의",
+        "key_classes": {
+          "Theta": {
+            "purpose": "Wyckoff 박스 파라미터",
+            "fields": {
+              "pivot_lr": "피벗 좌우 봉 수 (4)",
+              "box_L": "박스 길이 봉 수 (96 = 24시간)",
+              "m_freeze": "박스 고정 기간 (32)",
+              "atr_len": "ATR 길이 (14)",
+              "x_atr": "ATR 배수 (0.35)",
+              "m_bw": "박스 폭 임계값 (0.10)",
+              "N_reclaim": "리클레임 봉 수 (3)",
+              "N_fill": "필 봉 수 (5)",
+              "F_min": "최소 필 율 (0.70)"
+            }
+          },
+          "BacktestCosts": "거래 비용 (fee_bps, slippage_bps)",
+          "BacktestConfig": "백테스트 설정 (conf_min, edge_min, chaos_ret_atr)"
+        }
+      },
+
+      "_02_features/indicators.py": {
+        "purpose": "기술적 지표",
+        "key_functions": ["atr", "rsi", "stoch_rsi", "zscore", "slope", "adx", "find_pivot_points", "detect_rsi_divergence", "detect_fib_bounce"]
+      },
+
+      "_03_wyckoff": {
+        "box.py": {
+          "purpose": "Wyckoff 박스 감지",
+          "key_function": "box_engine_freeze",
+          "logic": "폭(bw) <= 1.5 * 중앙값이면 박스 형성"
+        },
+        "events.py": {
+          "purpose": "Spring/UTAD 신호 감지",
+          "key_function": "detect_spring_utad",
+          "signals": {
+            "Spring": "박스 하단 돌파 후 회복 → 롱",
+            "UTAD": "박스 상단 돌파 후 회복 → 숏"
+          }
+        },
+        "phases.py": {
+          "purpose": "Wyckoff 페이즈 판정",
+          "key_function": "detect_wyckoff_phase",
+          "phases": ["A", "B", "C", "D", "E"],
+          "key_class": "AccumulationSignal"
+        }
+      },
+
+      "_04_navigation": {
+        "chart_navigator.py": {
+          "purpose": "통합 분석 시스템",
+          "key_class": "ChartNavigator",
+          "steps": ["MTF 피보나치 컨플루언스", "물리학 검증", "RSI 다이버전스", "Wyckoff 페이즈", "종합 확률"]
+        },
+        "fibonacci_confluence.py": {
+          "purpose": "MTF 피보나치 겹침 분석",
+          "key_class": "MTFFibonacciConfluence"
+        },
+        "mtf_scoring.py": {
+          "purpose": "MTF 점수 계산",
+          "key_functions": ["compute_mtf_scores", "generate_mtf_signals"]
+        }
+      },
+
+      "_06_risk": {
+        "position_sizing.py": {
+          "purpose": "포지션 사이징",
+          "key_class": "FixedRisk"
+        },
+        "dynamic_sl_tp.py": {
+          "purpose": "동적 SL/TP",
+          "key_class": "DynamicSLTP"
+        }
+      }
+    },
+
+    "_04_execution": {
+      "broker_sim.py": {
+        "purpose": "백테스트 시뮬레이션",
+        "key_function": "simulate",
+        "returns": ["equity_df", "trades_df", "signals_df", "nav_df"]
+      },
+      "broker_sim_mtf.py": {
+        "purpose": "MTF 백테스트 시뮬레이션",
+        "key_function": "simulate_mtf",
+        "features": ["4.5단계 확률 필터", "리스크 기반 포지션 사이징"]
+      }
+    },
+
+    "_05_probability": {
+      "barrier.py": {
+        "purpose": "배리어 도달 확률",
+        "key_function": "calculate_barrier_probability",
+        "returns": {
+          "p_tp": "TP 도달 확률",
+          "p_sl": "SL 도달 확률",
+          "p_timeout": "시간초과 확률",
+          "ev_r": "기대값 (R-unit)"
+        },
+        "method": "Monte Carlo 시뮬레이션 (1000회)"
+      }
+    },
+
+    "_08_tuning": {
+      "theta_space.py": {
+        "purpose": "Theta 파라미터 공간",
+        "key_class": "ThetaSpace",
+        "key_method": "sample()"
+      },
+      "walk_forward.py": {
+        "purpose": "Walk-Forward 최적화",
+        "key_class": "WalkForwardOptimizer"
+      },
+      "adaptive_space.py": {
+        "purpose": "적응형 파라미터 공간",
+        "key_functions": ["generate_adaptive_space", "build_theta_and_config"]
+      }
+    }
+  },
+
+  "key_pipelines": {
+    "backtest": {
+      "description": "백테스트 실행 흐름",
+      "steps": [
+        "1. 데이터 로드 (loader.py)",
+        "2. Wyckoff 박스 감지 (box_engine_freeze)",
+        "3. 신호 감지 (detect_spring_utad, detect_phase_signals)",
+        "4. Navigation Gate 체크 (compute_navigation)",
+        "5. 확률 필터 (calculate_barrier_probability) [선택]",
+        "6. 거래 시뮬레이션 (simulate_mtf)",
+        "7. 성과 분석 (summarize_performance)",
+        "8. 차트 생성 (plot_backtest_results)"
+      ]
+    },
+    "tuning": {
+      "description": "파라미터 튜닝 흐름",
+      "steps": [
+        "0. ThetaSpace 초기화",
+        "1. Train/Test 데이터 분할",
+        "2. Train 기간에서 후보 탐색",
+        "3. Test 기간에서 검증",
+        "4. 최적 Theta 반환"
+      ]
+    }
+  },
+
+  "key_entry_points": {
+    "spot_backtest": "src/wpcn/_01_crypto/001_binance/001_spot/002_sub/run_spot_backtest_mtf.py",
+    "futures_backtest": "src/wpcn/_01_crypto/001_binance/002_futures/001_backtest/engine.py",
+    "cli": "src/wpcn/_09_cli/main.py"
+  },
+
+  "env_variables": {
+    "data_paths": ["WPCN_DATA_DIR", "WPCN_RESULTS_DIR", "WPCN_LOGS_DIR"],
+    "backtest_params": ["SYMBOL", "TIMEFRAME", "BACKTEST_DAYS", "LEVERAGE", "POSITION_PCT"],
+    "wyckoff_params": ["BOX_LOOKBACK", "SPRING_THRESHOLD", "M_FREEZE", "PIVOT_LR", "ATR_LEN", "X_ATR", "M_BW", "N_RECLAIM", "F_MIN"],
+    "probability_filter": ["USE_PROBABILITY_MODEL", "MIN_TP_PROBABILITY", "MIN_EV_R"],
+    "tuning": ["USE_TUNING", "TUNING_TRAIN_DAYS", "TUNING_TEST_DAYS", "TUNING_N_CANDIDATES"],
+    "navigation_gate": ["USE_NAVIGATION_GATE", "CONF_MIN", "EDGE_MIN", "CHAOS_RET_ATR"]
+  },
+
+  "design_philosophy": {
+    "1_conservative_entry": "높은 Gate (conf_min=0.65, edge_min=0.70) → No-trade 30%+",
+    "2_probability_based": "배리어 확률 + 기대값 필터링",
+    "3_mtf_analysis": "15분 주 타임프레임 + 5분 세부 → 피보나치 컨플루언스",
+    "4_wyckoff_centered": "Spring/UTAD, Accumulation/Distribution 페이즈",
+    "5_realistic_costs": "스팟 BTC 0.105%, ALT 0.20%, 선물 0.09%"
+  }
+}

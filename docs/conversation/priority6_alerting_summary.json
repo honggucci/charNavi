@@ -1,0 +1,191 @@
+{
+  "priority": 6,
+  "title": "Alerting & Monitoring",
+  "version": "v2.3.1",
+  "date": "2026-01-02",
+  "status": "completed",
+
+  "objective": "A/B Testing 및 스케줄러 이벤트에 대한 알림 시스템 구축",
+
+  "features": {
+    "supported_channels": [
+      {
+        "channel": "Slack",
+        "method": "Webhook",
+        "env_var": "WPCN_SLACK_WEBHOOK"
+      },
+      {
+        "channel": "Telegram",
+        "method": "Bot API",
+        "env_vars": ["WPCN_TELEGRAM_TOKEN", "WPCN_TELEGRAM_CHAT_ID"]
+      },
+      {
+        "channel": "Discord",
+        "method": "Webhook",
+        "env_var": "WPCN_DISCORD_WEBHOOK"
+      },
+      {
+        "channel": "Console",
+        "method": "print()",
+        "description": "기본 활성화"
+      }
+    ],
+    "alert_events": [
+      {
+        "event": "PROMOTION",
+        "level": "SUCCESS",
+        "description": "Challenger가 Champion으로 승격"
+      },
+      {
+        "event": "ROLLBACK",
+        "level": "WARNING",
+        "description": "Challenger 롤백, Champion 복원"
+      },
+      {
+        "event": "CHALLENGER_REGISTERED",
+        "level": "INFO",
+        "description": "새 Challenger 등록"
+      },
+      {
+        "event": "OOS_FINALIZED",
+        "level": "SUCCESS/WARNING",
+        "description": "OOS 성능 확정 (양수면 SUCCESS, 음수면 WARNING)"
+      },
+      {
+        "event": "SCHEDULER_COMPLETE",
+        "level": "SUCCESS",
+        "description": "주간 최적화 완료"
+      },
+      {
+        "event": "SCHEDULER_ERROR",
+        "level": "ERROR",
+        "description": "최적화 중 에러 발생"
+      },
+      {
+        "event": "DEGRADATION",
+        "level": "WARNING/CRITICAL",
+        "description": "성능 저하 감지 (50% 이상이면 CRITICAL)"
+      }
+    ],
+    "alert_levels": [
+      "INFO",
+      "SUCCESS",
+      "WARNING",
+      "ERROR",
+      "CRITICAL"
+    ]
+  },
+
+  "files_created": [
+    {
+      "file": "src/wpcn/_08_tuning/alerting.py",
+      "description": "Alerting 모듈 (AlertConfig, Alert, AlertManager)",
+      "line_count": 520
+    },
+    {
+      "file": "tests/test_alerting.py",
+      "description": "Alerting 테스트 (31 tests)",
+      "line_count": 380
+    }
+  ],
+
+  "files_modified": [
+    {
+      "file": "src/wpcn/_08_tuning/scheduler.py",
+      "changes": [
+        "v2.2 → v2.3 버전 업그레이드",
+        "_init_alerting() 메서드 추가",
+        "승격/롤백/에러/완료 시 알림 전송"
+      ]
+    }
+  ],
+
+  "test_results": {
+    "total_tests": 113,
+    "passed": 113,
+    "failed": 0,
+    "breakdown": {
+      "test_alerting.py": 31,
+      "test_live_trading_integration.py": 24,
+      "test_param_versioning.py": 27,
+      "test_scheduler_ab.py": 17,
+      "test_rollback_side_effects.py": 14
+    }
+  },
+
+  "usage_examples": {
+    "environment_setup": {
+      "slack": "export WPCN_SLACK_WEBHOOK='https://hooks.slack.com/services/...'",
+      "telegram": "export WPCN_TELEGRAM_TOKEN='123456:ABC...' && export WPCN_TELEGRAM_CHAT_ID='-100123456789'",
+      "discord": "export WPCN_DISCORD_WEBHOOK='https://discord.com/api/webhooks/...'"
+    },
+    "programmatic_usage": {
+      "basic": "from wpcn._08_tuning.alerting import get_alert_manager\nmanager = get_alert_manager()\nmanager.notify_promotion(symbol='BTC-USDT', run_id='20260102_120000')",
+      "custom_config": "from wpcn._08_tuning.alerting import AlertConfig, AlertManager\nconfig = AlertConfig(slack_webhook='...', min_level=AlertLevel.WARNING)\nmanager = AlertManager(config)",
+      "custom_handler": "manager.add_handler(lambda alert: my_logger.info(alert.to_dict()))"
+    },
+    "scheduler_auto_notification": "스케줄러가 자동으로 알림 전송 (환경변수만 설정하면 됨)"
+  },
+
+  "architecture": {
+    "classes": {
+      "AlertConfig": "알림 설정 (채널 URL, 활성화 여부, 최소 레벨)",
+      "Alert": "알림 메시지 (이벤트, 레벨, 제목, 상세정보)",
+      "AlertManager": "알림 전송 관리자",
+      "AlertLevel": "알림 심각도 enum",
+      "AlertEvent": "알림 이벤트 타입 enum"
+    },
+    "convenience_methods": [
+      "notify_promotion()",
+      "notify_rollback()",
+      "notify_challenger_registered()",
+      "notify_oos_finalized()",
+      "notify_scheduler_complete()",
+      "notify_scheduler_error()",
+      "notify_degradation()"
+    ],
+    "message_formats": [
+      "Slack: Rich blocks with emoji, context, details",
+      "Telegram: HTML formatted with bold, code blocks",
+      "Discord: Embed with color-coded severity",
+      "Console: Plain text with prefix [INFO], [SUCCESS], etc."
+    ]
+  },
+
+  "scheduler_integration": {
+    "auto_notifications": [
+      {
+        "trigger": "Champion 승격",
+        "method": "_auto_promote_or_rollback()",
+        "alert": "notify_promotion()"
+      },
+      {
+        "trigger": "Challenger 롤백",
+        "method": "_auto_promote_or_rollback()",
+        "alert": "notify_rollback()"
+      },
+      {
+        "trigger": "새 Challenger 등록",
+        "method": "_register_challenger()",
+        "alert": "notify_challenger_registered()"
+      },
+      {
+        "trigger": "최적화 완료",
+        "method": "run()",
+        "alert": "notify_scheduler_complete()"
+      },
+      {
+        "trigger": "에러 발생",
+        "method": "run()",
+        "alert": "notify_scheduler_error()"
+      }
+    ]
+  },
+
+  "next_steps": [
+    "실제 Slack/Telegram/Discord 연동 테스트",
+    "로그 파일 모니터링 대시보드 (Grafana 등)",
+    "알림 throttling (너무 잦은 알림 방지)",
+    "알림 템플릿 커스터마이징"
+  ]
+}

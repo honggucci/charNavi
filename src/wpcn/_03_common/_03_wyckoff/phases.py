@@ -79,14 +79,49 @@ FIB_LEVELS = {
     'fib_786': 0.786
 }
 
+# ============================================================================
 # 방향별 포지션 비율 설정
-DIRECTION_RATIOS = {
+# ============================================================================
+
+# 선물용: long/short 양방향 가능
+DIRECTION_RATIOS_FUTURES = {
     'accumulation': {'long': 0.70, 'short': 0.30},        # 전통적 매집: 롱 70%, 숏 30%
     'distribution': {'long': 0.30, 'short': 0.70},        # 전통적 분산: 롱 30%, 숏 70%
     're_accumulation': {'long': 0.80, 'short': 0.20},     # 상승 중 매집: 롱 80%, 숏 20%
     're_distribution': {'long': 0.20, 'short': 0.80},     # 하락 중 분산: 롱 20%, 숏 80%
     'unknown': {'long': 0.50, 'short': 0.50}              # 50/50
 }
+
+# 현물용: short 불가 → cash_exposure로 대체
+# short 비율 = 현금 비중 (관망/현금화)
+DIRECTION_RATIOS_SPOT = {
+    'accumulation': {'long_exposure': 0.70, 'cash_exposure': 0.30},      # 매집: 70% 매수, 30% 현금
+    'distribution': {'long_exposure': 0.30, 'cash_exposure': 0.70},      # 분산: 30% 유지, 70% 현금화
+    're_accumulation': {'long_exposure': 0.80, 'cash_exposure': 0.20},   # 상승 중: 80% 매수
+    're_distribution': {'long_exposure': 0.20, 'cash_exposure': 0.80},   # 하락 중: 20% 유지, 80% 현금화
+    'unknown': {'long_exposure': 0.50, 'cash_exposure': 0.50}            # 불명확: 50/50
+}
+
+# 기존 코드 호환성을 위한 별칭 (선물 기본)
+DIRECTION_RATIOS = DIRECTION_RATIOS_FUTURES
+
+
+def get_direction_ratios(direction: str, is_spot: bool = True) -> Dict[str, float]:
+    """
+    방향에 따른 포지션 비율 반환
+
+    Args:
+        direction: 'accumulation', 'distribution', 're_accumulation', 're_distribution', 'unknown'
+        is_spot: True면 현물 (long/cash), False면 선물 (long/short)
+
+    Returns:
+        {'long_exposure': 0.7, 'cash_exposure': 0.3} (현물)
+        또는 {'long': 0.7, 'short': 0.3} (선물)
+    """
+    if is_spot:
+        return DIRECTION_RATIOS_SPOT.get(direction, DIRECTION_RATIOS_SPOT['unknown'])
+    else:
+        return DIRECTION_RATIOS_FUTURES.get(direction, DIRECTION_RATIOS_FUTURES['unknown'])
 
 
 def detect_wyckoff_phase(

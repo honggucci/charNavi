@@ -1,0 +1,128 @@
+{
+  "date": "2026-01-01",
+  "title": "Critical Bugfix: Cost Direction & Exposure Cap",
+  "summary": "비용 방향 버그 수정 및 총 노출 상한 하드캡 추가",
+  "context": "12개 핵심 질문 분석 결과 발견된 HIGH 위험 이슈 2건 수정",
+
+  "issues_fixed": [
+    {
+      "id": "Q2",
+      "severity": "HIGH",
+      "title": "비용 방향 버그",
+      "description": "매도 시에도 +bps 적용 → 수익 과대평가",
+      "before": {
+        "file": "src/wpcn/_03_common/cost.py",
+        "code": "return price * (1.0 + bps)  # 항상 +bps"
+      },
+      "after": {
+        "file": "src/wpcn/_03_common/cost.py",
+        "code": "if is_buy: return price * (1.0 + bps) else: return price * (1.0 - bps)"
+      },
+      "impact": "이전: 왕복 비용 0%로 계산됨 → 수정 후: 왕복 비용 0.21% 현실적 반영"
+    },
+    {
+      "id": "Q11",
+      "severity": "HIGH",
+      "title": "총 노출 상한 없음",
+      "description": "축적 + Phase C 합산 노출이 무제한 → 50% 초과 가능",
+      "before": {
+        "file": "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/broker_sim.py",
+        "code": "# 노출 상한 체크 없음"
+      },
+      "after": {
+        "file": "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/broker_sim.py",
+        "code": "max_exposure=0.50 파라미터 추가, 축적 진입 전 current_exposure + position_pct > max_exposure 시 스킵"
+      },
+      "impact": "이전: 축적 10회 시 50% 노출 가능 → 수정 후: 50% 하드캡"
+    }
+  ],
+
+  "files_modified": [
+    {
+      "path": "src/wpcn/_03_common/cost.py",
+      "changes": [
+        "apply_costs(price, costs, is_buy=True) 시그니처 변경",
+        "is_buy=True: price * (1 + bps) - 매수 시 비싸게",
+        "is_buy=False: price * (1 - bps) - 매도 시 싸게"
+      ]
+    },
+    {
+      "path": "src/wpcn/_01_crypto/001_binance/001_spot/001_backtest/broker_sim.py",
+      "changes": [
+        "simulate() 함수에 max_exposure=0.50 파라미터 추가",
+        "축적 진입 전 노출 상한 체크 로직 추가 (lines 107-121)",
+        "모든 apply_costs 호출에 is_buy 파라미터 추가",
+        "롱 매수: is_buy=True",
+        "롱 매도(청산): is_buy=False",
+        "숏 매도(진입): is_buy=False",
+        "숏 매수(청산): is_buy=True"
+      ]
+    }
+  ],
+
+  "apply_costs_mapping": {
+    "롱 축적 진입": {"action": "매수", "is_buy": true, "line": 117},
+    "숏 축적 진입": {"action": "매도", "is_buy": false, "line": 135},
+    "롱 축적 청산 (TP/SL)": {"action": "매도", "is_buy": false, "lines": [169, 185]},
+    "숏 축적 청산 (TP/SL)": {"action": "매수", "is_buy": true, "lines": [211, 227]},
+    "Phase C 롱 진입": {"action": "매수", "is_buy": true, "line": 279},
+    "Phase C 숏 진입": {"action": "매도", "is_buy": false, "line": 279},
+    "롱 청산 (STOP/TP1/TP2/TIME_EXIT)": {"action": "매도", "is_buy": false, "lines": [341, 354, 368, 379]},
+    "숏 청산 (STOP/TP1/TP2/TIME_EXIT)": {"action": "매수", "is_buy": true, "lines": [341, 354, 368, 379]}
+  },
+
+  "12_questions_analysis": {
+    "Q1_equity_duplicate": {"status": "OK", "reason": "합산 후 accum_total_qty=0으로 리셋"},
+    "Q2_cost_direction": {"status": "FIXED", "severity": "HIGH"},
+    "Q3_fill_priority": {"status": "OK", "reason": "STOP 우선 (if-else 구조)"},
+    "Q4_F_min_calculation": {"status": "OK", "reason": "결정적 체결 확률 (0 or 1)"},
+    "Q5_spring_utad_bias": {"status": "PENDING", "severity": "MEDIUM", "note": "4.0 상수는 임의값, 데이터 기반 튜닝 필요"},
+    "Q6_top1_runlen": {"status": "OK", "reason": "단순 카운트 (라벨만 같으면 +1)"},
+    "Q7_chaos_condition": {"status": "OK", "reason": "|ret| > 3.0 * (ATR/close) → CHAOS"},
+    "Q8_box_freeze": {"status": "OK", "reason": "bw <= 1.5 * median_bw 시 m_freeze 봉 고정"},
+    "Q9_adaptive_reclaim_hold": {"status": "PENDING", "severity": "MEDIUM", "note": "현재 고정값, FFT 연동 가능"},
+    "Q10_accum_dynamic_tpsl": {"status": "PENDING", "severity": "MEDIUM", "note": "현재 고정값 1.5%/1.0%"},
+    "Q11_exposure_cap": {"status": "FIXED", "severity": "HIGH"},
+    "Q12_spot_short_hedge": {"status": "PENDING", "severity": "MEDIUM", "note": "가상 숏, 선물 확장 시 별도 구현 필요"}
+  },
+
+  "remaining_issues": [
+    {
+      "id": "Q5",
+      "title": "Spring/UTAD 바이어스 튜닝",
+      "severity": "MEDIUM",
+      "recommendation": "데이터 기반으로 4.0 상수 튜닝 또는 ML 학습"
+    },
+    {
+      "id": "Q9",
+      "title": "적응형 reclaim_hold_bars",
+      "severity": "MEDIUM",
+      "recommendation": "FFT 지배주기 T로 hold = max(1, round(T/12))"
+    },
+    {
+      "id": "Q10",
+      "title": "축적 TP/SL 동적화",
+      "severity": "MEDIUM",
+      "recommendation": "dynamic_params의 Maxwell-Boltzmann 레짐 연동"
+    },
+    {
+      "id": "Q12",
+      "title": "현물 숏 헤지 → 선물 확장",
+      "severity": "MEDIUM",
+      "recommendation": "선물 연동 시 레버리지/펀딩비/청산 구현"
+    }
+  ],
+
+  "test_example": {
+    "description": "BTC Spot 비용 계산 예시",
+    "costs": {"fee_bps": 7.5, "slippage_bps": 3.0},
+    "scenario": {
+      "buy_price": 100000,
+      "buy_fill": 100105,
+      "sell_price": 101000,
+      "sell_fill": 100894,
+      "round_trip_cost_pct": 0.211
+    },
+    "note": "이전에는 매도도 +bps 적용되어 round_trip=0%로 계산됨"
+  }
+}
