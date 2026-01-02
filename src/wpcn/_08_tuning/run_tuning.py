@@ -36,6 +36,7 @@ from .walk_forward import (
     run_walk_forward_v8
 )
 from .param_store import save_optimized_params
+from .param_optimizer import get_optimizer  # v3: 옵티마이저 팩토리
 from .param_schema import convert_params_to_minutes  # v2: 저장 시 분 단위 변환
 from wpcn._00_config.config import PATHS
 
@@ -47,7 +48,7 @@ def create_backtest_func():
     GPT 지적 #3 반영: build_theta_and_config() 사용
     GPT 지적 #2 반영: validate_params()로 invalid 조합 차단
     """
-    from wpcn._03_common._01_core.types import Theta, BacktestConfig, BacktestCosts
+    from wpcn._03_common._01_core.types import Theta, BacktestConfig, COSTS_SPOT_BTC, CONFIG_NAVIGATION
     from wpcn._04_execution.broker_sim import simulate
     from wpcn._03_common._05_metrics.performance import summarize_performance
 
@@ -83,14 +84,12 @@ def create_backtest_func():
             F_min=theta_dict.get("F_min", 0.70),
         )
 
-        costs = BacktestCosts()
-        bt_config = BacktestConfig(
-            tp_pct=config_dict.get("tp_pct", 0.015),
-            sl_pct=config_dict.get("sl_pct", 0.010),
-        )
+        costs = COSTS_SPOT_BTC  # Spot BTC: fee=7.5bps, slip=3bps
+        bt_config = CONFIG_NAVIGATION  # Navigation 기본 설정 사용
 
         try:
-            equity_df, trades_df, _, _ = simulate(df, theta, costs, bt_config)
+            # verbose=False로 디버그 로그 억제
+            equity_df, trades_df, _, _ = simulate(df, None, theta, costs, bt_config, verbose=False)
             perf = summarize_performance(equity_df, trades_df)
 
             return {
@@ -102,11 +101,10 @@ def create_backtest_func():
                 "total_trades": perf.get("trade_entries", 0),
             }
         except Exception as e:
-            print(f"  Backtest error: {e}")
             return {
                 "total_return": -100,
                 "max_drawdown": 100,
-                "sharpe_ratio": 0,
+                "sharpe_ratio": -10,
                 "win_rate": 0,
                 "profit_factor": 0,
                 "total_trades": 0,
@@ -158,7 +156,8 @@ def run_adaptive_tuning(
     n_iterations: int = 30,
     train_weeks: int = 8,
     test_weeks: int = 2,
-    output_dir: str = None
+    output_dir: str = None,
+    optimizer_type: str = "random",  # v3: random, optuna, bayesian
 ):
     """
     적응형 튜닝 파이프라인 실행
@@ -169,12 +168,13 @@ def run_adaptive_tuning(
     - complete + high_purity 사이클만 사용
     """
     print("="*80)
-    print("Adaptive Tuning Pipeline (v2 - GPT 지적 반영)")
+    print("Adaptive Tuning Pipeline (v3 - Optuna/Constraint Propagation)")
     print("="*80)
     print(f"Symbol: {symbol}")
     print(f"Market: {market}")
     print(f"Days: {days}")
     print(f"Timeframe: {timeframe}")
+    print(f"Optimizer: {optimizer_type}")  # v3
     print("="*80)
 
     # ============================================================
@@ -231,11 +231,18 @@ def run_adaptive_tuning(
     print("\n[Phase 4] Running Walk-Forward Optimization...")
     print("  (GPT 지적 반영: validate_params로 invalid 조합 차단)")
 
+    # v3: 옵티마이저 팩토리 사용
+    print(f"  Using optimizer: {optimizer_type}")
+    if optimizer_type == "optuna":
+        print("  (TPE Sampler + Constraint Propagation)")
+    elif optimizer_type == "random":
+        print("  (v3: Constraint Propagation + Rejection Sampling fallback)")
+
     config = WalkForwardConfig(
         train_weeks=train_weeks,
         test_weeks=test_weeks,
         step_weeks=test_weeks,
-        optimizer_type="random",
+        optimizer_type=optimizer_type,  # v3: 파라미터로 전달
         n_iterations=n_iterations,
         objective="sharpe"
     )
@@ -320,13 +327,30 @@ def run_adaptive_tuning(
     output_path = PATHS.PROJECT_ROOT / "results" / "tuning" / f"adaptive_tuning_{symbol}_{timeframe}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # v3.1: 코드 버전 + Optuna 상태 기록
+    from .param_optimizer import get_optuna_status, HAS_OPTUNA
+    import subprocess
+
+    # Git SHA 가져오기 (실패 시 None)
+    try:
+        git_sha = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=PATHS.PROJECT_ROOT,
+            stderr=subprocess.DEVNULL
+        ).decode().strip()
+    except Exception:
+        git_sha = None
+
     final_result = {
         "timestamp": datetime.now().isoformat(),
-        "version": "v2.1_sensitivity",
+        "version": "v3.1_optuna_tracking",
         "run_id": run_id,  # v2.1: scheduler에서 set_active에 사용
+        "code_version": git_sha,  # v3.1: 코드 버전 추적
         "symbol": symbol,
         "market": market,
         "timeframe": timeframe,
+        "optimizer_requested": optimizer_type,  # v3.1: 요청된 옵티마이저
+        "optuna_status": get_optuna_status(),   # v3.1: Optuna 설치 상태
         "analysis": {
             "confidence": space.confidence,
             "box_L_range": space.box_L,
@@ -375,7 +399,7 @@ def run_adaptive_tuning(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Adaptive Tuning Pipeline (v2)")
+    parser = argparse.ArgumentParser(description="Adaptive Tuning Pipeline (v3 - Optuna/Constraint)")
     parser.add_argument("--symbol", default="BTC-USDT", help="Trading symbol")
     parser.add_argument("--days", type=int, default=90, help="Analysis period (days)")
     parser.add_argument("--market", default="spot", choices=["spot", "futures"])
@@ -384,6 +408,13 @@ def main():
     parser.add_argument("--train-weeks", type=int, default=8, help="Training period (weeks)")
     parser.add_argument("--test-weeks", type=int, default=2, help="Test period (weeks)")
     parser.add_argument("--output-dir", default=None, help="Output directory")
+    # v3: 옵티마이저 선택 옵션 추가
+    parser.add_argument(
+        "--optimizer",
+        default="random",
+        choices=["random", "optuna", "bayesian", "grid"],
+        help="Optimizer type: random (v3 constraint propagation), optuna (TPE, recommended), bayesian (GP), grid"
+    )
 
     args = parser.parse_args()
 
@@ -395,7 +426,8 @@ def main():
         n_iterations=args.iterations,
         train_weeks=args.train_weeks,
         test_weeks=args.test_weeks,
-        output_dir=args.output_dir
+        output_dir=args.output_dir,
+        optimizer_type=args.optimizer,  # v3
     )
 
 

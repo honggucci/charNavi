@@ -182,11 +182,11 @@ def main():
         results[tf] = result
 
         if result["status"] == "success":
-            print(f"[{tf}] ✓ Success - run_id: {result.get('run_id')}")
+            print(f"[{tf}] [OK] Success - run_id: {result.get('run_id')}")
         elif result["status"] == "dry_run":
-            print(f"[{tf}] ○ Dry run completed")
+            print(f"[{tf}] [DRY] Dry run completed")
         else:
-            print(f"[{tf}] ✗ Failed: {result.get('error')}")
+            print(f"[{tf}] [FAIL] Failed: {result.get('error')}")
 
     # 최종 요약
     elapsed = datetime.now() - start_time
@@ -198,7 +198,7 @@ def main():
     print(f"Results:")
 
     for tf, result in results.items():
-        status_icon = "✓" if result["status"] == "success" else "○" if result["status"] == "dry_run" else "✗"
+        status_icon = "[OK]" if result["status"] == "success" else "[DRY]" if result["status"] == "dry_run" else "[FAIL]"
         print(f"  [{tf}] {status_icon} {result['status']}")
         if result.get("robust_params"):
             params = result["robust_params"]

@@ -187,7 +187,7 @@ def approx_pfill_det(df: pd.DataFrame, t_idx: int, entry_price: float, N_fill: i
     hit = ((window["low"] <= entry_price) & (entry_price <= window["high"])).any()
     return 1.0 if hit else 0.0
 
-def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta = None, costs: BacktestCosts = None, cfg: BacktestConfig = None, mtf: List[str] | None = None, scalping_mode: bool = False, use_phase_accumulation: bool = False, spot_mode: bool = True, use_fractal_gate: bool = False) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta = None, costs: BacktestCosts = None, cfg: BacktestConfig = None, mtf: List[str] | None = None, scalping_mode: bool = False, use_phase_accumulation: bool = False, spot_mode: bool = True, use_fractal_gate: bool = False, verbose: bool = True) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     백테스트 시뮬레이션 (MTF + 와이코프 + 피보나치 전략)
 
@@ -196,6 +196,7 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
         df_5m: 5분봉 DataFrame (보조 타임프레임, MTF 신호용)
         spot_mode: True면 현물 (숏 비활성화), False면 선물 (숏 가능)
         use_phase_accumulation: DEPRECATED - 항상 False (313번 물타기 방지)
+        verbose: True면 상세 로그 출력 (기본 True)
     """
     df = df.sort_index()
     if df_5m is not None:
@@ -203,7 +204,8 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
     mtf = mtf or []
 
     # === 동적 파라미터 계산 (전체 시계열) ===
-    print("  Computing dynamic parameters...")
+    if verbose:
+        print("  Computing dynamic parameters...")
     dyn_engine = DynamicParameterEngine(
         vol_lookback=100,
         fft_min_period=10,
@@ -212,10 +214,12 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
     )
     # 전체 시계열에 대한 동적 파라미터 계산 (미리 계산)
     dyn_params_df = dyn_engine.compute_params_series(df, min_lookback=50)
-    print(f"  Dynamic parameters computed for {len(dyn_params_df)} bars")
+    if verbose:
+        print(f"  Dynamic parameters computed for {len(dyn_params_df)} bars")
 
     # === MTF 지표 계산 ===
-    print("  Computing MTF indicators...")
+    if verbose:
+        print("  Computing MTF indicators...")
 
     # 15M Stoch RSI
     stoch_k_15m, stoch_d_15m = stoch_rsi(df['close'], 14, 14, 3, 3)
@@ -227,13 +231,15 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
     div_5m = None
     if df_5m is not None:
         div_5m = detect_rsi_divergence(df_5m, rsi_len=14, lookback=20)
-        print(f"    5M RSI Divergence computed for {len(div_5m)} bars")
+        if verbose:
+            print(f"    5M RSI Divergence computed for {len(div_5m)} bars")
 
     # Find oversold/overbought extremes
     extremes = find_oversold_overbought_extremes(df, stoch_k_15m)
     oversold_times = [t for t, _ in extremes['oversold_extremes']]
     overbought_times = [t for t, _ in extremes['overbought_extremes']]
-    print(f"    Found {len(oversold_times)} oversold extremes, {len(overbought_times)} overbought extremes")
+    if verbose:
+        print(f"    Found {len(oversold_times)} oversold extremes, {len(overbought_times)} overbought extremes")
 
     # navigation (page probs + Unknown gate)
     nav = compute_navigation(df, theta, cfg, mtf)
@@ -348,7 +354,8 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
                     if t in phases_df.index:
                         active_box_high = phases_df.loc[t, 'box_high']
                         active_box_low = phases_df.loc[t, 'box_low']
-                        print(f"[Spring] {t}: box_low={active_box_low:.2f}, box_high={active_box_high:.2f}, fib_236={fib_236 if not np.isnan(fib_236) else 'NaN'}")
+                        if verbose:
+                            print(f"[Spring] {t}: box_low={active_box_low:.2f}, box_high={active_box_high:.2f}, fib_236={fib_236 if not np.isnan(fib_236) else 'NaN'}")
                 elif sig.event in ['utad', 'downthrust'] and sig.side == 'short':
                     utad_detected_i = i
                     if t in phases_df.index:
@@ -371,13 +378,14 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
             )
 
             # Debug: 높은 스코어 신호 로깅 (score >= 2.0)
-            if long_score >= 2.0 and i % 1000 == 0:  # 1000봉마다 샘플링
+            if verbose and long_score >= 2.0 and i % 1000 == 0:  # 1000봉마다 샘플링
                 print(f"[MTF CHECK] {t}: valid={long_valid}, score={long_score:.1f}, reasons={long_reasons}")
 
             if long_valid and long_score >= 4.0:  # MIN_SCORE from .env
                 # Navigation Gate 체크 - MTF 신호는 자체 필터링이 강력하므로 게이트 우회
                 gate_ok = True  # MTF signals bypass Navigation Gate
-                print(f"[MTF SIGNAL PASSED] {t}: gate_ok={gate_ok}, box_low={active_box_low:.2f}, reasons={long_reasons}")
+                if verbose:
+                    print(f"[MTF SIGNAL PASSED] {t}: gate_ok={gate_ok}, box_low={active_box_low:.2f}, reasons={long_reasons}")
 
                 if gate_ok:
                     # 현물 전액 진입 (POSITION_PCT=0.95 사용)
@@ -414,9 +422,10 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
                         tp1_exited = False
                         tp2_exited = False
 
-                        print(f"[MTF ENTRY SPOT] {t}: score={long_score:.1f}, px={entry_px:.2f}, qty={qty:.6f}")
-                        print(f"  TP1={tp1_price:.2f} (box_width*{tp1_ratio:.2f}), TP2={tp2_price:.2f} (box_width*{tp2_ratio:.2f}), SL={stop_price:.2f} (box_width*{sl_ratio:.2f})")
-                        print(f"  Reasons: {long_reasons}")
+                        if verbose:
+                            print(f"[MTF ENTRY SPOT] {t}: score={long_score:.1f}, px={entry_px:.2f}, qty={qty:.6f}")
+                            print(f"  TP1={tp1_price:.2f} (box_width*{tp1_ratio:.2f}), TP2={tp2_price:.2f} (box_width*{tp2_ratio:.2f}), SL={stop_price:.2f} (box_width*{sl_ratio:.2f})")
+                            print(f"  Reasons: {long_reasons}")
 
                         trades.append({
                             "time": t,
@@ -444,7 +453,8 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
                     "qty": total_qty,
                     "pnl_pct": pnl_pct
                 })
-                print(f"[MTF STOP] {t}: px={exit_px:.2f}, pnl={pnl_pct:.2f}%")
+                if verbose:
+                    print(f"[MTF STOP] {t}: px={exit_px:.2f}, pnl={pnl_pct:.2f}%")
                 # 포지션 리셋
                 total_qty = 0.0
                 avg_entry_px = 0.0
@@ -474,7 +484,8 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
                     "qty": exit_qty,
                     "pnl_pct": pnl_pct
                 })
-                print(f"[MTF TP1] {t}: px={exit_px:.2f}, qty={exit_qty:.6f}, pnl={pnl_pct:.2f}%, SL→BE")
+                if verbose:
+                    print(f"[MTF TP1] {t}: px={exit_px:.2f}, qty={exit_qty:.6f}, pnl={pnl_pct:.2f}%, SL->BE")
 
             # TP2 익절 (나머지 전체 청산)
             elif tp1_exited and cfg.use_tp2 and not tp2_exited and h >= tp2_price:
@@ -489,7 +500,8 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
                     "qty": total_qty,
                     "pnl_pct": pnl_pct
                 })
-                print(f"[MTF TP2] {t}: px={exit_px:.2f}, qty={total_qty:.6f}, pnl={pnl_pct:.2f}%")
+                if verbose:
+                    print(f"[MTF TP2] {t}: px={exit_px:.2f}, qty={total_qty:.6f}, pnl={pnl_pct:.2f}%")
                 # 포지션 리셋
                 total_qty = 0.0
                 avg_entry_px = 0.0
@@ -511,7 +523,8 @@ def simulate(df: pd.DataFrame, df_5m: pd.DataFrame | None = None, theta: Theta =
                     "qty": total_qty,
                     "pnl_pct": pnl_pct
                 })
-                print(f"[MTF TIME_EXIT] {t}: px={exit_px:.2f}, pnl={pnl_pct:.2f}%, hold_bars={i-entry_i}")
+                if verbose:
+                    print(f"[MTF TIME_EXIT] {t}: px={exit_px:.2f}, pnl={pnl_pct:.2f}%, hold_bars={i-entry_i}")
                 # 포지션 리셋
                 total_qty = 0.0
                 avg_entry_px = 0.0

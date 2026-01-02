@@ -23,7 +23,14 @@ try:
 except ImportError:
     ThetaSpace = None
 
-from .param_optimizer import BayesianOptimizer, RandomSearchOptimizer, OptimizationResult
+from .param_optimizer import (
+    BayesianOptimizer,
+    RandomSearchOptimizer,
+    OptunaOptimizer,
+    GridSearchOptimizer,
+    OptimizationResult,
+    get_optimizer,
+)
 
 
 # ============================================================
@@ -108,7 +115,7 @@ class WalkForwardConfig:
     test_weeks: int = 2             # 테스트 기간 (주)
     step_weeks: int = 2             # 슬라이딩 스텝 (주)
     min_train_bars: int = 5000      # 최소 훈련 데이터 (봉 수)
-    optimizer_type: str = "bayesian"  # "bayesian", "random"
+    optimizer_type: str = "random"  # "random", "optuna", "bayesian", "grid"
     n_iterations: int = 50          # 최적화 반복 횟수
     objective: str = "sharpe"       # "sharpe", "calmar", "return", "sortino"
 
@@ -273,11 +280,8 @@ class WalkForwardOptimizer:
         print(f"  Iterations: {cfg.n_iterations}")
         print(f"{'='*60}\n")
 
-        # Optimizer 선택
-        if cfg.optimizer_type == "bayesian":
-            optimizer = BayesianOptimizer()
-        else:
-            optimizer = RandomSearchOptimizer()
+        # Optimizer 선택 (v3: get_optimizer 팩토리 사용)
+        optimizer = get_optimizer(cfg.optimizer_type)
 
         fold_results = []
 

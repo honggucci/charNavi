@@ -1,0 +1,135 @@
+{
+  "session_id": "2026-01-02_120000_v3_wiring",
+  "timestamp": "2026-01-02T12:00:00+09:00",
+  "title": "V3 Wiring Complete - Optuna/Constraint/Reducer Integration",
+  "status": "COMPLETED",
+  "summary": {
+    "description": "GPT+Gemini institutional grade 분석 후 실제 wiring 작업 완료",
+    "key_issue": "모듈 생성만 하고 실제 연결(wiring)이 안 됨 - PR만 올리고 머지 안 함",
+    "resolution": "모든 __init__.py export 추가 + CLI 옵션 연결 + walk_forward.py 옵티마이저 선택 버그 수정"
+  },
+  "changes": {
+    "files_modified": [
+      {
+        "path": "_08_tuning/__init__.py",
+        "changes": [
+          "OptunaOptimizer export 추가",
+          "ConstraintRegistry, ParamConstraint export 추가",
+          "SamplingStats, OptimizationResult export 추가",
+          "get_optimizer, get_constraint_registry export 추가",
+          "ParamReducer, ReductionConfig, ReducedParamSpace export 추가",
+          "auto_reduce_for_next_week export 추가"
+        ]
+      },
+      {
+        "path": "_08_tuning/run_tuning.py",
+        "changes": [
+          "--optimizer CLI 옵션 추가 (random, optuna, bayesian, grid)",
+          "WalkForwardConfig에 optimizer_type 파라미터 전달",
+          "get_optimizer import 추가"
+        ]
+      },
+      {
+        "path": "_08_tuning/walk_forward.py",
+        "changes": [
+          "get_optimizer() 팩토리 함수 import",
+          "기존 if bayesian else random 분기 -> get_optimizer(cfg.optimizer_type) 호출로 변경",
+          "WalkForwardConfig.optimizer_type 기본값 'random'으로 설정"
+        ],
+        "critical_fix": true,
+        "bug_description": "--optimizer optuna/grid 옵션이 실제로는 random으로 동작하던 버그"
+      },
+      {
+        "path": "_08_tuning/param_reducer.py",
+        "changes": [
+          "keep_sensitivity_threshold 실제 사용하도록 로직 추가",
+          "RRR/ratio min > max 역전 시 fallback 기본값 처리"
+        ]
+      },
+      {
+        "path": "_04_execution/__init__.py",
+        "changes": [
+          "새로 생성",
+          "StateManager, PersistedPosition, PersistedTrade, PersistedState export",
+          "get_state_manager, recover_from_crash export"
+        ]
+      },
+      {
+        "path": "_02_features/__init__.py",
+        "changes": [
+          "새로 생성",
+          "FastDynamicEngine, VolatilityCache export",
+          "fast_fft_cycle, fast_hilbert_phase, cached_volatility_regime export",
+          "HAS_NUMBA export"
+        ]
+      }
+    ]
+  },
+  "verification": {
+    "import_chain_test": {
+      "command": "python -c \"from wpcn._08_tuning import OptunaOptimizer, ParamReducer, get_optimizer; print('PASS')\"",
+      "result": "PASS"
+    },
+    "cli_option_test": {
+      "command": "python -m wpcn._08_tuning.run_tuning --help",
+      "result": "--optimizer 옵션 표시 확인"
+    },
+    "optimizer_selection_test": {
+      "results": [
+        "[PASS] --optimizer random: RandomSearchOptimizer",
+        "[PASS] --optimizer optuna: OptunaOptimizer",
+        "[PASS] --optimizer grid: GridSearchOptimizer"
+      ]
+    }
+  },
+  "technical_details": {
+    "constraint_propagation": {
+      "description": "box_L -> m_freeze -> pivot_lr 의존성 기반 자동 범위 조정",
+      "implementation": "ConstraintRegistry.propagate(params) 호출"
+    },
+    "optuna_tpe": {
+      "description": "Tree-structured Parzen Estimator 기반 효율적 하이퍼파라미터 최적화",
+      "implementation": "OptunaOptimizer.optimize(df, backtest_func, space, n_iter)"
+    },
+    "param_reducer": {
+      "description": "Sensitivity 분석 결과 기반 불안정 파라미터 고정 + 차원 축소",
+      "reparameterization": [
+        "tp_pct = RRR * sl_pct (tp_pct 제거, RRR 추가)",
+        "m_freeze = m_freeze_ratio * box_L (m_freeze 제거, ratio 추가)"
+      ]
+    }
+  },
+  "remaining_tasks": [
+    {
+      "task": "BTC-USDT Spot 전체 타임프레임 재최적화",
+      "timeframes": ["5m", "15m", "1h", "4h", "1d", "1w"],
+      "status": "pending",
+      "note": "wiring 완료 후 사용자 요청 시 실행"
+    },
+    {
+      "task": "StateManager live loop 연결",
+      "description": "recover_from_crash()를 실제 라이브 실행 루프에 호출",
+      "status": "pending"
+    },
+    {
+      "task": "FastDynamicEngine optional swap",
+      "description": "broker_sim.py에서 DynamicParameterEngine 대신 사용 옵션",
+      "status": "pending"
+    },
+    {
+      "task": "Numba 설치",
+      "command": "pip install numba",
+      "description": "HAS_NUMBA=True 활성화로 성능 향상",
+      "status": "pending"
+    }
+  ],
+  "user_feedback": {
+    "initial": "PR만 올리고 머지 안 함 - 파일 만들어놓고 연결 안 됨",
+    "final": "wiring 자체는 꽤 제대로 들어갔고, walk_forward.py 버그 지적 후 수정 완료"
+  },
+  "lessons_learned": [
+    "모듈 생성 != 시스템 통합. __init__.py export + CLI 옵션 + 실제 호출부 수정까지 완료해야 함",
+    "옵티마이저 선택 로직이 if-else로 하드코딩되어 있으면 새 옵션 추가 시 무시됨 -> 팩토리 패턴 필수",
+    "keep_sensitivity_threshold 같은 설정값은 선언만 하지 말고 실제 사용하는 코드 확인 필요"
+  ]
+}

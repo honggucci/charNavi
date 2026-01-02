@@ -1,0 +1,2909 @@
+{
+  "n_folds": 361,
+  "avg_train_score": -10.0,
+  "avg_test_score": -10.0,
+  "overfit_ratio": 0.0,
+  "robust_params": {
+    "box_L": 31,
+    "m_freeze": 14,
+    "pivot_lr": 6,
+    "atr_len": 15,
+    "x_atr": 0.3536260594281022,
+    "m_bw": 0.09781807608225213,
+    "tp_pct": 0.020090531477752117,
+    "sl_pct": 0.010316740357996634,
+    "min_score": 3.917932041816826,
+    "rsi_oversold": 32,
+    "rsi_overbought": 67
+  },
+  "folds": [
+    {
+      "fold_id": 0,
+      "train_period": "2019-01-01 00:00:00 ~ 2019-01-29 00:00:00",
+      "test_period": "2019-01-29 00:00:00 ~ 2019-02-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 1,
+      "train_period": "2019-01-08 00:00:00 ~ 2019-02-05 00:00:00",
+      "test_period": "2019-02-05 00:00:00 ~ 2019-02-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 2,
+      "train_period": "2019-01-15 00:00:00 ~ 2019-02-12 00:00:00",
+      "test_period": "2019-02-12 00:00:00 ~ 2019-02-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 3,
+      "train_period": "2019-01-22 00:00:00 ~ 2019-02-19 00:00:00",
+      "test_period": "2019-02-19 00:00:00 ~ 2019-02-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 4,
+      "train_period": "2019-01-29 00:00:00 ~ 2019-02-26 00:00:00",
+      "test_period": "2019-02-26 00:00:00 ~ 2019-03-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 5,
+      "train_period": "2019-02-05 00:00:00 ~ 2019-03-05 00:00:00",
+      "test_period": "2019-03-05 00:00:00 ~ 2019-03-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 6,
+      "train_period": "2019-02-12 00:00:00 ~ 2019-03-12 00:00:00",
+      "test_period": "2019-03-12 00:00:00 ~ 2019-03-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 7,
+      "train_period": "2019-02-19 00:00:00 ~ 2019-03-19 00:00:00",
+      "test_period": "2019-03-19 00:00:00 ~ 2019-03-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 8,
+      "train_period": "2019-02-26 00:00:00 ~ 2019-03-26 00:00:00",
+      "test_period": "2019-03-26 00:00:00 ~ 2019-04-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 9,
+      "train_period": "2019-03-05 00:00:00 ~ 2019-04-02 00:00:00",
+      "test_period": "2019-04-02 00:00:00 ~ 2019-04-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 10,
+      "train_period": "2019-03-12 00:00:00 ~ 2019-04-09 00:00:00",
+      "test_period": "2019-04-09 00:00:00 ~ 2019-04-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 11,
+      "train_period": "2019-03-19 00:00:00 ~ 2019-04-16 00:00:00",
+      "test_period": "2019-04-16 00:00:00 ~ 2019-04-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 12,
+      "train_period": "2019-03-26 00:00:00 ~ 2019-04-23 00:00:00",
+      "test_period": "2019-04-23 00:00:00 ~ 2019-04-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 13,
+      "train_period": "2019-04-02 00:00:00 ~ 2019-04-30 00:00:00",
+      "test_period": "2019-04-30 00:00:00 ~ 2019-05-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 14,
+      "train_period": "2019-04-09 00:00:00 ~ 2019-05-07 00:00:00",
+      "test_period": "2019-05-07 00:00:00 ~ 2019-05-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 15,
+      "train_period": "2019-04-16 00:00:00 ~ 2019-05-14 00:00:00",
+      "test_period": "2019-05-14 00:00:00 ~ 2019-05-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 16,
+      "train_period": "2019-04-23 00:00:00 ~ 2019-05-21 00:00:00",
+      "test_period": "2019-05-21 00:00:00 ~ 2019-05-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 17,
+      "train_period": "2019-04-30 00:00:00 ~ 2019-05-28 00:00:00",
+      "test_period": "2019-05-28 00:00:00 ~ 2019-06-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 18,
+      "train_period": "2019-05-07 00:00:00 ~ 2019-06-04 00:00:00",
+      "test_period": "2019-06-04 00:00:00 ~ 2019-06-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 19,
+      "train_period": "2019-05-14 00:00:00 ~ 2019-06-11 00:00:00",
+      "test_period": "2019-06-11 00:00:00 ~ 2019-06-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 20,
+      "train_period": "2019-05-21 00:00:00 ~ 2019-06-18 00:00:00",
+      "test_period": "2019-06-18 00:00:00 ~ 2019-06-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 21,
+      "train_period": "2019-05-28 00:00:00 ~ 2019-06-25 00:00:00",
+      "test_period": "2019-06-25 00:00:00 ~ 2019-07-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 22,
+      "train_period": "2019-06-04 00:00:00 ~ 2019-07-02 00:00:00",
+      "test_period": "2019-07-02 00:00:00 ~ 2019-07-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 23,
+      "train_period": "2019-06-11 00:00:00 ~ 2019-07-09 00:00:00",
+      "test_period": "2019-07-09 00:00:00 ~ 2019-07-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 24,
+      "train_period": "2019-06-18 00:00:00 ~ 2019-07-16 00:00:00",
+      "test_period": "2019-07-16 00:00:00 ~ 2019-07-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 25,
+      "train_period": "2019-06-25 00:00:00 ~ 2019-07-23 00:00:00",
+      "test_period": "2019-07-23 00:00:00 ~ 2019-07-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 26,
+      "train_period": "2019-07-02 00:00:00 ~ 2019-07-30 00:00:00",
+      "test_period": "2019-07-30 00:00:00 ~ 2019-08-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 27,
+      "train_period": "2019-07-09 00:00:00 ~ 2019-08-06 00:00:00",
+      "test_period": "2019-08-06 00:00:00 ~ 2019-08-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 28,
+      "train_period": "2019-07-16 00:00:00 ~ 2019-08-13 00:00:00",
+      "test_period": "2019-08-13 00:00:00 ~ 2019-08-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 29,
+      "train_period": "2019-07-23 00:00:00 ~ 2019-08-20 00:00:00",
+      "test_period": "2019-08-20 00:00:00 ~ 2019-08-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 30,
+      "train_period": "2019-07-30 00:00:00 ~ 2019-08-27 00:00:00",
+      "test_period": "2019-08-27 00:00:00 ~ 2019-09-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 31,
+      "train_period": "2019-08-06 00:00:00 ~ 2019-09-03 00:00:00",
+      "test_period": "2019-09-03 00:00:00 ~ 2019-09-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 32,
+      "train_period": "2019-08-13 00:00:00 ~ 2019-09-10 00:00:00",
+      "test_period": "2019-09-10 00:00:00 ~ 2019-09-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 33,
+      "train_period": "2019-08-20 00:00:00 ~ 2019-09-17 00:00:00",
+      "test_period": "2019-09-17 00:00:00 ~ 2019-09-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 34,
+      "train_period": "2019-08-27 00:00:00 ~ 2019-09-24 00:00:00",
+      "test_period": "2019-09-24 00:00:00 ~ 2019-10-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 35,
+      "train_period": "2019-09-03 00:00:00 ~ 2019-10-01 00:00:00",
+      "test_period": "2019-10-01 00:00:00 ~ 2019-10-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 36,
+      "train_period": "2019-09-10 00:00:00 ~ 2019-10-08 00:00:00",
+      "test_period": "2019-10-08 00:00:00 ~ 2019-10-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 37,
+      "train_period": "2019-09-17 00:00:00 ~ 2019-10-15 00:00:00",
+      "test_period": "2019-10-15 00:00:00 ~ 2019-10-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 38,
+      "train_period": "2019-09-24 00:00:00 ~ 2019-10-22 00:00:00",
+      "test_period": "2019-10-22 00:00:00 ~ 2019-10-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 39,
+      "train_period": "2019-10-01 00:00:00 ~ 2019-10-29 00:00:00",
+      "test_period": "2019-10-29 00:00:00 ~ 2019-11-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 40,
+      "train_period": "2019-10-08 00:00:00 ~ 2019-11-05 00:00:00",
+      "test_period": "2019-11-05 00:00:00 ~ 2019-11-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 41,
+      "train_period": "2019-10-15 00:00:00 ~ 2019-11-12 00:00:00",
+      "test_period": "2019-11-12 00:00:00 ~ 2019-11-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 42,
+      "train_period": "2019-10-22 00:00:00 ~ 2019-11-19 00:00:00",
+      "test_period": "2019-11-19 00:00:00 ~ 2019-11-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 43,
+      "train_period": "2019-10-29 00:00:00 ~ 2019-11-26 00:00:00",
+      "test_period": "2019-11-26 00:00:00 ~ 2019-12-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 44,
+      "train_period": "2019-11-05 00:00:00 ~ 2019-12-03 00:00:00",
+      "test_period": "2019-12-03 00:00:00 ~ 2019-12-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 45,
+      "train_period": "2019-11-12 00:00:00 ~ 2019-12-10 00:00:00",
+      "test_period": "2019-12-10 00:00:00 ~ 2019-12-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 46,
+      "train_period": "2019-11-19 00:00:00 ~ 2019-12-17 00:00:00",
+      "test_period": "2019-12-17 00:00:00 ~ 2019-12-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 47,
+      "train_period": "2019-11-26 00:00:00 ~ 2019-12-24 00:00:00",
+      "test_period": "2019-12-24 00:00:00 ~ 2019-12-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 48,
+      "train_period": "2019-12-03 00:00:00 ~ 2019-12-31 00:00:00",
+      "test_period": "2019-12-31 00:00:00 ~ 2020-01-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 49,
+      "train_period": "2019-12-10 00:00:00 ~ 2020-01-07 00:00:00",
+      "test_period": "2020-01-07 00:00:00 ~ 2020-01-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 50,
+      "train_period": "2019-12-17 00:00:00 ~ 2020-01-14 00:00:00",
+      "test_period": "2020-01-14 00:00:00 ~ 2020-01-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 51,
+      "train_period": "2019-12-24 00:00:00 ~ 2020-01-21 00:00:00",
+      "test_period": "2020-01-21 00:00:00 ~ 2020-01-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 52,
+      "train_period": "2019-12-31 00:00:00 ~ 2020-01-28 00:00:00",
+      "test_period": "2020-01-28 00:00:00 ~ 2020-02-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 53,
+      "train_period": "2020-01-07 00:00:00 ~ 2020-02-04 00:00:00",
+      "test_period": "2020-02-04 00:00:00 ~ 2020-02-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 54,
+      "train_period": "2020-01-14 00:00:00 ~ 2020-02-11 00:00:00",
+      "test_period": "2020-02-11 00:00:00 ~ 2020-02-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 55,
+      "train_period": "2020-01-21 00:00:00 ~ 2020-02-18 00:00:00",
+      "test_period": "2020-02-18 00:00:00 ~ 2020-02-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 56,
+      "train_period": "2020-01-28 00:00:00 ~ 2020-02-25 00:00:00",
+      "test_period": "2020-02-25 00:00:00 ~ 2020-03-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 57,
+      "train_period": "2020-02-04 00:00:00 ~ 2020-03-03 00:00:00",
+      "test_period": "2020-03-03 00:00:00 ~ 2020-03-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 58,
+      "train_period": "2020-02-11 00:00:00 ~ 2020-03-10 00:00:00",
+      "test_period": "2020-03-10 00:00:00 ~ 2020-03-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 59,
+      "train_period": "2020-02-18 00:00:00 ~ 2020-03-17 00:00:00",
+      "test_period": "2020-03-17 00:00:00 ~ 2020-03-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 60,
+      "train_period": "2020-02-25 00:00:00 ~ 2020-03-24 00:00:00",
+      "test_period": "2020-03-24 00:00:00 ~ 2020-03-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 61,
+      "train_period": "2020-03-03 00:00:00 ~ 2020-03-31 00:00:00",
+      "test_period": "2020-03-31 00:00:00 ~ 2020-04-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 62,
+      "train_period": "2020-03-10 00:00:00 ~ 2020-04-07 00:00:00",
+      "test_period": "2020-04-07 00:00:00 ~ 2020-04-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 63,
+      "train_period": "2020-03-17 00:00:00 ~ 2020-04-14 00:00:00",
+      "test_period": "2020-04-14 00:00:00 ~ 2020-04-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 64,
+      "train_period": "2020-03-24 00:00:00 ~ 2020-04-21 00:00:00",
+      "test_period": "2020-04-21 00:00:00 ~ 2020-04-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 65,
+      "train_period": "2020-03-31 00:00:00 ~ 2020-04-28 00:00:00",
+      "test_period": "2020-04-28 00:00:00 ~ 2020-05-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 66,
+      "train_period": "2020-04-07 00:00:00 ~ 2020-05-05 00:00:00",
+      "test_period": "2020-05-05 00:00:00 ~ 2020-05-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 67,
+      "train_period": "2020-04-14 00:00:00 ~ 2020-05-12 00:00:00",
+      "test_period": "2020-05-12 00:00:00 ~ 2020-05-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 68,
+      "train_period": "2020-04-21 00:00:00 ~ 2020-05-19 00:00:00",
+      "test_period": "2020-05-19 00:00:00 ~ 2020-05-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 69,
+      "train_period": "2020-04-28 00:00:00 ~ 2020-05-26 00:00:00",
+      "test_period": "2020-05-26 00:00:00 ~ 2020-06-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 70,
+      "train_period": "2020-05-05 00:00:00 ~ 2020-06-02 00:00:00",
+      "test_period": "2020-06-02 00:00:00 ~ 2020-06-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 71,
+      "train_period": "2020-05-12 00:00:00 ~ 2020-06-09 00:00:00",
+      "test_period": "2020-06-09 00:00:00 ~ 2020-06-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 72,
+      "train_period": "2020-05-19 00:00:00 ~ 2020-06-16 00:00:00",
+      "test_period": "2020-06-16 00:00:00 ~ 2020-06-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 73,
+      "train_period": "2020-05-26 00:00:00 ~ 2020-06-23 00:00:00",
+      "test_period": "2020-06-23 00:00:00 ~ 2020-06-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 74,
+      "train_period": "2020-06-02 00:00:00 ~ 2020-06-30 00:00:00",
+      "test_period": "2020-06-30 00:00:00 ~ 2020-07-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 75,
+      "train_period": "2020-06-09 00:00:00 ~ 2020-07-07 00:00:00",
+      "test_period": "2020-07-07 00:00:00 ~ 2020-07-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 76,
+      "train_period": "2020-06-16 00:00:00 ~ 2020-07-14 00:00:00",
+      "test_period": "2020-07-14 00:00:00 ~ 2020-07-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 77,
+      "train_period": "2020-06-23 00:00:00 ~ 2020-07-21 00:00:00",
+      "test_period": "2020-07-21 00:00:00 ~ 2020-07-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 78,
+      "train_period": "2020-06-30 00:00:00 ~ 2020-07-28 00:00:00",
+      "test_period": "2020-07-28 00:00:00 ~ 2020-08-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 79,
+      "train_period": "2020-07-07 00:00:00 ~ 2020-08-04 00:00:00",
+      "test_period": "2020-08-04 00:00:00 ~ 2020-08-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 80,
+      "train_period": "2020-07-14 00:00:00 ~ 2020-08-11 00:00:00",
+      "test_period": "2020-08-11 00:00:00 ~ 2020-08-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 81,
+      "train_period": "2020-07-21 00:00:00 ~ 2020-08-18 00:00:00",
+      "test_period": "2020-08-18 00:00:00 ~ 2020-08-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 82,
+      "train_period": "2020-07-28 00:00:00 ~ 2020-08-25 00:00:00",
+      "test_period": "2020-08-25 00:00:00 ~ 2020-09-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 83,
+      "train_period": "2020-08-04 00:00:00 ~ 2020-09-01 00:00:00",
+      "test_period": "2020-09-01 00:00:00 ~ 2020-09-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 84,
+      "train_period": "2020-08-11 00:00:00 ~ 2020-09-08 00:00:00",
+      "test_period": "2020-09-08 00:00:00 ~ 2020-09-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 85,
+      "train_period": "2020-08-18 00:00:00 ~ 2020-09-15 00:00:00",
+      "test_period": "2020-09-15 00:00:00 ~ 2020-09-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 86,
+      "train_period": "2020-08-25 00:00:00 ~ 2020-09-22 00:00:00",
+      "test_period": "2020-09-22 00:00:00 ~ 2020-09-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 87,
+      "train_period": "2020-09-01 00:00:00 ~ 2020-09-29 00:00:00",
+      "test_period": "2020-09-29 00:00:00 ~ 2020-10-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 88,
+      "train_period": "2020-09-08 00:00:00 ~ 2020-10-06 00:00:00",
+      "test_period": "2020-10-06 00:00:00 ~ 2020-10-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 89,
+      "train_period": "2020-09-15 00:00:00 ~ 2020-10-13 00:00:00",
+      "test_period": "2020-10-13 00:00:00 ~ 2020-10-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 90,
+      "train_period": "2020-09-22 00:00:00 ~ 2020-10-20 00:00:00",
+      "test_period": "2020-10-20 00:00:00 ~ 2020-10-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 91,
+      "train_period": "2020-09-29 00:00:00 ~ 2020-10-27 00:00:00",
+      "test_period": "2020-10-27 00:00:00 ~ 2020-11-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 92,
+      "train_period": "2020-10-06 00:00:00 ~ 2020-11-03 00:00:00",
+      "test_period": "2020-11-03 00:00:00 ~ 2020-11-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 93,
+      "train_period": "2020-10-13 00:00:00 ~ 2020-11-10 00:00:00",
+      "test_period": "2020-11-10 00:00:00 ~ 2020-11-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 94,
+      "train_period": "2020-10-20 00:00:00 ~ 2020-11-17 00:00:00",
+      "test_period": "2020-11-17 00:00:00 ~ 2020-11-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 95,
+      "train_period": "2020-10-27 00:00:00 ~ 2020-11-24 00:00:00",
+      "test_period": "2020-11-24 00:00:00 ~ 2020-12-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 96,
+      "train_period": "2020-11-03 00:00:00 ~ 2020-12-01 00:00:00",
+      "test_period": "2020-12-01 00:00:00 ~ 2020-12-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 97,
+      "train_period": "2020-11-10 00:00:00 ~ 2020-12-08 00:00:00",
+      "test_period": "2020-12-08 00:00:00 ~ 2020-12-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 98,
+      "train_period": "2020-11-17 00:00:00 ~ 2020-12-15 00:00:00",
+      "test_period": "2020-12-15 00:00:00 ~ 2020-12-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 99,
+      "train_period": "2020-11-24 00:00:00 ~ 2020-12-22 00:00:00",
+      "test_period": "2020-12-22 00:00:00 ~ 2020-12-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 100,
+      "train_period": "2020-12-01 00:00:00 ~ 2020-12-29 00:00:00",
+      "test_period": "2020-12-29 00:00:00 ~ 2021-01-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 101,
+      "train_period": "2020-12-08 00:00:00 ~ 2021-01-05 00:00:00",
+      "test_period": "2021-01-05 00:00:00 ~ 2021-01-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 102,
+      "train_period": "2020-12-15 00:00:00 ~ 2021-01-12 00:00:00",
+      "test_period": "2021-01-12 00:00:00 ~ 2021-01-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 103,
+      "train_period": "2020-12-22 00:00:00 ~ 2021-01-19 00:00:00",
+      "test_period": "2021-01-19 00:00:00 ~ 2021-01-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 104,
+      "train_period": "2020-12-29 00:00:00 ~ 2021-01-26 00:00:00",
+      "test_period": "2021-01-26 00:00:00 ~ 2021-02-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 105,
+      "train_period": "2021-01-05 00:00:00 ~ 2021-02-02 00:00:00",
+      "test_period": "2021-02-02 00:00:00 ~ 2021-02-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 106,
+      "train_period": "2021-01-12 00:00:00 ~ 2021-02-09 00:00:00",
+      "test_period": "2021-02-09 00:00:00 ~ 2021-02-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 107,
+      "train_period": "2021-01-19 00:00:00 ~ 2021-02-16 00:00:00",
+      "test_period": "2021-02-16 00:00:00 ~ 2021-02-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 108,
+      "train_period": "2021-01-26 00:00:00 ~ 2021-02-23 00:00:00",
+      "test_period": "2021-02-23 00:00:00 ~ 2021-03-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 109,
+      "train_period": "2021-02-02 00:00:00 ~ 2021-03-02 00:00:00",
+      "test_period": "2021-03-02 00:00:00 ~ 2021-03-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 110,
+      "train_period": "2021-02-09 00:00:00 ~ 2021-03-09 00:00:00",
+      "test_period": "2021-03-09 00:00:00 ~ 2021-03-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 111,
+      "train_period": "2021-02-16 00:00:00 ~ 2021-03-16 00:00:00",
+      "test_period": "2021-03-16 00:00:00 ~ 2021-03-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 112,
+      "train_period": "2021-02-23 00:00:00 ~ 2021-03-23 00:00:00",
+      "test_period": "2021-03-23 00:00:00 ~ 2021-03-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 113,
+      "train_period": "2021-03-02 00:00:00 ~ 2021-03-30 00:00:00",
+      "test_period": "2021-03-30 00:00:00 ~ 2021-04-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 114,
+      "train_period": "2021-03-09 00:00:00 ~ 2021-04-06 00:00:00",
+      "test_period": "2021-04-06 00:00:00 ~ 2021-04-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 115,
+      "train_period": "2021-03-16 00:00:00 ~ 2021-04-13 00:00:00",
+      "test_period": "2021-04-13 00:00:00 ~ 2021-04-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 116,
+      "train_period": "2021-03-23 00:00:00 ~ 2021-04-20 00:00:00",
+      "test_period": "2021-04-20 00:00:00 ~ 2021-04-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 117,
+      "train_period": "2021-03-30 00:00:00 ~ 2021-04-27 00:00:00",
+      "test_period": "2021-04-27 00:00:00 ~ 2021-05-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 118,
+      "train_period": "2021-04-06 00:00:00 ~ 2021-05-04 00:00:00",
+      "test_period": "2021-05-04 00:00:00 ~ 2021-05-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 119,
+      "train_period": "2021-04-13 00:00:00 ~ 2021-05-11 00:00:00",
+      "test_period": "2021-05-11 00:00:00 ~ 2021-05-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 120,
+      "train_period": "2021-04-20 00:00:00 ~ 2021-05-18 00:00:00",
+      "test_period": "2021-05-18 00:00:00 ~ 2021-05-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 121,
+      "train_period": "2021-04-27 00:00:00 ~ 2021-05-25 00:00:00",
+      "test_period": "2021-05-25 00:00:00 ~ 2021-06-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 122,
+      "train_period": "2021-05-04 00:00:00 ~ 2021-06-01 00:00:00",
+      "test_period": "2021-06-01 00:00:00 ~ 2021-06-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 123,
+      "train_period": "2021-05-11 00:00:00 ~ 2021-06-08 00:00:00",
+      "test_period": "2021-06-08 00:00:00 ~ 2021-06-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 124,
+      "train_period": "2021-05-18 00:00:00 ~ 2021-06-15 00:00:00",
+      "test_period": "2021-06-15 00:00:00 ~ 2021-06-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 125,
+      "train_period": "2021-05-25 00:00:00 ~ 2021-06-22 00:00:00",
+      "test_period": "2021-06-22 00:00:00 ~ 2021-06-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 126,
+      "train_period": "2021-06-01 00:00:00 ~ 2021-06-29 00:00:00",
+      "test_period": "2021-06-29 00:00:00 ~ 2021-07-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 127,
+      "train_period": "2021-06-08 00:00:00 ~ 2021-07-06 00:00:00",
+      "test_period": "2021-07-06 00:00:00 ~ 2021-07-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 128,
+      "train_period": "2021-06-15 00:00:00 ~ 2021-07-13 00:00:00",
+      "test_period": "2021-07-13 00:00:00 ~ 2021-07-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 129,
+      "train_period": "2021-06-22 00:00:00 ~ 2021-07-20 00:00:00",
+      "test_period": "2021-07-20 00:00:00 ~ 2021-07-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 130,
+      "train_period": "2021-06-29 00:00:00 ~ 2021-07-27 00:00:00",
+      "test_period": "2021-07-27 00:00:00 ~ 2021-08-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 131,
+      "train_period": "2021-07-06 00:00:00 ~ 2021-08-03 00:00:00",
+      "test_period": "2021-08-03 00:00:00 ~ 2021-08-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 132,
+      "train_period": "2021-07-13 00:00:00 ~ 2021-08-10 00:00:00",
+      "test_period": "2021-08-10 00:00:00 ~ 2021-08-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 133,
+      "train_period": "2021-07-20 00:00:00 ~ 2021-08-17 00:00:00",
+      "test_period": "2021-08-17 00:00:00 ~ 2021-08-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 134,
+      "train_period": "2021-07-27 00:00:00 ~ 2021-08-24 00:00:00",
+      "test_period": "2021-08-24 00:00:00 ~ 2021-08-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 135,
+      "train_period": "2021-08-03 00:00:00 ~ 2021-08-31 00:00:00",
+      "test_period": "2021-08-31 00:00:00 ~ 2021-09-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 136,
+      "train_period": "2021-08-10 00:00:00 ~ 2021-09-07 00:00:00",
+      "test_period": "2021-09-07 00:00:00 ~ 2021-09-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 137,
+      "train_period": "2021-08-17 00:00:00 ~ 2021-09-14 00:00:00",
+      "test_period": "2021-09-14 00:00:00 ~ 2021-09-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 138,
+      "train_period": "2021-08-24 00:00:00 ~ 2021-09-21 00:00:00",
+      "test_period": "2021-09-21 00:00:00 ~ 2021-09-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 139,
+      "train_period": "2021-08-31 00:00:00 ~ 2021-09-28 00:00:00",
+      "test_period": "2021-09-28 00:00:00 ~ 2021-10-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 140,
+      "train_period": "2021-09-07 00:00:00 ~ 2021-10-05 00:00:00",
+      "test_period": "2021-10-05 00:00:00 ~ 2021-10-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 141,
+      "train_period": "2021-09-14 00:00:00 ~ 2021-10-12 00:00:00",
+      "test_period": "2021-10-12 00:00:00 ~ 2021-10-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 142,
+      "train_period": "2021-09-21 00:00:00 ~ 2021-10-19 00:00:00",
+      "test_period": "2021-10-19 00:00:00 ~ 2021-10-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 143,
+      "train_period": "2021-09-28 00:00:00 ~ 2021-10-26 00:00:00",
+      "test_period": "2021-10-26 00:00:00 ~ 2021-11-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 144,
+      "train_period": "2021-10-05 00:00:00 ~ 2021-11-02 00:00:00",
+      "test_period": "2021-11-02 00:00:00 ~ 2021-11-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 145,
+      "train_period": "2021-10-12 00:00:00 ~ 2021-11-09 00:00:00",
+      "test_period": "2021-11-09 00:00:00 ~ 2021-11-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 146,
+      "train_period": "2021-10-19 00:00:00 ~ 2021-11-16 00:00:00",
+      "test_period": "2021-11-16 00:00:00 ~ 2021-11-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 147,
+      "train_period": "2021-10-26 00:00:00 ~ 2021-11-23 00:00:00",
+      "test_period": "2021-11-23 00:00:00 ~ 2021-11-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 148,
+      "train_period": "2021-11-02 00:00:00 ~ 2021-11-30 00:00:00",
+      "test_period": "2021-11-30 00:00:00 ~ 2021-12-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 149,
+      "train_period": "2021-11-09 00:00:00 ~ 2021-12-07 00:00:00",
+      "test_period": "2021-12-07 00:00:00 ~ 2021-12-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 150,
+      "train_period": "2021-11-16 00:00:00 ~ 2021-12-14 00:00:00",
+      "test_period": "2021-12-14 00:00:00 ~ 2021-12-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 151,
+      "train_period": "2021-11-23 00:00:00 ~ 2021-12-21 00:00:00",
+      "test_period": "2021-12-21 00:00:00 ~ 2021-12-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 152,
+      "train_period": "2021-11-30 00:00:00 ~ 2021-12-28 00:00:00",
+      "test_period": "2021-12-28 00:00:00 ~ 2022-01-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 153,
+      "train_period": "2021-12-07 00:00:00 ~ 2022-01-04 00:00:00",
+      "test_period": "2022-01-04 00:00:00 ~ 2022-01-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 154,
+      "train_period": "2021-12-14 00:00:00 ~ 2022-01-11 00:00:00",
+      "test_period": "2022-01-11 00:00:00 ~ 2022-01-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 155,
+      "train_period": "2021-12-21 00:00:00 ~ 2022-01-18 00:00:00",
+      "test_period": "2022-01-18 00:00:00 ~ 2022-01-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 156,
+      "train_period": "2021-12-28 00:00:00 ~ 2022-01-25 00:00:00",
+      "test_period": "2022-01-25 00:00:00 ~ 2022-02-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 157,
+      "train_period": "2022-01-04 00:00:00 ~ 2022-02-01 00:00:00",
+      "test_period": "2022-02-01 00:00:00 ~ 2022-02-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 158,
+      "train_period": "2022-01-11 00:00:00 ~ 2022-02-08 00:00:00",
+      "test_period": "2022-02-08 00:00:00 ~ 2022-02-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 159,
+      "train_period": "2022-01-18 00:00:00 ~ 2022-02-15 00:00:00",
+      "test_period": "2022-02-15 00:00:00 ~ 2022-02-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 160,
+      "train_period": "2022-01-25 00:00:00 ~ 2022-02-22 00:00:00",
+      "test_period": "2022-02-22 00:00:00 ~ 2022-03-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 161,
+      "train_period": "2022-02-01 00:00:00 ~ 2022-03-01 00:00:00",
+      "test_period": "2022-03-01 00:00:00 ~ 2022-03-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 162,
+      "train_period": "2022-02-08 00:00:00 ~ 2022-03-08 00:00:00",
+      "test_period": "2022-03-08 00:00:00 ~ 2022-03-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 163,
+      "train_period": "2022-02-15 00:00:00 ~ 2022-03-15 00:00:00",
+      "test_period": "2022-03-15 00:00:00 ~ 2022-03-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 164,
+      "train_period": "2022-02-22 00:00:00 ~ 2022-03-22 00:00:00",
+      "test_period": "2022-03-22 00:00:00 ~ 2022-03-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 165,
+      "train_period": "2022-03-01 00:00:00 ~ 2022-03-29 00:00:00",
+      "test_period": "2022-03-29 00:00:00 ~ 2022-04-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 166,
+      "train_period": "2022-03-08 00:00:00 ~ 2022-04-05 00:00:00",
+      "test_period": "2022-04-05 00:00:00 ~ 2022-04-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 167,
+      "train_period": "2022-03-15 00:00:00 ~ 2022-04-12 00:00:00",
+      "test_period": "2022-04-12 00:00:00 ~ 2022-04-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 168,
+      "train_period": "2022-03-22 00:00:00 ~ 2022-04-19 00:00:00",
+      "test_period": "2022-04-19 00:00:00 ~ 2022-04-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 169,
+      "train_period": "2022-03-29 00:00:00 ~ 2022-04-26 00:00:00",
+      "test_period": "2022-04-26 00:00:00 ~ 2022-05-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 170,
+      "train_period": "2022-04-05 00:00:00 ~ 2022-05-03 00:00:00",
+      "test_period": "2022-05-03 00:00:00 ~ 2022-05-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 171,
+      "train_period": "2022-04-12 00:00:00 ~ 2022-05-10 00:00:00",
+      "test_period": "2022-05-10 00:00:00 ~ 2022-05-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 172,
+      "train_period": "2022-04-19 00:00:00 ~ 2022-05-17 00:00:00",
+      "test_period": "2022-05-17 00:00:00 ~ 2022-05-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 173,
+      "train_period": "2022-04-26 00:00:00 ~ 2022-05-24 00:00:00",
+      "test_period": "2022-05-24 00:00:00 ~ 2022-05-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 174,
+      "train_period": "2022-05-03 00:00:00 ~ 2022-05-31 00:00:00",
+      "test_period": "2022-05-31 00:00:00 ~ 2022-06-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 175,
+      "train_period": "2022-05-10 00:00:00 ~ 2022-06-07 00:00:00",
+      "test_period": "2022-06-07 00:00:00 ~ 2022-06-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 176,
+      "train_period": "2022-05-17 00:00:00 ~ 2022-06-14 00:00:00",
+      "test_period": "2022-06-14 00:00:00 ~ 2022-06-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 177,
+      "train_period": "2022-05-24 00:00:00 ~ 2022-06-21 00:00:00",
+      "test_period": "2022-06-21 00:00:00 ~ 2022-06-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 178,
+      "train_period": "2022-05-31 00:00:00 ~ 2022-06-28 00:00:00",
+      "test_period": "2022-06-28 00:00:00 ~ 2022-07-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 179,
+      "train_period": "2022-06-07 00:00:00 ~ 2022-07-05 00:00:00",
+      "test_period": "2022-07-05 00:00:00 ~ 2022-07-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 180,
+      "train_period": "2022-06-14 00:00:00 ~ 2022-07-12 00:00:00",
+      "test_period": "2022-07-12 00:00:00 ~ 2022-07-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 181,
+      "train_period": "2022-06-21 00:00:00 ~ 2022-07-19 00:00:00",
+      "test_period": "2022-07-19 00:00:00 ~ 2022-07-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 182,
+      "train_period": "2022-06-28 00:00:00 ~ 2022-07-26 00:00:00",
+      "test_period": "2022-07-26 00:00:00 ~ 2022-08-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 183,
+      "train_period": "2022-07-05 00:00:00 ~ 2022-08-02 00:00:00",
+      "test_period": "2022-08-02 00:00:00 ~ 2022-08-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 184,
+      "train_period": "2022-07-12 00:00:00 ~ 2022-08-09 00:00:00",
+      "test_period": "2022-08-09 00:00:00 ~ 2022-08-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 185,
+      "train_period": "2022-07-19 00:00:00 ~ 2022-08-16 00:00:00",
+      "test_period": "2022-08-16 00:00:00 ~ 2022-08-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 186,
+      "train_period": "2022-07-26 00:00:00 ~ 2022-08-23 00:00:00",
+      "test_period": "2022-08-23 00:00:00 ~ 2022-08-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 187,
+      "train_period": "2022-08-02 00:00:00 ~ 2022-08-30 00:00:00",
+      "test_period": "2022-08-30 00:00:00 ~ 2022-09-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 188,
+      "train_period": "2022-08-09 00:00:00 ~ 2022-09-06 00:00:00",
+      "test_period": "2022-09-06 00:00:00 ~ 2022-09-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 189,
+      "train_period": "2022-08-16 00:00:00 ~ 2022-09-13 00:00:00",
+      "test_period": "2022-09-13 00:00:00 ~ 2022-09-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 190,
+      "train_period": "2022-08-23 00:00:00 ~ 2022-09-20 00:00:00",
+      "test_period": "2022-09-20 00:00:00 ~ 2022-09-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 191,
+      "train_period": "2022-08-30 00:00:00 ~ 2022-09-27 00:00:00",
+      "test_period": "2022-09-27 00:00:00 ~ 2022-10-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 192,
+      "train_period": "2022-09-06 00:00:00 ~ 2022-10-04 00:00:00",
+      "test_period": "2022-10-04 00:00:00 ~ 2022-10-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 193,
+      "train_period": "2022-09-13 00:00:00 ~ 2022-10-11 00:00:00",
+      "test_period": "2022-10-11 00:00:00 ~ 2022-10-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 194,
+      "train_period": "2022-09-20 00:00:00 ~ 2022-10-18 00:00:00",
+      "test_period": "2022-10-18 00:00:00 ~ 2022-10-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 195,
+      "train_period": "2022-09-27 00:00:00 ~ 2022-10-25 00:00:00",
+      "test_period": "2022-10-25 00:00:00 ~ 2022-11-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 196,
+      "train_period": "2022-10-04 00:00:00 ~ 2022-11-01 00:00:00",
+      "test_period": "2022-11-01 00:00:00 ~ 2022-11-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 197,
+      "train_period": "2022-10-11 00:00:00 ~ 2022-11-08 00:00:00",
+      "test_period": "2022-11-08 00:00:00 ~ 2022-11-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 198,
+      "train_period": "2022-10-18 00:00:00 ~ 2022-11-15 00:00:00",
+      "test_period": "2022-11-15 00:00:00 ~ 2022-11-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 199,
+      "train_period": "2022-10-25 00:00:00 ~ 2022-11-22 00:00:00",
+      "test_period": "2022-11-22 00:00:00 ~ 2022-11-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 200,
+      "train_period": "2022-11-01 00:00:00 ~ 2022-11-29 00:00:00",
+      "test_period": "2022-11-29 00:00:00 ~ 2022-12-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 201,
+      "train_period": "2022-11-08 00:00:00 ~ 2022-12-06 00:00:00",
+      "test_period": "2022-12-06 00:00:00 ~ 2022-12-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 202,
+      "train_period": "2022-11-15 00:00:00 ~ 2022-12-13 00:00:00",
+      "test_period": "2022-12-13 00:00:00 ~ 2022-12-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 203,
+      "train_period": "2022-11-22 00:00:00 ~ 2022-12-20 00:00:00",
+      "test_period": "2022-12-20 00:00:00 ~ 2022-12-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 204,
+      "train_period": "2022-11-29 00:00:00 ~ 2022-12-27 00:00:00",
+      "test_period": "2022-12-27 00:00:00 ~ 2023-01-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 205,
+      "train_period": "2022-12-06 00:00:00 ~ 2023-01-03 00:00:00",
+      "test_period": "2023-01-03 00:00:00 ~ 2023-01-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 206,
+      "train_period": "2022-12-13 00:00:00 ~ 2023-01-10 00:00:00",
+      "test_period": "2023-01-10 00:00:00 ~ 2023-01-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 207,
+      "train_period": "2022-12-20 00:00:00 ~ 2023-01-17 00:00:00",
+      "test_period": "2023-01-17 00:00:00 ~ 2023-01-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 208,
+      "train_period": "2022-12-27 00:00:00 ~ 2023-01-24 00:00:00",
+      "test_period": "2023-01-24 00:00:00 ~ 2023-01-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 209,
+      "train_period": "2023-01-03 00:00:00 ~ 2023-01-31 00:00:00",
+      "test_period": "2023-01-31 00:00:00 ~ 2023-02-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 210,
+      "train_period": "2023-01-10 00:00:00 ~ 2023-02-07 00:00:00",
+      "test_period": "2023-02-07 00:00:00 ~ 2023-02-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 211,
+      "train_period": "2023-01-17 00:00:00 ~ 2023-02-14 00:00:00",
+      "test_period": "2023-02-14 00:00:00 ~ 2023-02-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 212,
+      "train_period": "2023-01-24 00:00:00 ~ 2023-02-21 00:00:00",
+      "test_period": "2023-02-21 00:00:00 ~ 2023-02-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 213,
+      "train_period": "2023-01-31 00:00:00 ~ 2023-02-28 00:00:00",
+      "test_period": "2023-02-28 00:00:00 ~ 2023-03-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 214,
+      "train_period": "2023-02-07 00:00:00 ~ 2023-03-07 00:00:00",
+      "test_period": "2023-03-07 00:00:00 ~ 2023-03-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 215,
+      "train_period": "2023-02-14 00:00:00 ~ 2023-03-14 00:00:00",
+      "test_period": "2023-03-14 00:00:00 ~ 2023-03-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 216,
+      "train_period": "2023-02-21 00:00:00 ~ 2023-03-21 00:00:00",
+      "test_period": "2023-03-21 00:00:00 ~ 2023-03-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 217,
+      "train_period": "2023-02-28 00:00:00 ~ 2023-03-28 00:00:00",
+      "test_period": "2023-03-28 00:00:00 ~ 2023-04-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 218,
+      "train_period": "2023-03-07 00:00:00 ~ 2023-04-04 00:00:00",
+      "test_period": "2023-04-04 00:00:00 ~ 2023-04-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 219,
+      "train_period": "2023-03-14 00:00:00 ~ 2023-04-11 00:00:00",
+      "test_period": "2023-04-11 00:00:00 ~ 2023-04-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 220,
+      "train_period": "2023-03-21 00:00:00 ~ 2023-04-18 00:00:00",
+      "test_period": "2023-04-18 00:00:00 ~ 2023-04-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 221,
+      "train_period": "2023-03-28 00:00:00 ~ 2023-04-25 00:00:00",
+      "test_period": "2023-04-25 00:00:00 ~ 2023-05-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 222,
+      "train_period": "2023-04-04 00:00:00 ~ 2023-05-02 00:00:00",
+      "test_period": "2023-05-02 00:00:00 ~ 2023-05-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 223,
+      "train_period": "2023-04-11 00:00:00 ~ 2023-05-09 00:00:00",
+      "test_period": "2023-05-09 00:00:00 ~ 2023-05-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 224,
+      "train_period": "2023-04-18 00:00:00 ~ 2023-05-16 00:00:00",
+      "test_period": "2023-05-16 00:00:00 ~ 2023-05-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 225,
+      "train_period": "2023-04-25 00:00:00 ~ 2023-05-23 00:00:00",
+      "test_period": "2023-05-23 00:00:00 ~ 2023-05-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 226,
+      "train_period": "2023-05-02 00:00:00 ~ 2023-05-30 00:00:00",
+      "test_period": "2023-05-30 00:00:00 ~ 2023-06-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 227,
+      "train_period": "2023-05-09 00:00:00 ~ 2023-06-06 00:00:00",
+      "test_period": "2023-06-06 00:00:00 ~ 2023-06-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 228,
+      "train_period": "2023-05-16 00:00:00 ~ 2023-06-13 00:00:00",
+      "test_period": "2023-06-13 00:00:00 ~ 2023-06-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 229,
+      "train_period": "2023-05-23 00:00:00 ~ 2023-06-20 00:00:00",
+      "test_period": "2023-06-20 00:00:00 ~ 2023-06-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 230,
+      "train_period": "2023-05-30 00:00:00 ~ 2023-06-27 00:00:00",
+      "test_period": "2023-06-27 00:00:00 ~ 2023-07-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 231,
+      "train_period": "2023-06-06 00:00:00 ~ 2023-07-04 00:00:00",
+      "test_period": "2023-07-04 00:00:00 ~ 2023-07-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 232,
+      "train_period": "2023-06-13 00:00:00 ~ 2023-07-11 00:00:00",
+      "test_period": "2023-07-11 00:00:00 ~ 2023-07-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 233,
+      "train_period": "2023-06-20 00:00:00 ~ 2023-07-18 00:00:00",
+      "test_period": "2023-07-18 00:00:00 ~ 2023-07-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 234,
+      "train_period": "2023-06-27 00:00:00 ~ 2023-07-25 00:00:00",
+      "test_period": "2023-07-25 00:00:00 ~ 2023-08-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 235,
+      "train_period": "2023-07-04 00:00:00 ~ 2023-08-01 00:00:00",
+      "test_period": "2023-08-01 00:00:00 ~ 2023-08-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 236,
+      "train_period": "2023-07-11 00:00:00 ~ 2023-08-08 00:00:00",
+      "test_period": "2023-08-08 00:00:00 ~ 2023-08-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 237,
+      "train_period": "2023-07-18 00:00:00 ~ 2023-08-15 00:00:00",
+      "test_period": "2023-08-15 00:00:00 ~ 2023-08-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 238,
+      "train_period": "2023-07-25 00:00:00 ~ 2023-08-22 00:00:00",
+      "test_period": "2023-08-22 00:00:00 ~ 2023-08-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 239,
+      "train_period": "2023-08-01 00:00:00 ~ 2023-08-29 00:00:00",
+      "test_period": "2023-08-29 00:00:00 ~ 2023-09-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 240,
+      "train_period": "2023-08-08 00:00:00 ~ 2023-09-05 00:00:00",
+      "test_period": "2023-09-05 00:00:00 ~ 2023-09-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 241,
+      "train_period": "2023-08-15 00:00:00 ~ 2023-09-12 00:00:00",
+      "test_period": "2023-09-12 00:00:00 ~ 2023-09-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 242,
+      "train_period": "2023-08-22 00:00:00 ~ 2023-09-19 00:00:00",
+      "test_period": "2023-09-19 00:00:00 ~ 2023-09-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 243,
+      "train_period": "2023-08-29 00:00:00 ~ 2023-09-26 00:00:00",
+      "test_period": "2023-09-26 00:00:00 ~ 2023-10-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 244,
+      "train_period": "2023-09-05 00:00:00 ~ 2023-10-03 00:00:00",
+      "test_period": "2023-10-03 00:00:00 ~ 2023-10-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 245,
+      "train_period": "2023-09-12 00:00:00 ~ 2023-10-10 00:00:00",
+      "test_period": "2023-10-10 00:00:00 ~ 2023-10-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 246,
+      "train_period": "2023-09-19 00:00:00 ~ 2023-10-17 00:00:00",
+      "test_period": "2023-10-17 00:00:00 ~ 2023-10-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 247,
+      "train_period": "2023-09-26 00:00:00 ~ 2023-10-24 00:00:00",
+      "test_period": "2023-10-24 00:00:00 ~ 2023-10-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 248,
+      "train_period": "2023-10-03 00:00:00 ~ 2023-10-31 00:00:00",
+      "test_period": "2023-10-31 00:00:00 ~ 2023-11-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 249,
+      "train_period": "2023-10-10 00:00:00 ~ 2023-11-07 00:00:00",
+      "test_period": "2023-11-07 00:00:00 ~ 2023-11-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 250,
+      "train_period": "2023-10-17 00:00:00 ~ 2023-11-14 00:00:00",
+      "test_period": "2023-11-14 00:00:00 ~ 2023-11-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 251,
+      "train_period": "2023-10-24 00:00:00 ~ 2023-11-21 00:00:00",
+      "test_period": "2023-11-21 00:00:00 ~ 2023-11-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 252,
+      "train_period": "2023-10-31 00:00:00 ~ 2023-11-28 00:00:00",
+      "test_period": "2023-11-28 00:00:00 ~ 2023-12-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 253,
+      "train_period": "2023-11-07 00:00:00 ~ 2023-12-05 00:00:00",
+      "test_period": "2023-12-05 00:00:00 ~ 2023-12-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 254,
+      "train_period": "2023-11-14 00:00:00 ~ 2023-12-12 00:00:00",
+      "test_period": "2023-12-12 00:00:00 ~ 2023-12-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 255,
+      "train_period": "2023-11-21 00:00:00 ~ 2023-12-19 00:00:00",
+      "test_period": "2023-12-19 00:00:00 ~ 2023-12-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 256,
+      "train_period": "2023-11-28 00:00:00 ~ 2023-12-26 00:00:00",
+      "test_period": "2023-12-26 00:00:00 ~ 2024-01-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 257,
+      "train_period": "2023-12-05 00:00:00 ~ 2024-01-02 00:00:00",
+      "test_period": "2024-01-02 00:00:00 ~ 2024-01-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 258,
+      "train_period": "2023-12-12 00:00:00 ~ 2024-01-09 00:00:00",
+      "test_period": "2024-01-09 00:00:00 ~ 2024-01-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 259,
+      "train_period": "2023-12-19 00:00:00 ~ 2024-01-16 00:00:00",
+      "test_period": "2024-01-16 00:00:00 ~ 2024-01-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 260,
+      "train_period": "2023-12-26 00:00:00 ~ 2024-01-23 00:00:00",
+      "test_period": "2024-01-23 00:00:00 ~ 2024-01-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 261,
+      "train_period": "2024-01-02 00:00:00 ~ 2024-01-30 00:00:00",
+      "test_period": "2024-01-30 00:00:00 ~ 2024-02-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 262,
+      "train_period": "2024-01-09 00:00:00 ~ 2024-02-06 00:00:00",
+      "test_period": "2024-02-06 00:00:00 ~ 2024-02-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 263,
+      "train_period": "2024-01-16 00:00:00 ~ 2024-02-13 00:00:00",
+      "test_period": "2024-02-13 00:00:00 ~ 2024-02-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 264,
+      "train_period": "2024-01-23 00:00:00 ~ 2024-02-20 00:00:00",
+      "test_period": "2024-02-20 00:00:00 ~ 2024-02-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 265,
+      "train_period": "2024-01-30 00:00:00 ~ 2024-02-27 00:00:00",
+      "test_period": "2024-02-27 00:00:00 ~ 2024-03-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 266,
+      "train_period": "2024-02-06 00:00:00 ~ 2024-03-05 00:00:00",
+      "test_period": "2024-03-05 00:00:00 ~ 2024-03-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 267,
+      "train_period": "2024-02-13 00:00:00 ~ 2024-03-12 00:00:00",
+      "test_period": "2024-03-12 00:00:00 ~ 2024-03-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 268,
+      "train_period": "2024-02-20 00:00:00 ~ 2024-03-19 00:00:00",
+      "test_period": "2024-03-19 00:00:00 ~ 2024-03-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 269,
+      "train_period": "2024-02-27 00:00:00 ~ 2024-03-26 00:00:00",
+      "test_period": "2024-03-26 00:00:00 ~ 2024-04-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 270,
+      "train_period": "2024-03-05 00:00:00 ~ 2024-04-02 00:00:00",
+      "test_period": "2024-04-02 00:00:00 ~ 2024-04-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 271,
+      "train_period": "2024-03-12 00:00:00 ~ 2024-04-09 00:00:00",
+      "test_period": "2024-04-09 00:00:00 ~ 2024-04-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 272,
+      "train_period": "2024-03-19 00:00:00 ~ 2024-04-16 00:00:00",
+      "test_period": "2024-04-16 00:00:00 ~ 2024-04-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 273,
+      "train_period": "2024-03-26 00:00:00 ~ 2024-04-23 00:00:00",
+      "test_period": "2024-04-23 00:00:00 ~ 2024-04-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 274,
+      "train_period": "2024-04-02 00:00:00 ~ 2024-04-30 00:00:00",
+      "test_period": "2024-04-30 00:00:00 ~ 2024-05-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 275,
+      "train_period": "2024-04-09 00:00:00 ~ 2024-05-07 00:00:00",
+      "test_period": "2024-05-07 00:00:00 ~ 2024-05-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 276,
+      "train_period": "2024-04-16 00:00:00 ~ 2024-05-14 00:00:00",
+      "test_period": "2024-05-14 00:00:00 ~ 2024-05-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 277,
+      "train_period": "2024-04-23 00:00:00 ~ 2024-05-21 00:00:00",
+      "test_period": "2024-05-21 00:00:00 ~ 2024-05-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 278,
+      "train_period": "2024-04-30 00:00:00 ~ 2024-05-28 00:00:00",
+      "test_period": "2024-05-28 00:00:00 ~ 2024-06-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 279,
+      "train_period": "2024-05-07 00:00:00 ~ 2024-06-04 00:00:00",
+      "test_period": "2024-06-04 00:00:00 ~ 2024-06-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 280,
+      "train_period": "2024-05-14 00:00:00 ~ 2024-06-11 00:00:00",
+      "test_period": "2024-06-11 00:00:00 ~ 2024-06-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 281,
+      "train_period": "2024-05-21 00:00:00 ~ 2024-06-18 00:00:00",
+      "test_period": "2024-06-18 00:00:00 ~ 2024-06-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 282,
+      "train_period": "2024-05-28 00:00:00 ~ 2024-06-25 00:00:00",
+      "test_period": "2024-06-25 00:00:00 ~ 2024-07-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 283,
+      "train_period": "2024-06-04 00:00:00 ~ 2024-07-02 00:00:00",
+      "test_period": "2024-07-02 00:00:00 ~ 2024-07-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 284,
+      "train_period": "2024-06-11 00:00:00 ~ 2024-07-09 00:00:00",
+      "test_period": "2024-07-09 00:00:00 ~ 2024-07-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 285,
+      "train_period": "2024-06-18 00:00:00 ~ 2024-07-16 00:00:00",
+      "test_period": "2024-07-16 00:00:00 ~ 2024-07-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 286,
+      "train_period": "2024-06-25 00:00:00 ~ 2024-07-23 00:00:00",
+      "test_period": "2024-07-23 00:00:00 ~ 2024-07-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 287,
+      "train_period": "2024-07-02 00:00:00 ~ 2024-07-30 00:00:00",
+      "test_period": "2024-07-30 00:00:00 ~ 2024-08-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 288,
+      "train_period": "2024-07-09 00:00:00 ~ 2024-08-06 00:00:00",
+      "test_period": "2024-08-06 00:00:00 ~ 2024-08-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 289,
+      "train_period": "2024-07-16 00:00:00 ~ 2024-08-13 00:00:00",
+      "test_period": "2024-08-13 00:00:00 ~ 2024-08-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 290,
+      "train_period": "2024-07-23 00:00:00 ~ 2024-08-20 00:00:00",
+      "test_period": "2024-08-20 00:00:00 ~ 2024-08-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 291,
+      "train_period": "2024-07-30 00:00:00 ~ 2024-08-27 00:00:00",
+      "test_period": "2024-08-27 00:00:00 ~ 2024-09-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 292,
+      "train_period": "2024-08-06 00:00:00 ~ 2024-09-03 00:00:00",
+      "test_period": "2024-09-03 00:00:00 ~ 2024-09-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 293,
+      "train_period": "2024-08-13 00:00:00 ~ 2024-09-10 00:00:00",
+      "test_period": "2024-09-10 00:00:00 ~ 2024-09-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 294,
+      "train_period": "2024-08-20 00:00:00 ~ 2024-09-17 00:00:00",
+      "test_period": "2024-09-17 00:00:00 ~ 2024-09-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 295,
+      "train_period": "2024-08-27 00:00:00 ~ 2024-09-24 00:00:00",
+      "test_period": "2024-09-24 00:00:00 ~ 2024-10-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 296,
+      "train_period": "2024-09-03 00:00:00 ~ 2024-10-01 00:00:00",
+      "test_period": "2024-10-01 00:00:00 ~ 2024-10-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 297,
+      "train_period": "2024-09-10 00:00:00 ~ 2024-10-08 00:00:00",
+      "test_period": "2024-10-08 00:00:00 ~ 2024-10-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 298,
+      "train_period": "2024-09-17 00:00:00 ~ 2024-10-15 00:00:00",
+      "test_period": "2024-10-15 00:00:00 ~ 2024-10-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 299,
+      "train_period": "2024-09-24 00:00:00 ~ 2024-10-22 00:00:00",
+      "test_period": "2024-10-22 00:00:00 ~ 2024-10-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 300,
+      "train_period": "2024-10-01 00:00:00 ~ 2024-10-29 00:00:00",
+      "test_period": "2024-10-29 00:00:00 ~ 2024-11-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 301,
+      "train_period": "2024-10-08 00:00:00 ~ 2024-11-05 00:00:00",
+      "test_period": "2024-11-05 00:00:00 ~ 2024-11-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 302,
+      "train_period": "2024-10-15 00:00:00 ~ 2024-11-12 00:00:00",
+      "test_period": "2024-11-12 00:00:00 ~ 2024-11-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 303,
+      "train_period": "2024-10-22 00:00:00 ~ 2024-11-19 00:00:00",
+      "test_period": "2024-11-19 00:00:00 ~ 2024-11-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 304,
+      "train_period": "2024-10-29 00:00:00 ~ 2024-11-26 00:00:00",
+      "test_period": "2024-11-26 00:00:00 ~ 2024-12-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 305,
+      "train_period": "2024-11-05 00:00:00 ~ 2024-12-03 00:00:00",
+      "test_period": "2024-12-03 00:00:00 ~ 2024-12-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 306,
+      "train_period": "2024-11-12 00:00:00 ~ 2024-12-10 00:00:00",
+      "test_period": "2024-12-10 00:00:00 ~ 2024-12-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 307,
+      "train_period": "2024-11-19 00:00:00 ~ 2024-12-17 00:00:00",
+      "test_period": "2024-12-17 00:00:00 ~ 2024-12-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 308,
+      "train_period": "2024-11-26 00:00:00 ~ 2024-12-24 00:00:00",
+      "test_period": "2024-12-24 00:00:00 ~ 2024-12-31 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 309,
+      "train_period": "2024-12-03 00:00:00 ~ 2024-12-31 00:00:00",
+      "test_period": "2024-12-31 00:00:00 ~ 2025-01-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 310,
+      "train_period": "2024-12-10 00:00:00 ~ 2025-01-07 00:00:00",
+      "test_period": "2025-01-07 00:00:00 ~ 2025-01-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 311,
+      "train_period": "2024-12-17 00:00:00 ~ 2025-01-14 00:00:00",
+      "test_period": "2025-01-14 00:00:00 ~ 2025-01-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 312,
+      "train_period": "2024-12-24 00:00:00 ~ 2025-01-21 00:00:00",
+      "test_period": "2025-01-21 00:00:00 ~ 2025-01-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 313,
+      "train_period": "2024-12-31 00:00:00 ~ 2025-01-28 00:00:00",
+      "test_period": "2025-01-28 00:00:00 ~ 2025-02-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 314,
+      "train_period": "2025-01-07 00:00:00 ~ 2025-02-04 00:00:00",
+      "test_period": "2025-02-04 00:00:00 ~ 2025-02-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 315,
+      "train_period": "2025-01-14 00:00:00 ~ 2025-02-11 00:00:00",
+      "test_period": "2025-02-11 00:00:00 ~ 2025-02-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 316,
+      "train_period": "2025-01-21 00:00:00 ~ 2025-02-18 00:00:00",
+      "test_period": "2025-02-18 00:00:00 ~ 2025-02-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 317,
+      "train_period": "2025-01-28 00:00:00 ~ 2025-02-25 00:00:00",
+      "test_period": "2025-02-25 00:00:00 ~ 2025-03-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 318,
+      "train_period": "2025-02-04 00:00:00 ~ 2025-03-04 00:00:00",
+      "test_period": "2025-03-04 00:00:00 ~ 2025-03-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 319,
+      "train_period": "2025-02-11 00:00:00 ~ 2025-03-11 00:00:00",
+      "test_period": "2025-03-11 00:00:00 ~ 2025-03-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 320,
+      "train_period": "2025-02-18 00:00:00 ~ 2025-03-18 00:00:00",
+      "test_period": "2025-03-18 00:00:00 ~ 2025-03-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 321,
+      "train_period": "2025-02-25 00:00:00 ~ 2025-03-25 00:00:00",
+      "test_period": "2025-03-25 00:00:00 ~ 2025-04-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 322,
+      "train_period": "2025-03-04 00:00:00 ~ 2025-04-01 00:00:00",
+      "test_period": "2025-04-01 00:00:00 ~ 2025-04-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 323,
+      "train_period": "2025-03-11 00:00:00 ~ 2025-04-08 00:00:00",
+      "test_period": "2025-04-08 00:00:00 ~ 2025-04-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 324,
+      "train_period": "2025-03-18 00:00:00 ~ 2025-04-15 00:00:00",
+      "test_period": "2025-04-15 00:00:00 ~ 2025-04-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 325,
+      "train_period": "2025-03-25 00:00:00 ~ 2025-04-22 00:00:00",
+      "test_period": "2025-04-22 00:00:00 ~ 2025-04-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 326,
+      "train_period": "2025-04-01 00:00:00 ~ 2025-04-29 00:00:00",
+      "test_period": "2025-04-29 00:00:00 ~ 2025-05-06 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 327,
+      "train_period": "2025-04-08 00:00:00 ~ 2025-05-06 00:00:00",
+      "test_period": "2025-05-06 00:00:00 ~ 2025-05-13 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 328,
+      "train_period": "2025-04-15 00:00:00 ~ 2025-05-13 00:00:00",
+      "test_period": "2025-05-13 00:00:00 ~ 2025-05-20 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 329,
+      "train_period": "2025-04-22 00:00:00 ~ 2025-05-20 00:00:00",
+      "test_period": "2025-05-20 00:00:00 ~ 2025-05-27 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 330,
+      "train_period": "2025-04-29 00:00:00 ~ 2025-05-27 00:00:00",
+      "test_period": "2025-05-27 00:00:00 ~ 2025-06-03 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 331,
+      "train_period": "2025-05-06 00:00:00 ~ 2025-06-03 00:00:00",
+      "test_period": "2025-06-03 00:00:00 ~ 2025-06-10 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 332,
+      "train_period": "2025-05-13 00:00:00 ~ 2025-06-10 00:00:00",
+      "test_period": "2025-06-10 00:00:00 ~ 2025-06-17 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 333,
+      "train_period": "2025-05-20 00:00:00 ~ 2025-06-17 00:00:00",
+      "test_period": "2025-06-17 00:00:00 ~ 2025-06-24 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 334,
+      "train_period": "2025-05-27 00:00:00 ~ 2025-06-24 00:00:00",
+      "test_period": "2025-06-24 00:00:00 ~ 2025-07-01 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 335,
+      "train_period": "2025-06-03 00:00:00 ~ 2025-07-01 00:00:00",
+      "test_period": "2025-07-01 00:00:00 ~ 2025-07-08 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 336,
+      "train_period": "2025-06-10 00:00:00 ~ 2025-07-08 00:00:00",
+      "test_period": "2025-07-08 00:00:00 ~ 2025-07-15 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 337,
+      "train_period": "2025-06-17 00:00:00 ~ 2025-07-15 00:00:00",
+      "test_period": "2025-07-15 00:00:00 ~ 2025-07-22 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 338,
+      "train_period": "2025-06-24 00:00:00 ~ 2025-07-22 00:00:00",
+      "test_period": "2025-07-22 00:00:00 ~ 2025-07-29 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 339,
+      "train_period": "2025-07-01 00:00:00 ~ 2025-07-29 00:00:00",
+      "test_period": "2025-07-29 00:00:00 ~ 2025-08-05 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 340,
+      "train_period": "2025-07-08 00:00:00 ~ 2025-08-05 00:00:00",
+      "test_period": "2025-08-05 00:00:00 ~ 2025-08-12 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 341,
+      "train_period": "2025-07-15 00:00:00 ~ 2025-08-12 00:00:00",
+      "test_period": "2025-08-12 00:00:00 ~ 2025-08-19 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 342,
+      "train_period": "2025-07-22 00:00:00 ~ 2025-08-19 00:00:00",
+      "test_period": "2025-08-19 00:00:00 ~ 2025-08-26 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 343,
+      "train_period": "2025-07-29 00:00:00 ~ 2025-08-26 00:00:00",
+      "test_period": "2025-08-26 00:00:00 ~ 2025-09-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 344,
+      "train_period": "2025-08-05 00:00:00 ~ 2025-09-02 00:00:00",
+      "test_period": "2025-09-02 00:00:00 ~ 2025-09-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 345,
+      "train_period": "2025-08-12 00:00:00 ~ 2025-09-09 00:00:00",
+      "test_period": "2025-09-09 00:00:00 ~ 2025-09-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 346,
+      "train_period": "2025-08-19 00:00:00 ~ 2025-09-16 00:00:00",
+      "test_period": "2025-09-16 00:00:00 ~ 2025-09-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 347,
+      "train_period": "2025-08-26 00:00:00 ~ 2025-09-23 00:00:00",
+      "test_period": "2025-09-23 00:00:00 ~ 2025-09-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 348,
+      "train_period": "2025-09-02 00:00:00 ~ 2025-09-30 00:00:00",
+      "test_period": "2025-09-30 00:00:00 ~ 2025-10-07 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 349,
+      "train_period": "2025-09-09 00:00:00 ~ 2025-10-07 00:00:00",
+      "test_period": "2025-10-07 00:00:00 ~ 2025-10-14 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 350,
+      "train_period": "2025-09-16 00:00:00 ~ 2025-10-14 00:00:00",
+      "test_period": "2025-10-14 00:00:00 ~ 2025-10-21 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 351,
+      "train_period": "2025-09-23 00:00:00 ~ 2025-10-21 00:00:00",
+      "test_period": "2025-10-21 00:00:00 ~ 2025-10-28 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 352,
+      "train_period": "2025-09-30 00:00:00 ~ 2025-10-28 00:00:00",
+      "test_period": "2025-10-28 00:00:00 ~ 2025-11-04 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 353,
+      "train_period": "2025-10-07 00:00:00 ~ 2025-11-04 00:00:00",
+      "test_period": "2025-11-04 00:00:00 ~ 2025-11-11 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 354,
+      "train_period": "2025-10-14 00:00:00 ~ 2025-11-11 00:00:00",
+      "test_period": "2025-11-11 00:00:00 ~ 2025-11-18 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 355,
+      "train_period": "2025-10-21 00:00:00 ~ 2025-11-18 00:00:00",
+      "test_period": "2025-11-18 00:00:00 ~ 2025-11-25 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 356,
+      "train_period": "2025-10-28 00:00:00 ~ 2025-11-25 00:00:00",
+      "test_period": "2025-11-25 00:00:00 ~ 2025-12-02 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 357,
+      "train_period": "2025-11-04 00:00:00 ~ 2025-12-02 00:00:00",
+      "test_period": "2025-12-02 00:00:00 ~ 2025-12-09 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 358,
+      "train_period": "2025-11-11 00:00:00 ~ 2025-12-09 00:00:00",
+      "test_period": "2025-12-09 00:00:00 ~ 2025-12-16 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 359,
+      "train_period": "2025-11-18 00:00:00 ~ 2025-12-16 00:00:00",
+      "test_period": "2025-12-16 00:00:00 ~ 2025-12-23 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 360,
+      "train_period": "2025-11-25 00:00:00 ~ 2025-12-23 00:00:00",
+      "test_period": "2025-12-23 00:00:00 ~ 2025-12-30 00:00:00",
+      "train_score": -10,
+      "test_score": -10,
+      "is_overfit": false
+    }
+  ]
+}

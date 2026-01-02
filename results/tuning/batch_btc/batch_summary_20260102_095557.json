@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-01-02T09:55:57.898235",
+  "symbol": "BTC-USDT",
+  "market": "spot",
+  "days": 2588,
+  "elapsed_seconds": 0.0,
+  "results": {
+    "5m": {
+      "status": "dry_run",
+      "timeframe": "5m"
+    },
+    "15m": {
+      "status": "dry_run",
+      "timeframe": "15m"
+    },
+    "1h": {
+      "status": "dry_run",
+      "timeframe": "1h"
+    },
+    "4h": {
+      "status": "dry_run",
+      "timeframe": "4h"
+    },
+    "1d": {
+      "status": "dry_run",
+      "timeframe": "1d"
+    },
+    "1w": {
+      "status": "dry_run",
+      "timeframe": "1w"
+    }
+  }
+}

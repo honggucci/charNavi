@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-01-02T13:02:41.026305",
+  "symbol": "BTC-USDT",
+  "market": "spot",
+  "days": 2588,
+  "elapsed_seconds": 55.332255,
+  "results": {
+    "1d": {
+      "status": "failed",
+      "timeframe": "1d",
+      "error": "No result returned"
+    }
+  }
+}

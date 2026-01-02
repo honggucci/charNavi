@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "market": "spot",
+  "symbol": "BTC-USDT",
+  "timeframe": "15m",
+  "unit": "minutes",
+  "params": {
+    "box_window_minutes": 405,
+    "freeze_minutes": 180,
+    "pivot_window_minutes": 60,
+    "atr_len": 16,
+    "x_atr": 0.4284367190358155,
+    "m_bw": 0.10518774452497172,
+    "sl_pct": 0.00954098866276842,
+    "tp_pct": 0.023007543777138657,
+    "min_score": 3.7838517751242136,
+    "rsi_oversold": 34,
+    "rsi_overbought": 66
+  },
+  "created_at": "2026-01-02T19:53:43.827977",
+  "valid_until": null,
+  "optimization_method": "adaptive_tuning_v2.1",
+  "confidence": {
+    "overfit_ratio": 0.0,
+    "cv_consistency": 0.0,
+    "temporal_stability": 0.0,
+    "oos_performance": null,
+    "n_complete_cycles": 0,
+    "n_high_purity_cycles": 0,
+    "fold_consistency": 0.0,
+    "fft_reliability": 0.0,
+    "sensitivity_score": 0.0,
+    "stability_grade": "",
+    "unstable_params": [],
+    "oos_pending": false,
+    "oos_skip_reason": "",
+    "confidence_score": 0.0
+  },
+  "performance": {
+    "train": {
+      "score": 0.0
+    },
+    "val": {
+      "score": 0.0
+    },
+    "oos": null
+  },
+  "n_folds": 0,
+  "data_period": ""
+}

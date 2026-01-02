@@ -1,0 +1,5682 @@
+{
+  "analysis_date": "2026-01-02T19:54:43.412720",
+  "version": "v2_claude_code",
+  "symbol": "BTC-USDT",
+  "market": "spot",
+  "days_analyzed": 90,
+  "theta_config": {
+    "pivot_lr": 4,
+    "box_L": 96,
+    "m_freeze": 32,
+    "atr_len": 14,
+    "x_atr": 0.35,
+    "m_bw": 0.1,
+    "N_reclaim": 3,
+    "N_fill": 5,
+    "F_min": 0.7
+  },
+  "timeframes": {
+    "15m": {
+      "timeframe": "15m",
+      "symbol": "BTC-USDT",
+      "market": "spot",
+      "days_analyzed": 90,
+      "candles_count": 8641,
+      "date_range": {
+        "start": "2025-10-01T03:30:00",
+        "end": "2025-12-30T03:30:00"
+      },
+      "wyckoff_stats": {
+        "overall": {
+          "total_cycles": 213,
+          "complete_cycles": 73,
+          "abc_cycles": 0,
+          "high_purity_cycles": 60,
+          "incomplete_cycles": 140,
+          "mixed_direction_cycles": 23,
+          "sequence_type_counts": {
+            "incomplete": 138,
+            "B-C": 73,
+            "C-only": 2
+          },
+          "mean_length": 39.397260273972606,
+          "median_length": 33.0,
+          "min_length": 33,
+          "max_length": 99,
+          "std_length": 14.999759003644948,
+          "percentile_25": 33.0,
+          "percentile_75": 33.0
+        },
+        "by_direction": {
+          "accumulation": {
+            "count": 6,
+            "mean_length": 33.0,
+            "median_length": 33.0,
+            "min_length": 33,
+            "max_length": 33,
+            "std_length": 0.0,
+            "percentile_25": 33.0,
+            "percentile_75": 33.0,
+            "avg_purity": 0.7573333333333333
+          },
+          "distribution": {
+            "count": 5,
+            "mean_length": 33.0,
+            "median_length": 33.0,
+            "min_length": 33,
+            "max_length": 33,
+            "std_length": 0.0,
+            "percentile_25": 33.0,
+            "percentile_75": 33.0,
+            "avg_purity": 0.7818
+          },
+          "re_accumulation": {
+            "count": 20,
+            "mean_length": 41.5,
+            "median_length": 33.0,
+            "min_length": 33,
+            "max_length": 68,
+            "std_length": 13.736237131263998,
+            "percentile_25": 33.0,
+            "percentile_75": 52.0,
+            "avg_purity": 0.78215
+          },
+          "re_distribution": {
+            "count": 29,
+            "mean_length": 42.10344827586207,
+            "median_length": 33.0,
+            "min_length": 33,
+            "max_length": 99,
+            "std_length": 19.516192594843258,
+            "percentile_25": 33.0,
+            "percentile_75": 33.0,
+            "avg_purity": 0.786551724137931
+          }
+        }
+      },
+      "recommended_params": {
+        "recommended_box_L": 33,
+        "recommended_max_hold_bars": 33,
+        "recommended_fft_cycle": null,
+        "time_estimates": {
+          "box_L_hours": 8.2,
+          "max_hold_hours": 8.2
+        },
+        "confidence": "high",
+        "basis": {
+          "median_cycle": 33.0,
+          "p75_cycle": 33.0,
+          "complete_cycles": 73,
+          "high_purity_cycles": 60
+        }
+      },
+      "fft_cycles": {
+        "dominant_cycle": 99,
+        "dominant_power": NaN,
+        "peak_ratio": 0.0,
+        "reliable": false,
+        "top_3_cycles": [
+          [
+            5,
+            NaN
+          ],
+          [
+            5,
+            NaN
+          ],
+          [
+            5,
+            NaN
+          ]
+        ]
+      },
+      "cycles_detail": [
+        {
+          "start_time": "2025-10-02T03:15:00",
+          "end_time": "2025-10-02T11:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "unknown",
+            "B"
+          ],
+          "sub_phases": [
+            "",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-02T11:30:00",
+          "end_time": "2025-10-02T19:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-02T19:45:00",
+          "end_time": "2025-10-03T03:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-03T04:00:00",
+          "end_time": "2025-10-03T12:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-03T12:15:00",
+          "end_time": "2025-10-03T20:15:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.636,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-03T20:30:00",
+          "end_time": "2025-10-04T11:45:00",
+          "length": 62,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-04T12:00:00",
+          "end_time": "2025-10-04T20:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST"
+          ],
+          "max_confidence": 0.6
+        },
+        {
+          "start_time": "2025-10-04T20:15:00",
+          "end_time": "2025-10-05T04:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-05T04:30:00",
+          "end_time": "2025-10-05T12:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "UTAD_forming",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-05T12:45:00",
+          "end_time": "2025-10-05T20:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-05T21:00:00",
+          "end_time": "2025-10-06T05:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-06T05:15:00",
+          "end_time": "2025-10-06T13:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-06T13:30:00",
+          "end_time": "2025-10-06T21:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-06T21:45:00",
+          "end_time": "2025-10-07T05:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-07T06:00:00",
+          "end_time": "2025-10-07T14:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.97,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-07T14:15:00",
+          "end_time": "2025-10-07T22:15:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "C-only",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "D"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "SOW"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-07T22:30:00",
+          "end_time": "2025-10-08T18:00:00",
+          "length": 79,
+          "direction": "re_distribution",
+          "direction_purity": 0.924,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-10-08T18:15:00",
+          "end_time": "2025-10-09T02:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.818,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-09T02:30:00",
+          "end_time": "2025-10-09T18:45:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.803,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-09T19:00:00",
+          "end_time": "2025-10-10T19:30:00",
+          "length": 99,
+          "direction": "re_distribution",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-10T21:15:00",
+          "end_time": "2025-10-11T17:00:00",
+          "length": 80,
+          "direction": "re_distribution",
+          "direction_purity": 0.9,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "SC",
+            "AR",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-11T17:15:00",
+          "end_time": "2025-10-12T01:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-12T01:30:00",
+          "end_time": "2025-10-12T09:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-12T09:45:00",
+          "end_time": "2025-10-12T17:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.636,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-12T18:00:00",
+          "end_time": "2025-10-13T02:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReDistrib",
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-13T03:00:00",
+          "end_time": "2025-10-13T11:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-13T11:15:00",
+          "end_time": "2025-10-13T19:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-13T19:30:00",
+          "end_time": "2025-10-14T03:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.939,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-14T03:45:00",
+          "end_time": "2025-10-14T11:45:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-14T12:00:00",
+          "end_time": "2025-10-15T02:30:00",
+          "length": 59,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-15T02:45:00",
+          "end_time": "2025-10-15T19:00:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-15T19:15:00",
+          "end_time": "2025-10-16T11:30:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-16T11:45:00",
+          "end_time": "2025-10-16T19:45:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-16T20:00:00",
+          "end_time": "2025-10-17T04:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-17T04:15:00",
+          "end_time": "2025-10-17T12:15:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-17T15:15:00",
+          "end_time": "2025-10-17T23:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-17T23:30:00",
+          "end_time": "2025-10-18T07:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-18T07:45:00",
+          "end_time": "2025-10-18T15:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-18T16:00:00",
+          "end_time": "2025-10-19T00:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-19T00:15:00",
+          "end_time": "2025-10-19T08:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-19T08:30:00",
+          "end_time": "2025-10-19T16:30:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C",
+            "D"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming",
+            "SOS",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-19T17:15:00",
+          "end_time": "2025-10-20T10:00:00",
+          "length": 68,
+          "direction": "re_accumulation",
+          "direction_purity": 0.618,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-20T10:15:00",
+          "end_time": "2025-10-21T02:30:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-21T02:45:00",
+          "end_time": "2025-10-21T10:45:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.848,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-21T11:00:00",
+          "end_time": "2025-10-21T19:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.455,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "BC",
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-21T19:15:00",
+          "end_time": "2025-10-22T18:45:00",
+          "length": 95,
+          "direction": "re_distribution",
+          "direction_purity": 0.684,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-22T19:00:00",
+          "end_time": "2025-10-23T03:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-23T03:15:00",
+          "end_time": "2025-10-23T11:15:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-23T11:30:00",
+          "end_time": "2025-10-23T19:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.515,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-23T19:45:00",
+          "end_time": "2025-10-24T03:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-24T04:00:00",
+          "end_time": "2025-10-24T12:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-24T12:15:00",
+          "end_time": "2025-10-24T20:15:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-24T20:30:00",
+          "end_time": "2025-10-25T04:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-25T04:45:00",
+          "end_time": "2025-10-25T12:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-25T13:00:00",
+          "end_time": "2025-10-25T21:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-25T21:15:00",
+          "end_time": "2025-10-26T05:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-26T05:30:00",
+          "end_time": "2025-10-26T13:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-26T13:45:00",
+          "end_time": "2025-10-26T21:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-10-26T22:00:00",
+          "end_time": "2025-10-27T12:15:00",
+          "length": 58,
+          "direction": "re_accumulation",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-27T12:30:00",
+          "end_time": "2025-10-28T04:45:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-28T05:00:00",
+          "end_time": "2025-10-28T13:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-28T13:15:00",
+          "end_time": "2025-10-28T21:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "UTAD_forming",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-28T21:30:00",
+          "end_time": "2025-10-29T15:45:00",
+          "length": 74,
+          "direction": "re_distribution",
+          "direction_purity": 0.932,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-29T16:00:00",
+          "end_time": "2025-10-30T00:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.697,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-30T00:15:00",
+          "end_time": "2025-10-30T08:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.848,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C",
+            "D"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming",
+            "SOW"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-30T08:30:00",
+          "end_time": "2025-10-30T16:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.939,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-30T16:45:00",
+          "end_time": "2025-10-31T00:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-31T01:00:00",
+          "end_time": "2025-10-31T09:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-31T09:15:00",
+          "end_time": "2025-10-31T17:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-31T17:30:00",
+          "end_time": "2025-11-01T01:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-01T01:45:00",
+          "end_time": "2025-11-01T18:00:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 0.606,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-01T18:15:00",
+          "end_time": "2025-11-02T02:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-02T02:30:00",
+          "end_time": "2025-11-02T10:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.606,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-02T10:45:00",
+          "end_time": "2025-11-02T18:45:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-02T19:00:00",
+          "end_time": "2025-11-03T03:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.424,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "Spring_forming",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-03T04:00:00",
+          "end_time": "2025-11-03T06:30:00",
+          "length": 11,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-03T06:45:00",
+          "end_time": "2025-11-03T10:30:00",
+          "length": 16,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-03T12:30:00",
+          "end_time": "2025-11-03T22:45:00",
+          "length": 42,
+          "direction": "re_distribution",
+          "direction_purity": 0.833,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "SC",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-03T23:00:00",
+          "end_time": "2025-11-04T07:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.788,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-04T07:15:00",
+          "end_time": "2025-11-04T15:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C",
+            "D"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming",
+            "ST",
+            "SOW"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-04T15:30:00",
+          "end_time": "2025-11-04T23:30:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "C-only",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C"
+          ],
+          "sub_phases": [
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-04T23:45:00",
+          "end_time": "2025-11-05T12:30:00",
+          "length": 52,
+          "direction": "re_distribution",
+          "direction_purity": 0.865,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-11-05T12:45:00",
+          "end_time": "2025-11-05T20:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.72
+        },
+        {
+          "start_time": "2025-11-05T21:00:00",
+          "end_time": "2025-11-06T05:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-06T05:15:00",
+          "end_time": "2025-11-06T13:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-06T13:30:00",
+          "end_time": "2025-11-06T21:30:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-06T21:45:00",
+          "end_time": "2025-11-07T05:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-11-07T06:00:00",
+          "end_time": "2025-11-07T14:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-07T14:15:00",
+          "end_time": "2025-11-07T22:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-07T22:30:00",
+          "end_time": "2025-11-08T14:45:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-08T15:00:00",
+          "end_time": "2025-11-08T23:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-08T23:15:00",
+          "end_time": "2025-11-09T07:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-09T07:30:00",
+          "end_time": "2025-11-09T15:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-09T15:45:00",
+          "end_time": "2025-11-09T23:45:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-10T00:45:00",
+          "end_time": "2025-11-10T15:45:00",
+          "length": 61,
+          "direction": "re_accumulation",
+          "direction_purity": 0.967,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.76
+        },
+        {
+          "start_time": "2025-11-10T16:00:00",
+          "end_time": "2025-11-11T00:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-11T00:15:00",
+          "end_time": "2025-11-11T08:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.788,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-11T08:30:00",
+          "end_time": "2025-11-11T16:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.515,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-11T17:30:00",
+          "end_time": "2025-11-11T21:15:00",
+          "length": 16,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-11T21:30:00",
+          "end_time": "2025-11-12T01:00:00",
+          "length": 15,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-12T01:15:00",
+          "end_time": "2025-11-12T09:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST"
+          ],
+          "max_confidence": 0.6
+        },
+        {
+          "start_time": "2025-11-12T09:30:00",
+          "end_time": "2025-11-12T17:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.515,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-12T17:45:00",
+          "end_time": "2025-11-13T01:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-13T02:00:00",
+          "end_time": "2025-11-13T18:15:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.924,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-13T18:30:00",
+          "end_time": "2025-11-14T02:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-11-14T02:45:00",
+          "end_time": "2025-11-14T10:45:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-14T11:00:00",
+          "end_time": "2025-11-14T19:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.697,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-14T19:15:00",
+          "end_time": "2025-11-15T03:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.97,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-15T03:30:00",
+          "end_time": "2025-11-15T11:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-15T11:45:00",
+          "end_time": "2025-11-15T19:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-15T20:00:00",
+          "end_time": "2025-11-16T04:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-16T04:15:00",
+          "end_time": "2025-11-16T12:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-16T12:30:00",
+          "end_time": "2025-11-16T20:30:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C",
+            "D"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming",
+            "SOW"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-16T22:00:00",
+          "end_time": "2025-11-17T12:15:00",
+          "length": 58,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-17T12:30:00",
+          "end_time": "2025-11-17T20:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-17T20:45:00",
+          "end_time": "2025-11-18T04:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.697,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-18T05:00:00",
+          "end_time": "2025-11-18T15:45:00",
+          "length": 44,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-18T16:00:00",
+          "end_time": "2025-11-19T00:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-19T00:15:00",
+          "end_time": "2025-11-19T08:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-19T08:30:00",
+          "end_time": "2025-11-19T16:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-19T16:45:00",
+          "end_time": "2025-11-20T00:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.697,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-20T01:00:00",
+          "end_time": "2025-11-20T09:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-20T09:15:00",
+          "end_time": "2025-11-20T17:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-20T17:30:00",
+          "end_time": "2025-11-21T01:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-11-21T02:45:00",
+          "end_time": "2025-11-21T12:30:00",
+          "length": 40,
+          "direction": "mixed",
+          "direction_purity": 0.55,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "Spring_forming",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-21T14:30:00",
+          "end_time": "2025-11-21T22:30:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.667,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-21T22:45:00",
+          "end_time": "2025-11-22T06:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-22T07:00:00",
+          "end_time": "2025-11-22T15:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-22T15:15:00",
+          "end_time": "2025-11-22T23:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-22T23:30:00",
+          "end_time": "2025-11-23T07:30:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.758,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-23T07:45:00",
+          "end_time": "2025-11-23T15:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.667,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-23T16:00:00",
+          "end_time": "2025-11-24T00:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.697,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-24T00:15:00",
+          "end_time": "2025-11-24T08:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.667,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-24T08:30:00",
+          "end_time": "2025-11-24T16:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-24T16:45:00",
+          "end_time": "2025-11-25T00:45:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.636,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-25T01:00:00",
+          "end_time": "2025-11-25T17:15:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-25T17:30:00",
+          "end_time": "2025-11-26T01:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-26T01:45:00",
+          "end_time": "2025-11-26T09:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-26T10:00:00",
+          "end_time": "2025-11-26T18:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-26T19:30:00",
+          "end_time": "2025-11-26T21:45:00",
+          "length": 10,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-26T22:00:00",
+          "end_time": "2025-11-27T00:45:00",
+          "length": 12,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-27T02:30:00",
+          "end_time": "2025-11-27T13:45:00",
+          "length": 46,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-27T14:00:00",
+          "end_time": "2025-11-27T22:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-27T22:15:00",
+          "end_time": "2025-11-28T06:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-28T06:30:00",
+          "end_time": "2025-11-28T14:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-28T14:45:00",
+          "end_time": "2025-11-28T17:00:00",
+          "length": 10,
+          "direction": "re_accumulation",
+          "direction_purity": 0.9,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-11-28T17:30:00",
+          "end_time": "2025-11-29T18:00:00",
+          "length": 99,
+          "direction": "re_accumulation",
+          "direction_purity": 0.727,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-29T18:15:00",
+          "end_time": "2025-11-30T02:15:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-30T02:30:00",
+          "end_time": "2025-11-30T10:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.848,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-30T10:45:00",
+          "end_time": "2025-11-30T18:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.788,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "UTAD_forming",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-30T19:00:00",
+          "end_time": "2025-12-01T03:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-01T04:15:00",
+          "end_time": "2025-12-01T12:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-01T12:30:00",
+          "end_time": "2025-12-01T20:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-01T20:45:00",
+          "end_time": "2025-12-02T04:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-02T05:00:00",
+          "end_time": "2025-12-02T13:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.758,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C",
+            "D"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "UTAD_forming",
+            "SOS"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-02T13:15:00",
+          "end_time": "2025-12-02T21:15:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "BC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-02T21:30:00",
+          "end_time": "2025-12-03T09:45:00",
+          "length": 50,
+          "direction": "re_accumulation",
+          "direction_purity": 0.68,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-03T10:00:00",
+          "end_time": "2025-12-03T18:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.818,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-12-03T18:15:00",
+          "end_time": "2025-12-04T02:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-04T02:30:00",
+          "end_time": "2025-12-04T18:45:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-04T19:00:00",
+          "end_time": "2025-12-05T03:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-05T03:15:00",
+          "end_time": "2025-12-05T11:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.848,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-05T11:30:00",
+          "end_time": "2025-12-05T19:30:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.697,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-05T19:45:00",
+          "end_time": "2025-12-06T03:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-06T04:00:00",
+          "end_time": "2025-12-06T12:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-06T12:15:00",
+          "end_time": "2025-12-06T20:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-06T20:30:00",
+          "end_time": "2025-12-07T21:00:00",
+          "length": 99,
+          "direction": "re_distribution",
+          "direction_purity": 0.778,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-07T21:15:00",
+          "end_time": "2025-12-08T13:00:00",
+          "length": 64,
+          "direction": "re_accumulation",
+          "direction_purity": 0.969,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-08T13:15:00",
+          "end_time": "2025-12-08T21:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-08T21:30:00",
+          "end_time": "2025-12-09T05:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-09T05:45:00",
+          "end_time": "2025-12-09T13:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-09T14:00:00",
+          "end_time": "2025-12-09T22:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-09T22:15:00",
+          "end_time": "2025-12-10T11:45:00",
+          "length": 55,
+          "direction": "re_accumulation",
+          "direction_purity": 0.836,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-12-10T12:00:00",
+          "end_time": "2025-12-10T20:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-10T20:15:00",
+          "end_time": "2025-12-11T04:15:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-11T04:30:00",
+          "end_time": "2025-12-11T20:45:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-11T21:00:00",
+          "end_time": "2025-12-12T05:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-12T05:15:00",
+          "end_time": "2025-12-12T21:30:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 0.742,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-12T21:45:00",
+          "end_time": "2025-12-13T05:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-13T06:00:00",
+          "end_time": "2025-12-13T22:15:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-13T22:30:00",
+          "end_time": "2025-12-14T14:45:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.758,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-14T16:45:00",
+          "end_time": "2025-12-14T19:45:00",
+          "length": 13,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-14T20:00:00",
+          "end_time": "2025-12-14T22:15:00",
+          "length": 10,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-14T23:30:00",
+          "end_time": "2025-12-15T12:30:00",
+          "length": 53,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-15T12:45:00",
+          "end_time": "2025-12-15T20:45:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-15T21:00:00",
+          "end_time": "2025-12-16T19:30:00",
+          "length": 91,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-16T19:45:00",
+          "end_time": "2025-12-17T12:00:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-17T12:15:00",
+          "end_time": "2025-12-17T20:15:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.485,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "BC",
+            "AR_dist",
+            "SC",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-17T20:30:00",
+          "end_time": "2025-12-18T19:00:00",
+          "length": 91,
+          "direction": "re_distribution",
+          "direction_purity": 0.813,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "ReAccum",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-18T19:15:00",
+          "end_time": "2025-12-19T03:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-19T03:30:00",
+          "end_time": "2025-12-20T04:00:00",
+          "length": 99,
+          "direction": "re_accumulation",
+          "direction_purity": 0.798,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-20T04:15:00",
+          "end_time": "2025-12-20T12:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-20T12:30:00",
+          "end_time": "2025-12-20T20:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-20T20:45:00",
+          "end_time": "2025-12-21T13:00:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 0.803,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-21T13:45:00",
+          "end_time": "2025-12-22T05:00:00",
+          "length": 62,
+          "direction": "re_accumulation",
+          "direction_purity": 0.968,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-22T05:15:00",
+          "end_time": "2025-12-22T13:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.636,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-22T13:30:00",
+          "end_time": "2025-12-22T21:30:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-22T21:45:00",
+          "end_time": "2025-12-23T05:45:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.697,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-23T06:00:00",
+          "end_time": "2025-12-23T14:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.97,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "Spring_forming",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-23T14:15:00",
+          "end_time": "2025-12-23T22:15:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.909,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-23T22:30:00",
+          "end_time": "2025-12-24T06:30:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-24T06:45:00",
+          "end_time": "2025-12-24T14:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-24T15:00:00",
+          "end_time": "2025-12-24T23:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-24T23:15:00",
+          "end_time": "2025-12-25T15:30:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-25T15:45:00",
+          "end_time": "2025-12-26T08:00:00",
+          "length": 66,
+          "direction": "mixed",
+          "direction_purity": 0.561,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-26T08:15:00",
+          "end_time": "2025-12-26T22:00:00",
+          "length": 56,
+          "direction": "mixed",
+          "direction_purity": 0.321,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST",
+            "Spring_forming",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-26T22:15:00",
+          "end_time": "2025-12-27T14:30:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-27T14:45:00",
+          "end_time": "2025-12-27T22:45:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.879,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-27T23:00:00",
+          "end_time": "2025-12-28T07:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.76
+        },
+        {
+          "start_time": "2025-12-28T07:15:00",
+          "end_time": "2025-12-28T15:15:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.879,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-28T15:30:00",
+          "end_time": "2025-12-29T07:45:00",
+          "length": 66,
+          "direction": "mixed",
+          "direction_purity": 0.424,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-29T08:00:00",
+          "end_time": "2025-12-29T11:45:00",
+          "length": 16,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-29T12:00:00",
+          "end_time": "2025-12-30T03:30:00",
+          "length": 63,
+          "direction": "re_distribution",
+          "direction_purity": 0.667,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        }
+      ]
+    },
+    "1h": {
+      "timeframe": "1h",
+      "symbol": "BTC-USDT",
+      "market": "spot",
+      "days_analyzed": 90,
+      "candles_count": 2161,
+      "date_range": {
+        "start": "2025-10-01T03:00:00",
+        "end": "2025-12-30T03:00:00"
+      },
+      "wyckoff_stats": {
+        "overall": {
+          "total_cycles": 53,
+          "complete_cycles": 8,
+          "abc_cycles": 4,
+          "high_purity_cycles": 6,
+          "incomplete_cycles": 45,
+          "mixed_direction_cycles": 14,
+          "sequence_type_counts": {
+            "incomplete": 45,
+            "B-C": 4,
+            "A-B-C": 4
+          },
+          "mean_length": 45.375,
+          "median_length": 33.0,
+          "min_length": 33,
+          "max_length": 99,
+          "std_length": 24.552785701713884,
+          "percentile_25": 33.0,
+          "percentile_75": 41.25
+        },
+        "by_direction": {
+          "accumulation": {
+            "count": 3,
+            "mean_length": 33.0,
+            "median_length": 33.0,
+            "min_length": 33,
+            "max_length": 33,
+            "std_length": 0.0,
+            "percentile_25": 33.0,
+            "percentile_75": 33.0,
+            "avg_purity": 0.7676666666666666
+          },
+          "distribution": {
+            "count": 1,
+            "mean_length": 33.0,
+            "median_length": 33.0,
+            "min_length": 33,
+            "max_length": 33,
+            "std_length": 0.0,
+            "percentile_25": 33.0,
+            "percentile_75": 33.0,
+            "avg_purity": 0.848
+          },
+          "re_accumulation": {
+            "count": 2,
+            "mean_length": 49.5,
+            "median_length": 49.5,
+            "min_length": 33,
+            "max_length": 66,
+            "std_length": 23.33452377915607,
+            "percentile_25": 41.25,
+            "percentile_75": 57.75,
+            "avg_purity": 0.8939999999999999
+          }
+        }
+      },
+      "recommended_params": {
+        "recommended_box_L": 33,
+        "recommended_max_hold_bars": 41,
+        "recommended_fft_cycle": null,
+        "time_estimates": {
+          "box_L_hours": 33.0,
+          "max_hold_hours": 41.0
+        },
+        "confidence": "high",
+        "basis": {
+          "median_cycle": 33.0,
+          "p75_cycle": 41.25,
+          "complete_cycles": 8,
+          "high_purity_cycles": 6
+        }
+      },
+      "fft_cycles": {
+        "dominant_cycle": 98,
+        "dominant_power": NaN,
+        "peak_ratio": 0.0,
+        "reliable": false,
+        "top_3_cycles": [
+          [
+            5,
+            NaN
+          ],
+          [
+            5,
+            NaN
+          ],
+          [
+            5,
+            NaN
+          ]
+        ]
+      },
+      "cycles_detail": [
+        {
+          "start_time": "2025-10-05T02:00:00",
+          "end_time": "2025-10-06T10:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.879,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "unknown",
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "",
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-06T11:00:00",
+          "end_time": "2025-10-07T19:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.97,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-07T20:00:00",
+          "end_time": "2025-10-10T13:00:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-10T14:00:00",
+          "end_time": "2025-10-11T22:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.97,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "Spring_forming",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-11T23:00:00",
+          "end_time": "2025-10-14T04:00:00",
+          "length": 54,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-14T05:00:00",
+          "end_time": "2025-10-15T13:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-15T14:00:00",
+          "end_time": "2025-10-16T22:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "SC",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-16T23:00:00",
+          "end_time": "2025-10-18T07:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "SC",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-18T08:00:00",
+          "end_time": "2025-10-19T16:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-19T17:00:00",
+          "end_time": "2025-10-21T01:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST"
+          ],
+          "max_confidence": 0.6
+        },
+        {
+          "start_time": "2025-10-21T02:00:00",
+          "end_time": "2025-10-22T10:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "BC",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-22T11:00:00",
+          "end_time": "2025-10-23T19:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-23T20:00:00",
+          "end_time": "2025-10-27T22:00:00",
+          "length": 99,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "UTAD_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-27T23:00:00",
+          "end_time": "2025-10-29T07:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B"
+          ],
+          "sub_phases": [
+            "UTAD_forming",
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-10-29T08:00:00",
+          "end_time": "2025-10-30T16:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.697,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "Spring_forming",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-10-30T17:00:00",
+          "end_time": "2025-11-01T01:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-01T02:00:00",
+          "end_time": "2025-11-02T10:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-02T11:00:00",
+          "end_time": "2025-11-03T19:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.848,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-03T20:00:00",
+          "end_time": "2025-11-05T04:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.758,
+          "complete": true,
+          "sequence_type": "A-B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "A",
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "SC",
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-05T05:00:00",
+          "end_time": "2025-11-06T11:00:00",
+          "length": 31,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-06T12:00:00",
+          "end_time": "2025-11-07T21:00:00",
+          "length": 34,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-07T22:00:00",
+          "end_time": "2025-11-09T06:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-09T07:00:00",
+          "end_time": "2025-11-10T15:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.636,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "UTAD_forming",
+            "BC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-10T16:00:00",
+          "end_time": "2025-11-12T00:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.515,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-12T01:00:00",
+          "end_time": "2025-11-13T09:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-13T10:00:00",
+          "end_time": "2025-11-14T18:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.818,
+          "complete": true,
+          "sequence_type": "B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-15T04:00:00",
+          "end_time": "2025-11-17T01:00:00",
+          "length": 46,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-17T02:00:00",
+          "end_time": "2025-11-18T10:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "SC",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-18T11:00:00",
+          "end_time": "2025-11-19T19:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.485,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "BC",
+            "ST",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-19T20:00:00",
+          "end_time": "2025-11-21T04:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": true,
+          "sequence_type": "A-B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "A",
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "SC",
+            "ST",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-21T05:00:00",
+          "end_time": "2025-11-22T13:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.727,
+          "complete": true,
+          "sequence_type": "A-B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "A",
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "SC",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-22T14:00:00",
+          "end_time": "2025-11-24T00:00:00",
+          "length": 35,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-24T01:00:00",
+          "end_time": "2025-11-25T09:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-25T10:00:00",
+          "end_time": "2025-11-26T18:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.939,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "BC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-26T19:00:00",
+          "end_time": "2025-11-28T03:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.848,
+          "complete": true,
+          "sequence_type": "A-B-C",
+          "phase_sequence_valid": true,
+          "phases_seen": [
+            "A",
+            "B",
+            "C"
+          ],
+          "sub_phases": [
+            "BC",
+            "ST",
+            "UTAD_forming",
+            "ReAccum"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-28T04:00:00",
+          "end_time": "2025-11-29T12:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.545,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "UTAD_forming",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-29T13:00:00",
+          "end_time": "2025-11-30T21:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-30T22:00:00",
+          "end_time": "2025-12-02T06:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.939,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "SC",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-02T07:00:00",
+          "end_time": "2025-12-03T15:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.424,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "BC",
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-12-03T16:00:00",
+          "end_time": "2025-12-06T09:00:00",
+          "length": 66,
+          "direction": "re_accumulation",
+          "direction_purity": 0.833,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-06T10:00:00",
+          "end_time": "2025-12-07T18:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.848,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ReDistrib",
+            "ST",
+            "BC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-07T19:00:00",
+          "end_time": "2025-12-09T03:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.606,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "BC",
+            "AR_dist",
+            "ST",
+            "ReDistrib",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-09T04:00:00",
+          "end_time": "2025-12-10T12:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 0.788,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "BC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-10T13:00:00",
+          "end_time": "2025-12-11T21:00:00",
+          "length": 33,
+          "direction": "re_accumulation",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ST"
+          ],
+          "max_confidence": 0.6
+        },
+        {
+          "start_time": "2025-12-11T22:00:00",
+          "end_time": "2025-12-14T15:00:00",
+          "length": 66,
+          "direction": "mixed",
+          "direction_purity": 0.455,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReAccum",
+            "SC",
+            "ReDistrib",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-14T16:00:00",
+          "end_time": "2025-12-16T00:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.636,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "ReDistrib",
+            "ST",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-12-16T01:00:00",
+          "end_time": "2025-12-17T09:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-17T10:00:00",
+          "end_time": "2025-12-18T18:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.455,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "BC",
+            "AR_dist",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-18T19:00:00",
+          "end_time": "2025-12-22T21:00:00",
+          "length": 99,
+          "direction": "re_distribution",
+          "direction_purity": 0.768,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "SC",
+            "ReDistrib",
+            "ST",
+            "ReAccum"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-22T22:00:00",
+          "end_time": "2025-12-24T06:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.576,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReAccum",
+            "ST",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-24T07:00:00",
+          "end_time": "2025-12-25T15:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 1.0,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-25T16:00:00",
+          "end_time": "2025-12-27T00:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.455,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "BC",
+            "ReAccum",
+            "SC",
+            "ReDistrib"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-27T01:00:00",
+          "end_time": "2025-12-29T18:00:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "C",
+            "A"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "UTAD_forming",
+            "SC"
+          ],
+          "max_confidence": 0.8
+        }
+      ]
+    },
+    "4h": {
+      "timeframe": "4h",
+      "symbol": "BTC-USDT",
+      "market": "spot",
+      "days_analyzed": 90,
+      "candles_count": 541,
+      "date_range": {
+        "start": "2025-10-01T00:00:00",
+        "end": "2025-12-30T00:00:00"
+      },
+      "wyckoff_stats": {
+        "overall": {
+          "total_cycles": 11,
+          "complete_cycles": 0,
+          "abc_cycles": 0,
+          "high_purity_cycles": 0,
+          "incomplete_cycles": 11,
+          "mixed_direction_cycles": 2,
+          "sequence_type_counts": {
+            "incomplete": 11
+          },
+          "mean_length": 0,
+          "median_length": 0,
+          "min_length": 0,
+          "max_length": 0,
+          "std_length": 0,
+          "percentile_25": 0,
+          "percentile_75": 0
+        },
+        "by_direction": {}
+      },
+      "recommended_params": {
+        "recommended_box_L": 96,
+        "recommended_max_hold_bars": null,
+        "recommended_fft_cycle": null,
+        "confidence": "low",
+        "note": "insufficient complete cycles (0<3). keep defaults."
+      },
+      "fft_cycles": {
+        "dominant_cycle": 90,
+        "dominant_power": NaN,
+        "peak_ratio": 0.0,
+        "reliable": false,
+        "top_3_cycles": [
+          [
+            5,
+            NaN
+          ],
+          [
+            5,
+            NaN
+          ],
+          [
+            5,
+            NaN
+          ]
+        ]
+      },
+      "cycles_detail": [
+        {
+          "start_time": "2025-10-16T20:00:00",
+          "end_time": "2025-10-27T16:00:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.697,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "unknown",
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "",
+            "SC",
+            "ReDistrib",
+            "ST",
+            "BC",
+            "AR_dist"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-10-27T20:00:00",
+          "end_time": "2025-11-02T04:00:00",
+          "length": 33,
+          "direction": "re_distribution",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "SC",
+            "AR"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-11-02T08:00:00",
+          "end_time": "2025-11-07T16:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.758,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "ST",
+            "SC",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-07T20:00:00",
+          "end_time": "2025-11-18T16:00:00",
+          "length": 66,
+          "direction": "accumulation",
+          "direction_purity": 0.636,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "SC",
+            "ST",
+            "AR",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-18T20:00:00",
+          "end_time": "2025-11-24T04:00:00",
+          "length": 33,
+          "direction": "accumulation",
+          "direction_purity": 0.727,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A",
+            "C"
+          ],
+          "sub_phases": [
+            "ReDistrib",
+            "SC",
+            "Spring_forming"
+          ],
+          "max_confidence": 0.8
+        },
+        {
+          "start_time": "2025-11-24T08:00:00",
+          "end_time": "2025-11-30T00:00:00",
+          "length": 35,
+          "direction": "distribution",
+          "direction_purity": 0.943,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "C",
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "Spring_forming",
+            "BC",
+            "ST"
+          ],
+          "max_confidence": 0.79
+        },
+        {
+          "start_time": "2025-11-30T04:00:00",
+          "end_time": "2025-12-05T12:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.606,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "SC",
+            "BC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-05T16:00:00",
+          "end_time": "2025-12-11T00:00:00",
+          "length": 33,
+          "direction": "distribution",
+          "direction_purity": 0.606,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "BC",
+            "AR_dist",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-11T04:00:00",
+          "end_time": "2025-12-22T00:00:00",
+          "length": 66,
+          "direction": "re_distribution",
+          "direction_purity": 0.621,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "A",
+            "B"
+          ],
+          "sub_phases": [
+            "SC",
+            "AR",
+            "BC",
+            "ReDistrib",
+            "ST"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-22T04:00:00",
+          "end_time": "2025-12-27T12:00:00",
+          "length": 33,
+          "direction": "mixed",
+          "direction_purity": 0.485,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "SC",
+            "ReDistrib",
+            "BC",
+            "AR_dist",
+            "AR"
+          ],
+          "max_confidence": 0.75
+        },
+        {
+          "start_time": "2025-12-27T16:00:00",
+          "end_time": "2025-12-30T00:00:00",
+          "length": 15,
+          "direction": "mixed",
+          "direction_purity": 0.4,
+          "complete": false,
+          "sequence_type": "incomplete",
+          "phase_sequence_valid": false,
+          "phases_seen": [
+            "B",
+            "A"
+          ],
+          "sub_phases": [
+            "ST",
+            "ReDistrib",
+            "BC",
+            "AR_dist",
+            "SC"
+          ],
+          "max_confidence": 0.75
+        }
+      ]
+    }
+  }
+}

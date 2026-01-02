@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-01-02T13:02:48.542618",
+  "symbol": "BTC-USDT",
+  "market": "spot",
+  "days": 2588,
+  "elapsed_seconds": 64.544576,
+  "results": {
+    "4h": {
+      "status": "error",
+      "timeframe": "4h",
+      "error": "데이터가 부족하여 Fold를 생성할 수 없습니다"
+    }
+  }
+}

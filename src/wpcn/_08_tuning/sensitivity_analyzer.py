@@ -4,6 +4,19 @@ Sensitivity Analyzer - 파라미터 민감도 분석
 
 최적화된 파라미터의 안정성을 검증합니다.
 
+IMPORTANT - 감도(Sensitivity) 정의:
+===================================
+Sensitivity는 "importance(중요도)"가 아니라 **"instability(불안정도)"**입니다.
+
+- sensitivity = 파라미터를 조금 변경했을 때 성능이 얼마나 흔들리는지
+- 높은 sensitivity (>0.4) = 불안정 = 조금만 바꿔도 성능 급변 = **freeze 대상**
+- 낮은 sensitivity (<0.25) = 안정적 = 계속 탐색해도 안전 = **dynamic 유지**
+
+ParamReducer에서 사용 시:
+- sensitivity >= freeze_threshold(0.4): 파라미터 고정 (너무 불안정)
+- sensitivity <= keep_threshold(0.25): 파라미터 유지 (충분히 안정적)
+- 중간 영역: 상황에 따라 판단
+
 핵심 기능:
 1. 파라미터 ±10% 변화 시 성능 변동폭 측정
 2. 안정적 파라미터 vs 과적합 파라미터 구분

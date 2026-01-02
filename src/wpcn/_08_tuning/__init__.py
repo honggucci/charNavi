@@ -102,13 +102,34 @@ from .param_store import (
 )
 
 # ============================================================
-# 옵티마이저
+# 옵티마이저 (v3: Optuna TPE + Constraint Propagation)
 # ============================================================
 from .param_optimizer import (
     ParamOptimizer,
     GridSearchOptimizer,
     RandomSearchOptimizer,
     BayesianOptimizer,
+    # v3 추가
+    OptunaOptimizer,
+    OptimizationResult,
+    SamplingStats,
+    ConstraintRegistry,
+    ParamConstraint,
+    get_optimizer,
+    get_constraint_registry,
+    # v3.1: Optuna availability check
+    HAS_OPTUNA,
+    get_optuna_status,
+)
+
+# ============================================================
+# 차원 축소 (v3: Sensitivity 기반 자동화)
+# ============================================================
+from .param_reducer import (
+    ParamReducer,
+    ReductionConfig,
+    ReducedParamSpace,
+    auto_reduce_for_next_week,
 )
 
 # ============================================================
@@ -204,11 +225,27 @@ __all__ = [
     "save_optimized_params",
     "load_optimized_params",
 
-    # === 옵티마이저 ===
+    # === 옵티마이저 (v3: Optuna + Constraint) ===
     "ParamOptimizer",
     "GridSearchOptimizer",
     "RandomSearchOptimizer",
     "BayesianOptimizer",
+    "OptunaOptimizer",
+    "OptimizationResult",
+    "SamplingStats",
+    "ConstraintRegistry",
+    "ParamConstraint",
+    "get_optimizer",
+    "get_constraint_registry",
+    # v3.1: Optuna availability
+    "HAS_OPTUNA",
+    "get_optuna_status",
+
+    # === 차원 축소 (v3) ===
+    "ParamReducer",
+    "ReductionConfig",
+    "ReducedParamSpace",
+    "auto_reduce_for_next_week",
 
     # === Walk-Forward ===
     "WalkForwardConfig",

@@ -1,0 +1,37 @@
+{
+  "n_folds": 2,
+  "avg_train_score": 0.0,
+  "avg_test_score": 0.0,
+  "overfit_ratio": 0.0,
+  "robust_params": {
+    "box_L": 30,
+    "m_freeze": 13,
+    "pivot_lr": 2,
+    "atr_len": 16,
+    "x_atr": 0.453691417395383,
+    "m_bw": 0.11988165655308064,
+    "sl_pct": 0.0070327199463484525,
+    "tp_pct": 0.02807882153031957,
+    "min_score": 4.5659040594871545,
+    "rsi_oversold": 35,
+    "rsi_overbought": 68
+  },
+  "folds": [
+    {
+      "fold_id": 0,
+      "train_period": "2025-10-01 03:30:00 ~ 2025-11-26 03:30:00",
+      "test_period": "2025-11-26 03:30:00 ~ 2025-12-10 03:30:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 1,
+      "train_period": "2025-10-15 03:30:00 ~ 2025-12-10 03:30:00",
+      "test_period": "2025-12-10 03:30:00 ~ 2025-12-24 03:30:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    }
+  ]
+}
