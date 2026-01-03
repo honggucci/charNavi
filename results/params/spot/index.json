@@ -1,6 +1,10 @@
 {
   "BTC-USDT_15m": {
-    "latest_file": "BTC-USDT_15m_20260102_195343.json",
-    "updated_at": "20260102_195343"
+    "latest_file": "BTC-USDT_15m_20260102_200814.json",
+    "updated_at": "20260102_200814"
+  },
+  "BTC-USDT_1h": {
+    "latest_file": "BTC-USDT_1h_20260103_081009.json",
+    "updated_at": "20260103_081009"
   }
 }

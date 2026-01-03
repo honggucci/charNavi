@@ -1,0 +1,257 @@
+{
+  "timestamp": "2026-01-02T20:08:14.061734",
+  "version": "v3.1_optuna_tracking",
+  "run_id": "20260102_200814",
+  "code_version": "21fdd34",
+  "symbol": "BTC-USDT",
+  "market": "spot",
+  "timeframe": "15m",
+  "optimizer_requested": "random",
+  "optuna_status": {
+    "optuna_available": false,
+    "optuna_version": null
+  },
+  "analysis": {
+    "confidence": "high",
+    "box_L_range": [
+      26,
+      29,
+      33,
+      36,
+      39
+    ],
+    "m_freeze_range": [
+      8,
+      10,
+      13,
+      16,
+      19
+    ]
+  },
+  "hints": {
+    "recommended_box_L": 33,
+    "fft_dominant_cycle": 99,
+    "fft_reliable": false,
+    "median_cycle": 33.0
+  },
+  "optimization": {
+    "n_folds": 2,
+    "avg_train_score": 0.0,
+    "avg_test_score": 0.0,
+    "overfit_ratio": 0.0,
+    "robust_params": {
+      "box_L": 30,
+      "m_freeze": 13,
+      "pivot_lr": 2,
+      "atr_len": 16,
+      "x_atr": 0.453691417395383,
+      "m_bw": 0.11988165655308064,
+      "sl_pct": 0.0070327199463484525,
+      "tp_pct": 0.02807882153031957,
+      "min_score": 4.5659040594871545,
+      "rsi_oversold": 35,
+      "rsi_overbought": 68
+    },
+    "folds": [
+      {
+        "fold_id": 0,
+        "train_period": "2025-10-01 03:30:00 ~ 2025-11-26 03:30:00",
+        "test_period": "2025-11-26 03:30:00 ~ 2025-12-10 03:30:00",
+        "train_score": 0,
+        "test_score": 0,
+        "is_overfit": false
+      },
+      {
+        "fold_id": 1,
+        "train_period": "2025-10-15 03:30:00 ~ 2025-12-10 03:30:00",
+        "test_period": "2025-12-10 03:30:00 ~ 2025-12-24 03:30:00",
+        "train_score": 0,
+        "test_score": 0,
+        "is_overfit": false
+      }
+    ]
+  },
+  "robust_params": {
+    "box_L": 30,
+    "m_freeze": 13,
+    "pivot_lr": 2,
+    "atr_len": 16,
+    "x_atr": 0.453691417395383,
+    "m_bw": 0.11988165655308064,
+    "sl_pct": 0.0070327199463484525,
+    "tp_pct": 0.02807882153031957,
+    "min_score": 4.5659040594871545,
+    "rsi_oversold": 35,
+    "rsi_overbought": 68
+  },
+  "sensitivity": {
+    "overall_score": 0.125,
+    "base_score": 0.0,
+    "stable_params": [
+      "min_score",
+      "pivot_lr",
+      "x_atr",
+      "sl_pct",
+      "tp_pct",
+      "m_freeze",
+      "m_bw"
+    ],
+    "unstable_params": [
+      "box_L"
+    ],
+    "param_details": {
+      "min_score": {
+        "param_name": "min_score",
+        "base_value": 4.5659040594871545,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      },
+      "pivot_lr": {
+        "param_name": "pivot_lr",
+        "base_value": 2,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      },
+      "x_atr": {
+        "param_name": "x_atr",
+        "base_value": 0.453691417395383,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      },
+      "sl_pct": {
+        "param_name": "sl_pct",
+        "base_value": 0.0070327199463484525,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      },
+      "tp_pct": {
+        "param_name": "tp_pct",
+        "base_value": 0.02807882153031957,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      },
+      "box_L": {
+        "param_name": "box_L",
+        "base_value": 30,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          -10.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 1.0,
+        "is_stable": false
+      },
+      "m_freeze": {
+        "param_name": "m_freeze",
+        "base_value": 13,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      },
+      "m_bw": {
+        "param_name": "m_bw",
+        "base_value": 0.11988165655308064,
+        "base_score": 0.0,
+        "perturbations": [
+          -0.1,
+          -0.05,
+          0.05,
+          0.1
+        ],
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sensitivity": 0.0,
+        "is_stable": true
+      }
+    }
+  }
+}

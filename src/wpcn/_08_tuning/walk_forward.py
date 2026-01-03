@@ -114,7 +114,7 @@ class WalkForwardConfig:
     train_weeks: int = 12           # 훈련 기간 (주)
     test_weeks: int = 2             # 테스트 기간 (주)
     step_weeks: int = 2             # 슬라이딩 스텝 (주)
-    min_train_bars: int = 5000      # 최소 훈련 데이터 (봉 수)
+    min_train_bars: int = 1000      # 최소 훈련 데이터 (봉 수) - 타임프레임별 자동 조정됨
     optimizer_type: str = "random"  # "random", "optuna", "bayesian", "grid"
     n_iterations: int = 50          # 최적화 반복 횟수
     objective: str = "sharpe"       # "sharpe", "calmar", "return", "sortino"

@@ -1,0 +1,821 @@
+{
+  "n_folds": 100,
+  "avg_train_score": 0.0,
+  "avg_test_score": 0.0,
+  "overfit_ratio": 0.0,
+  "robust_params": {
+    "box_L": 31,
+    "m_freeze": 12,
+    "pivot_lr": 2,
+    "atr_len": 15,
+    "x_atr": 0.3434559895486036,
+    "m_bw": 0.09379330097125313,
+    "sl_pct": 0.009848988025657871,
+    "tp_pct": 0.02222636184557393,
+    "min_score": 3.9918519007913877,
+    "rsi_oversold": 32,
+    "rsi_overbought": 66
+  },
+  "folds": [
+    {
+      "fold_id": 0,
+      "train_period": "2019-12-22 03:00:00 ~ 2020-03-15 03:00:00",
+      "test_period": "2020-03-15 03:00:00 ~ 2020-04-05 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 1,
+      "train_period": "2020-01-12 03:00:00 ~ 2020-04-05 03:00:00",
+      "test_period": "2020-04-05 03:00:00 ~ 2020-04-26 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 2,
+      "train_period": "2020-02-02 03:00:00 ~ 2020-04-26 03:00:00",
+      "test_period": "2020-04-26 03:00:00 ~ 2020-05-17 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 3,
+      "train_period": "2020-02-23 03:00:00 ~ 2020-05-17 03:00:00",
+      "test_period": "2020-05-17 03:00:00 ~ 2020-06-07 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 4,
+      "train_period": "2020-03-15 03:00:00 ~ 2020-06-07 03:00:00",
+      "test_period": "2020-06-07 03:00:00 ~ 2020-06-28 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 5,
+      "train_period": "2020-04-05 03:00:00 ~ 2020-06-28 03:00:00",
+      "test_period": "2020-06-28 03:00:00 ~ 2020-07-19 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 6,
+      "train_period": "2020-04-26 03:00:00 ~ 2020-07-19 03:00:00",
+      "test_period": "2020-07-19 03:00:00 ~ 2020-08-09 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 7,
+      "train_period": "2020-05-17 03:00:00 ~ 2020-08-09 03:00:00",
+      "test_period": "2020-08-09 03:00:00 ~ 2020-08-30 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 8,
+      "train_period": "2020-06-07 03:00:00 ~ 2020-08-30 03:00:00",
+      "test_period": "2020-08-30 03:00:00 ~ 2020-09-20 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 9,
+      "train_period": "2020-06-28 03:00:00 ~ 2020-09-20 03:00:00",
+      "test_period": "2020-09-20 03:00:00 ~ 2020-10-11 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 10,
+      "train_period": "2020-07-19 03:00:00 ~ 2020-10-11 03:00:00",
+      "test_period": "2020-10-11 03:00:00 ~ 2020-11-01 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 11,
+      "train_period": "2020-08-09 03:00:00 ~ 2020-11-01 03:00:00",
+      "test_period": "2020-11-01 03:00:00 ~ 2020-11-22 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 12,
+      "train_period": "2020-08-30 03:00:00 ~ 2020-11-22 03:00:00",
+      "test_period": "2020-11-22 03:00:00 ~ 2020-12-13 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 13,
+      "train_period": "2020-09-20 03:00:00 ~ 2020-12-13 03:00:00",
+      "test_period": "2020-12-13 03:00:00 ~ 2021-01-03 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 14,
+      "train_period": "2020-10-11 03:00:00 ~ 2021-01-03 03:00:00",
+      "test_period": "2021-01-03 03:00:00 ~ 2021-01-24 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 15,
+      "train_period": "2020-11-01 03:00:00 ~ 2021-01-24 03:00:00",
+      "test_period": "2021-01-24 03:00:00 ~ 2021-02-14 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 16,
+      "train_period": "2020-11-22 03:00:00 ~ 2021-02-14 03:00:00",
+      "test_period": "2021-02-14 03:00:00 ~ 2021-03-07 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 17,
+      "train_period": "2020-12-13 03:00:00 ~ 2021-03-07 03:00:00",
+      "test_period": "2021-03-07 03:00:00 ~ 2021-03-28 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 18,
+      "train_period": "2021-01-03 03:00:00 ~ 2021-03-28 03:00:00",
+      "test_period": "2021-03-28 03:00:00 ~ 2021-04-18 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 19,
+      "train_period": "2021-01-24 03:00:00 ~ 2021-04-18 03:00:00",
+      "test_period": "2021-04-18 03:00:00 ~ 2021-05-09 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 20,
+      "train_period": "2021-02-14 03:00:00 ~ 2021-05-09 03:00:00",
+      "test_period": "2021-05-09 03:00:00 ~ 2021-05-30 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 21,
+      "train_period": "2021-03-07 03:00:00 ~ 2021-05-30 03:00:00",
+      "test_period": "2021-05-30 03:00:00 ~ 2021-06-20 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 22,
+      "train_period": "2021-03-28 03:00:00 ~ 2021-06-20 03:00:00",
+      "test_period": "2021-06-20 03:00:00 ~ 2021-07-11 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 23,
+      "train_period": "2021-04-18 03:00:00 ~ 2021-07-11 03:00:00",
+      "test_period": "2021-07-11 03:00:00 ~ 2021-08-01 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 24,
+      "train_period": "2021-05-09 03:00:00 ~ 2021-08-01 03:00:00",
+      "test_period": "2021-08-01 03:00:00 ~ 2021-08-22 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 25,
+      "train_period": "2021-05-30 03:00:00 ~ 2021-08-22 03:00:00",
+      "test_period": "2021-08-22 03:00:00 ~ 2021-09-12 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 26,
+      "train_period": "2021-06-20 03:00:00 ~ 2021-09-12 03:00:00",
+      "test_period": "2021-09-12 03:00:00 ~ 2021-10-03 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 27,
+      "train_period": "2021-07-11 03:00:00 ~ 2021-10-03 03:00:00",
+      "test_period": "2021-10-03 03:00:00 ~ 2021-10-24 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 28,
+      "train_period": "2021-08-01 03:00:00 ~ 2021-10-24 03:00:00",
+      "test_period": "2021-10-24 03:00:00 ~ 2021-11-14 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 29,
+      "train_period": "2021-08-22 03:00:00 ~ 2021-11-14 03:00:00",
+      "test_period": "2021-11-14 03:00:00 ~ 2021-12-05 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 30,
+      "train_period": "2021-09-12 03:00:00 ~ 2021-12-05 03:00:00",
+      "test_period": "2021-12-05 03:00:00 ~ 2021-12-26 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 31,
+      "train_period": "2021-10-03 03:00:00 ~ 2021-12-26 03:00:00",
+      "test_period": "2021-12-26 03:00:00 ~ 2022-01-16 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 32,
+      "train_period": "2021-10-24 03:00:00 ~ 2022-01-16 03:00:00",
+      "test_period": "2022-01-16 03:00:00 ~ 2022-02-06 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 33,
+      "train_period": "2021-11-14 03:00:00 ~ 2022-02-06 03:00:00",
+      "test_period": "2022-02-06 03:00:00 ~ 2022-02-27 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 34,
+      "train_period": "2021-12-05 03:00:00 ~ 2022-02-27 03:00:00",
+      "test_period": "2022-02-27 03:00:00 ~ 2022-03-20 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 35,
+      "train_period": "2021-12-26 03:00:00 ~ 2022-03-20 03:00:00",
+      "test_period": "2022-03-20 03:00:00 ~ 2022-04-10 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 36,
+      "train_period": "2022-01-16 03:00:00 ~ 2022-04-10 03:00:00",
+      "test_period": "2022-04-10 03:00:00 ~ 2022-05-01 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 37,
+      "train_period": "2022-02-06 03:00:00 ~ 2022-05-01 03:00:00",
+      "test_period": "2022-05-01 03:00:00 ~ 2022-05-22 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 38,
+      "train_period": "2022-02-27 03:00:00 ~ 2022-05-22 03:00:00",
+      "test_period": "2022-05-22 03:00:00 ~ 2022-06-12 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 39,
+      "train_period": "2022-03-20 03:00:00 ~ 2022-06-12 03:00:00",
+      "test_period": "2022-06-12 03:00:00 ~ 2022-07-03 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 40,
+      "train_period": "2022-04-10 03:00:00 ~ 2022-07-03 03:00:00",
+      "test_period": "2022-07-03 03:00:00 ~ 2022-07-24 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 41,
+      "train_period": "2022-05-01 03:00:00 ~ 2022-07-24 03:00:00",
+      "test_period": "2022-07-24 03:00:00 ~ 2022-08-14 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 42,
+      "train_period": "2022-05-22 03:00:00 ~ 2022-08-14 03:00:00",
+      "test_period": "2022-08-14 03:00:00 ~ 2022-09-04 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 43,
+      "train_period": "2022-06-12 03:00:00 ~ 2022-09-04 03:00:00",
+      "test_period": "2022-09-04 03:00:00 ~ 2022-09-25 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 44,
+      "train_period": "2022-07-03 03:00:00 ~ 2022-09-25 03:00:00",
+      "test_period": "2022-09-25 03:00:00 ~ 2022-10-16 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 45,
+      "train_period": "2022-07-24 03:00:00 ~ 2022-10-16 03:00:00",
+      "test_period": "2022-10-16 03:00:00 ~ 2022-11-06 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 46,
+      "train_period": "2022-08-14 03:00:00 ~ 2022-11-06 03:00:00",
+      "test_period": "2022-11-06 03:00:00 ~ 2022-11-27 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 47,
+      "train_period": "2022-09-04 03:00:00 ~ 2022-11-27 03:00:00",
+      "test_period": "2022-11-27 03:00:00 ~ 2022-12-18 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 48,
+      "train_period": "2022-09-25 03:00:00 ~ 2022-12-18 03:00:00",
+      "test_period": "2022-12-18 03:00:00 ~ 2023-01-08 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 49,
+      "train_period": "2022-10-16 03:00:00 ~ 2023-01-08 03:00:00",
+      "test_period": "2023-01-08 03:00:00 ~ 2023-01-29 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 50,
+      "train_period": "2022-11-06 03:00:00 ~ 2023-01-29 03:00:00",
+      "test_period": "2023-01-29 03:00:00 ~ 2023-02-19 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 51,
+      "train_period": "2022-11-27 03:00:00 ~ 2023-02-19 03:00:00",
+      "test_period": "2023-02-19 03:00:00 ~ 2023-03-12 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 52,
+      "train_period": "2022-12-18 03:00:00 ~ 2023-03-12 03:00:00",
+      "test_period": "2023-03-12 03:00:00 ~ 2023-04-02 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 53,
+      "train_period": "2023-01-08 03:00:00 ~ 2023-04-02 03:00:00",
+      "test_period": "2023-04-02 03:00:00 ~ 2023-04-23 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 54,
+      "train_period": "2023-01-29 03:00:00 ~ 2023-04-23 03:00:00",
+      "test_period": "2023-04-23 03:00:00 ~ 2023-05-14 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 55,
+      "train_period": "2023-02-19 03:00:00 ~ 2023-05-14 03:00:00",
+      "test_period": "2023-05-14 03:00:00 ~ 2023-06-04 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 56,
+      "train_period": "2023-03-12 03:00:00 ~ 2023-06-04 03:00:00",
+      "test_period": "2023-06-04 03:00:00 ~ 2023-06-25 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 57,
+      "train_period": "2023-04-02 03:00:00 ~ 2023-06-25 03:00:00",
+      "test_period": "2023-06-25 03:00:00 ~ 2023-07-16 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 58,
+      "train_period": "2023-04-23 03:00:00 ~ 2023-07-16 03:00:00",
+      "test_period": "2023-07-16 03:00:00 ~ 2023-08-06 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 59,
+      "train_period": "2023-05-14 03:00:00 ~ 2023-08-06 03:00:00",
+      "test_period": "2023-08-06 03:00:00 ~ 2023-08-27 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 60,
+      "train_period": "2023-06-04 03:00:00 ~ 2023-08-27 03:00:00",
+      "test_period": "2023-08-27 03:00:00 ~ 2023-09-17 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 61,
+      "train_period": "2023-06-25 03:00:00 ~ 2023-09-17 03:00:00",
+      "test_period": "2023-09-17 03:00:00 ~ 2023-10-08 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 62,
+      "train_period": "2023-07-16 03:00:00 ~ 2023-10-08 03:00:00",
+      "test_period": "2023-10-08 03:00:00 ~ 2023-10-29 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 63,
+      "train_period": "2023-08-06 03:00:00 ~ 2023-10-29 03:00:00",
+      "test_period": "2023-10-29 03:00:00 ~ 2023-11-19 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 64,
+      "train_period": "2023-08-27 03:00:00 ~ 2023-11-19 03:00:00",
+      "test_period": "2023-11-19 03:00:00 ~ 2023-12-10 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 65,
+      "train_period": "2023-09-17 03:00:00 ~ 2023-12-10 03:00:00",
+      "test_period": "2023-12-10 03:00:00 ~ 2023-12-31 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 66,
+      "train_period": "2023-10-08 03:00:00 ~ 2023-12-31 03:00:00",
+      "test_period": "2023-12-31 03:00:00 ~ 2024-01-21 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 67,
+      "train_period": "2023-10-29 03:00:00 ~ 2024-01-21 03:00:00",
+      "test_period": "2024-01-21 03:00:00 ~ 2024-02-11 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 68,
+      "train_period": "2023-11-19 03:00:00 ~ 2024-02-11 03:00:00",
+      "test_period": "2024-02-11 03:00:00 ~ 2024-03-03 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 69,
+      "train_period": "2023-12-10 03:00:00 ~ 2024-03-03 03:00:00",
+      "test_period": "2024-03-03 03:00:00 ~ 2024-03-24 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 70,
+      "train_period": "2023-12-31 03:00:00 ~ 2024-03-24 03:00:00",
+      "test_period": "2024-03-24 03:00:00 ~ 2024-04-14 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 71,
+      "train_period": "2024-01-21 03:00:00 ~ 2024-04-14 03:00:00",
+      "test_period": "2024-04-14 03:00:00 ~ 2024-05-05 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 72,
+      "train_period": "2024-02-11 03:00:00 ~ 2024-05-05 03:00:00",
+      "test_period": "2024-05-05 03:00:00 ~ 2024-05-26 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 73,
+      "train_period": "2024-03-03 03:00:00 ~ 2024-05-26 03:00:00",
+      "test_period": "2024-05-26 03:00:00 ~ 2024-06-16 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 74,
+      "train_period": "2024-03-24 03:00:00 ~ 2024-06-16 03:00:00",
+      "test_period": "2024-06-16 03:00:00 ~ 2024-07-07 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 75,
+      "train_period": "2024-04-14 03:00:00 ~ 2024-07-07 03:00:00",
+      "test_period": "2024-07-07 03:00:00 ~ 2024-07-28 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 76,
+      "train_period": "2024-05-05 03:00:00 ~ 2024-07-28 03:00:00",
+      "test_period": "2024-07-28 03:00:00 ~ 2024-08-18 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 77,
+      "train_period": "2024-05-26 03:00:00 ~ 2024-08-18 03:00:00",
+      "test_period": "2024-08-18 03:00:00 ~ 2024-09-08 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 78,
+      "train_period": "2024-06-16 03:00:00 ~ 2024-09-08 03:00:00",
+      "test_period": "2024-09-08 03:00:00 ~ 2024-09-29 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 79,
+      "train_period": "2024-07-07 03:00:00 ~ 2024-09-29 03:00:00",
+      "test_period": "2024-09-29 03:00:00 ~ 2024-10-20 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 80,
+      "train_period": "2024-07-28 03:00:00 ~ 2024-10-20 03:00:00",
+      "test_period": "2024-10-20 03:00:00 ~ 2024-11-10 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 81,
+      "train_period": "2024-08-18 03:00:00 ~ 2024-11-10 03:00:00",
+      "test_period": "2024-11-10 03:00:00 ~ 2024-12-01 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 82,
+      "train_period": "2024-09-08 03:00:00 ~ 2024-12-01 03:00:00",
+      "test_period": "2024-12-01 03:00:00 ~ 2024-12-22 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 83,
+      "train_period": "2024-09-29 03:00:00 ~ 2024-12-22 03:00:00",
+      "test_period": "2024-12-22 03:00:00 ~ 2025-01-12 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 84,
+      "train_period": "2024-10-20 03:00:00 ~ 2025-01-12 03:00:00",
+      "test_period": "2025-01-12 03:00:00 ~ 2025-02-02 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 85,
+      "train_period": "2024-11-10 03:00:00 ~ 2025-02-02 03:00:00",
+      "test_period": "2025-02-02 03:00:00 ~ 2025-02-23 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 86,
+      "train_period": "2024-12-01 03:00:00 ~ 2025-02-23 03:00:00",
+      "test_period": "2025-02-23 03:00:00 ~ 2025-03-16 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 87,
+      "train_period": "2024-12-22 03:00:00 ~ 2025-03-16 03:00:00",
+      "test_period": "2025-03-16 03:00:00 ~ 2025-04-06 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 88,
+      "train_period": "2025-01-12 03:00:00 ~ 2025-04-06 03:00:00",
+      "test_period": "2025-04-06 03:00:00 ~ 2025-04-27 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 89,
+      "train_period": "2025-02-02 03:00:00 ~ 2025-04-27 03:00:00",
+      "test_period": "2025-04-27 03:00:00 ~ 2025-05-18 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 90,
+      "train_period": "2025-02-23 03:00:00 ~ 2025-05-18 03:00:00",
+      "test_period": "2025-05-18 03:00:00 ~ 2025-06-08 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 91,
+      "train_period": "2025-03-16 03:00:00 ~ 2025-06-08 03:00:00",
+      "test_period": "2025-06-08 03:00:00 ~ 2025-06-29 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 92,
+      "train_period": "2025-04-06 03:00:00 ~ 2025-06-29 03:00:00",
+      "test_period": "2025-06-29 03:00:00 ~ 2025-07-20 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 93,
+      "train_period": "2025-04-27 03:00:00 ~ 2025-07-20 03:00:00",
+      "test_period": "2025-07-20 03:00:00 ~ 2025-08-10 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 94,
+      "train_period": "2025-05-18 03:00:00 ~ 2025-08-10 03:00:00",
+      "test_period": "2025-08-10 03:00:00 ~ 2025-08-31 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 95,
+      "train_period": "2025-06-08 03:00:00 ~ 2025-08-31 03:00:00",
+      "test_period": "2025-08-31 03:00:00 ~ 2025-09-21 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 96,
+      "train_period": "2025-06-29 03:00:00 ~ 2025-09-21 03:00:00",
+      "test_period": "2025-09-21 03:00:00 ~ 2025-10-12 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 97,
+      "train_period": "2025-07-20 03:00:00 ~ 2025-10-12 03:00:00",
+      "test_period": "2025-10-12 03:00:00 ~ 2025-11-02 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 98,
+      "train_period": "2025-08-10 03:00:00 ~ 2025-11-02 03:00:00",
+      "test_period": "2025-11-02 03:00:00 ~ 2025-11-23 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    },
+    {
+      "fold_id": 99,
+      "train_period": "2025-08-31 03:00:00 ~ 2025-11-23 03:00:00",
+      "test_period": "2025-11-23 03:00:00 ~ 2025-12-14 03:00:00",
+      "train_score": 0,
+      "test_score": 0,
+      "is_overfit": false
+    }
+  ]
+}
