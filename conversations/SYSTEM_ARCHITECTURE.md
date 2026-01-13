@@ -1,6 +1,6 @@
 # WPCN 시스템 아키텍처
 
-> 마지막 업데이트: 2026-01-04
+> 마지막 업데이트: 2026-01-13 (v2.6.14)
 
 ## 프로젝트 개요
 
@@ -56,6 +56,10 @@ wpcn-backtester-cli-noflask/
 │   ├── _04_execution/           # 시뮬레이션 엔진
 │   │   ├── broker_sim.py        # 메인 브로커 시뮬레이터
 │   │   ├── broker_sim_mtf.py    # MTF 백테스트 (simulate_mtf)
+│   │   ├── futures_backtest_15m.py  # 15분봉 지정가 백테스터 (v2.6.14)
+│   │   ├── futures_backtest_v3.py   # 5분봉 시장가 백테스터
+│   │   ├── hmm_entry_gate.py    # HMM 기반 진입 게이트
+│   │   ├── invariants.py        # PnL 불변식 검증기 (v2.6.14)
 │   │   ├── cost.py              # 비용 계산
 │   │   └── state_persistence.py # 상태 저장
 │   │
@@ -626,10 +630,51 @@ equity_df, trades_df, signals_df, nav_df = simulate_mtf(
 
 ---
 
+## v2.6.14 업데이트 (2026-01-13)
+
+### 15분봉 지정가 백테스터
+
+5분봉 ATR 스파이크로 인한 94% SL 히트 문제 해결을 위해 15분봉 전용 백테스터 추가.
+
+**핵심 변경사항**:
+- 타임프레임: 5분봉 → 15분봉 전용
+- 진입: 시장가 → 지정가 (Pending Order)
+- 체결 대기: 4봉(1시간) 미체결 시 취소
+- 최대 보유: 32봉(8시간) 펀딩비 회피
+
+**새 파일**:
+- `src/wpcn/_04_execution/futures_backtest_15m.py`
+- `src/wpcn/_04_execution/invariants.py` - PnL 불변식 검증기
+- `policy_v1_2_relaxed_cooldown.py` - Relaxed Cooldown policy
+
+### Policy v1.2 Relaxed Cooldown
+
+Transition cooldown 병목(99% 차단) 해결:
+
+```python
+# v1.1 (기존)
+transition_delta: 0.20
+cooldown_bars: 2
+
+# v1.2 (완화)
+transition_delta: 0.40  # 더 큰 변화만 감지
+cooldown_bars: 1        # 대기 시간 단축
+```
+
+**결과**:
+| 버전 | 총 Test PnL | 2023 Trades | 2024 Trades |
+|------|-------------|-------------|-------------|
+| v1 (5분봉) | -$31,482 | - | - |
+| v1.2 (15분봉) | **+$991** | **72** | **143** |
+
+---
+
 ## 변경 이력
 
 | 버전 | 날짜 | 변경사항 |
 |-----|------|---------|
+| **v2.6.14** | **2026-01-13** | **15분봉 지정가 백테스터 + Policy v1.2 Relaxed Cooldown** |
+| v2.6.11 | 2026-01-12 | HMM Risk Filter v3 - apply_hmm_filter() 버그 수정 |
 | v3.0 | 2026-01-04 | 문서 전면 리뉴얼, 현재 코드 구조 반영 |
 | v2.2 | 2026-01-02 | A/B Testing (Champion/Challenger) 추가 |
 | v2.1 | 2026-01-01 | OOS 추적, 민감도 분석, Gate 상향 |
