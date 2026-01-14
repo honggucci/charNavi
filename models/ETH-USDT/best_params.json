@@ -1,0 +1,12 @@
+{
+  "symbol": "ETH-USDT",
+  "atr_sl_mult": 1.5,
+  "atr_tp_mult": 2.0,
+  "leverage": 10,
+  "transition_delta": 0.4,
+  "cooldown_bars": 1,
+  "backtest_pnl": 122946.25062901061,
+  "backtest_trades": 224,
+  "backtest_win_rate": 43.75,
+  "optimized_at": "2026-01-14T11:05:38.751515"
+}

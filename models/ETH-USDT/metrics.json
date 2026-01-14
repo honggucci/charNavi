@@ -1,0 +1,14 @@
+{
+  "symbol": "ETH-USDT",
+  "n_samples": 139986,
+  "n_segments": 1,
+  "accuracy": 0.3832311802608832,
+  "log_likelihood": -575225.249436261,
+  "training_years": [
+    "2021",
+    "2022",
+    "2023",
+    "2024"
+  ],
+  "created_at": "2026-01-14T10:16:58.713748"
+}
